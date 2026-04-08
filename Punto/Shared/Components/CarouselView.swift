@@ -8,36 +8,43 @@ import SwiftUI
 
 struct CarouselView: View {
     @Binding var selectedIndex: Int
+    @State private var isCompresed = false
+    var quickSummary: [QuickSummary2]
     var vehicles: [Vehicle]
-    var titles: [String] = Array(repeating: "", count: 3)
-    var numbers: [Int] = Array(repeating: 0, count: 3)
     var color: Color
     
+    
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(alignment: .top) {
-                ForEach(Array(vehicles.indices), id: \.self) { index in
-                    Button {
-                        selectedIndex = index
-                    } label: {
-                        CarQuickView(vehicle: vehicles[index].vehicleInformation,
-                                     title1: titles[0], value1: numbers[0],
-                                     title2: titles[1], value2: numbers[0],
-                                     title3: titles[2], value3: numbers[0],
-                                     selectedColor: color,
-                                     isSelected: selectedIndex == index)
-                        .padding()
-                        .scaleEffect(selectedIndex == index ? 1.05 : 1.0)
+                
+        VStack {
+            if !isCompresed {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(alignment: .bottom) {
+                        ForEach(Array(vehicles.indices), id: \.self) { index in
+                            Button {
+                                selectedIndex = index
+                            } label: {
+                                CarQuickView(vehicle: vehicles[index].vehicleInformation, quickSummary: quickSummary,
+                                             selectedColor: color,
+                                             isSelected: selectedIndex == index)
+                                .padding()
+                                .scaleEffect(selectedIndex == index ? 1.05 : 1.0)
+                            }.buttonStyle(.plain)
+                        }
                     }
                 }
             }
+
+            DominantButtonView(text: "Show your vehicles", color: .myBlue, image: "car.2.fill") {
+                isCompresed.toggle()
+            }.padding(.horizontal)
         }
     }
 }
 
 #Preview {
     CarouselView(
-        selectedIndex: .constant(0), vehicles: [
+        selectedIndex: .constant(0), quickSummary: [.init(title: "Done", value: 0, color: .brandAmber), .init(title: "Done", value: 0, color: .brandAmber), .init(title: "Done", value: 0, color: .brandAmber),], vehicles: [
             TransportationVehicle(
                 vehicleInformation: .init(
                     id: UUID(),
@@ -66,7 +73,6 @@ struct CarouselView: View {
                     fuel: .diesel
                 )
             )
-        ]
-        ,titles: ["Total", "ToDo", "Done"], color: .blue
+        ], color: .red
     )
 }

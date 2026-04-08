@@ -31,3 +31,9 @@ enum FuelType: String {
     case gasoline = "Gasoline"
     case other = "Other"
 }
+
+struct DummyData {
+    func dummyDataVehicleInformation() -> VehicleInformation {
+        .init(id: .init(), image: "volvo", plate: "DMW-243", brand: "Volvo", model: "FMX", year: 2025, mileage: 10000, engine: "V8", transmission: .automatic, fuel: .diesel)
+    }
+}

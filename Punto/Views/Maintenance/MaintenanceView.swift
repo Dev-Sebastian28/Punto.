@@ -10,16 +10,15 @@ import SwiftUI
 struct MaintenanceView: View {
     @State var vm: MaintenanceViewModel = .init()
     @State var selectedVehicle: Int = 0
+    var quickSummary: [QuickSummary2]
     
     var body: some View {
         ZStack {
             VStack (alignment: .leading) {
                 
-                // Header
                 titleHeader
                 
-                // Carrusel
-                CarouselView(selectedIndex: $selectedVehicle, vehicles: vm.vehicles, titles: ["Urgency","Warning","Well"], numbers: [0,0,0], color: .blue)
+                CarouselView(selectedIndex: $selectedVehicle, quickSummary: quickSummary, vehicles: vm.vehicles, color: .blue)
                 
                 Separator()
                 
@@ -35,19 +34,8 @@ struct MaintenanceView: View {
             }.padding(.horizontal, 5)
         }
         
-        Button {
-            // Acción
-        } label: {
-            HStack {
-                Image(systemName: "plus")
-                Text("Add Part")
-            }
-            .font(.title2.bold())
-            .foregroundStyle(.white)
-            .padding(.vertical, 10)
-            .padding(.horizontal, 19)
-            .background(Color.blue.opacity(0.78).gradient)
-            .clipShape(RoundedRectangle(cornerRadius: 18))
+        DominantButtonView(text: "Add Component", color: .blue, image: "plus") {
+            
         }
     }
     
@@ -67,5 +55,9 @@ struct MaintenanceView: View {
 
 
 #Preview {
-    MaintenanceView(selectedVehicle: 0)
+    MaintenanceView(quickSummary: [
+        .init(title: "Critical", value: 0, color: .red),
+        .init(title: "Warning", value: 0, color: .yellow),
+        .init(title: "Well", value: 0, color: .green)
+    ])
 }

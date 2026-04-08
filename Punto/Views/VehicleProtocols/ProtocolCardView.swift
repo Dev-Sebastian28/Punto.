@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct VehicleProtocolCardView: View {
+struct ProtocolCardView: View {
     @State  var vehicleProtocol: VehicleProtocol
     var body: some View {
         
@@ -92,7 +92,7 @@ struct VehicleProtocolCardView: View {
 
 
 #Preview {
-    VehicleProtocolCardView(vehicleProtocol: .init(
+    ProtocolCardView(vehicleProtocol: .init(
         id: UUID(),
         name: "Revisión  PESV",
         description: "Inspección técnica obligatoria según normatividad colombiana antes de iniciar ruta.",

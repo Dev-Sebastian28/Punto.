@@ -8,16 +8,17 @@
 import SwiftUI
 
 struct VehicleProtocolsView: View {
-    @State var selectedVehicle: Int
-    @State private var isPresentedAddProtocol: Bool = false
+    @State var selectedVehicle: Int = 0
     @State private var vm = VehicleProtocoslViewModel(user: .init(name: "", email: "", access: .admin, country: .argentina))
+    var quickSummary: [QuickSummary2]
+    @Environment(NavigationRouter.self) var router
 
     var body: some View {
         VStack (alignment: .leading, spacing: 10) {
             
             header
             
-            CarouselView(selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles, titles: ["Total","High","Low"], color: .yellow)
+            CarouselView(selectedIndex: $vm.selectedVehicle, quickSummary: quickSummary, vehicles: vm.vehicles, color: .yellow)
             
             Separator()
             
@@ -25,15 +26,14 @@ struct VehicleProtocolsView: View {
             
             ScrollView(.vertical, showsIndicators: false) {
                 ForEach(vm.protocols,id: \.id ) { protocolData in
-                        VehicleProtocolCardView(vehicleProtocol: protocolData)
+                        ProtocolCardView(vehicleProtocol: protocolData)
                         .padding(2)
                     }
             
             }
             
             DominantButtonView(text: "Add Protocol", color: .yellow, image: "shield") {
-                
-            }.sheet(isPresented: $isPresentedAddProtocol) {
+                router.navigate(to: .addprotocols)
             }
         }
         .padding(.horizontal)
@@ -72,5 +72,10 @@ struct VehicleProtocolsView: View {
 }
 
 #Preview {
-    VehicleProtocolsView(selectedVehicle: 0)
+    VehicleProtocolsView(quickSummary: [
+        .init(title: "Critical", value: 0, color: .red),
+        .init(title: "Warning", value: 0, color: .yellow),
+        .init(title: "Well", value: 0, color: .green)
+    ])
+        .environment(NavigationRouter())
 }

@@ -49,13 +49,16 @@ struct PuntoApp: App {
                             .navigationDestination(for: AppRoute.self) { route in
                                 switch route {
                                 case .tasks:
-                                    TaskView()
+                                    TaskView(quickSummary: [])
                                 case .protocols:
-                                    VehicleProtocolsView(selectedVehicle: 0)
+                                    VehicleProtocolsView(quickSummary: [])
+                                case .addprotocols:
+                                    AddProtocolView()
                                 case .manteinances:
-                                    MaintenanceView()
+                                    MaintenanceView(quickSummary: [])
                                 case .expenses:
                                     ExpensesView()
+                                
                                 }
                             }
                             .navigationBarBackButtonHidden(true)

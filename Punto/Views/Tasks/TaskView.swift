@@ -10,6 +10,8 @@ import SwiftUI
 struct TaskView: View {
     @State var vm: TaskListViewModel = .init(userModel: .init(name: "", email: "", access: .admin, country: .argentina), selectedVehicle: 0)
     @State private var isPresentingAddTask: Bool = false
+    var quickSummary: [QuickSummary2]
+
     
     enum Constants {
         static let textString = "Tasks" // Localization
@@ -23,7 +25,7 @@ struct TaskView: View {
                 titleHeader
                 
                 // Carrusel
-                CarouselView(selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles, titles: ["Total", "Todo", "Done"], color: .blue)
+                CarouselView(selectedIndex: $vm.selectedVehicle, quickSummary: quickSummary, vehicles: vm.vehicles,  color: .blue)
                 
                 
                 Divider()
@@ -121,5 +123,9 @@ private struct ButtonView: View {
 
 
 #Preview {
-    TaskView()
+    TaskView(quickSummary: [
+        .init(title: "Critical", value: 0, color: .red),
+        .init(title: "Warning", value: 0, color: .yellow),
+        .init(title: "Well", value: 0, color: .green)
+    ])
 }
