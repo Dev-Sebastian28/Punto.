@@ -34,6 +34,6 @@ enum FuelType: String {
 
 struct DummyData {
     func dummyDataVehicleInformation() -> VehicleInformation {
-        .init(id: .init(), image: "volvo", plate: "DMW-243", brand: "Volvo", model: "FMX", year: 2025, mileage: 10000, engine: "V8", transmission: .automatic, fuel: .diesel)
+        .init(id: .init(), image: "volvo", plate: "DMW-243", brand: "Volvo", model: "dwadwadwdwadwaFMX", year: 2025, mileage: 10000, engine: "V8", transmission: .automatic, fuel: .diesel)
     }
 }
