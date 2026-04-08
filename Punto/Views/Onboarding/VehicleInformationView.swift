@@ -11,7 +11,7 @@ struct VehicleInformationView: View {
     var vehicle: Vehicle
     var isIndriverView: Bool = false
     
-    private var info: VehicleInfo {
+    private var info: VehicleInformation {
         vehicle.vehicleInformation
     }
     

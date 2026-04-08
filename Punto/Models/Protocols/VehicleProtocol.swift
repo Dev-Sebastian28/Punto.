@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum VehicleProtocolImportance: String, Codable {
+enum ProtocolImportance: String, CaseIterable {
     case low = "Low"
     case medium = "Medium"
     case high = "High"
 }
 
-enum ProtocolTime: String, Codable {
+enum ProtocolTime: String, CaseIterable {
     case daily = "Daily"
     case weekly = "Weekly"
     case startingWork = "Starting Work"
@@ -21,23 +21,13 @@ enum ProtocolTime: String, Codable {
 
 }
 
-
 struct VehicleProtocol {
     let id: UUID
-    let name: String
-    let description: String?
-    let tasks: [ProtocolTask]
-    let importance: VehicleProtocolImportance
-    let time: ProtocolTime
-}
-
-
-struct LinearVehicleProtocol {
-    let id: UUID
-    let name: String
-    let description: String?
-    let tasks: [ProtocolTask]
-    let importance: VehicleProtocolImportance
+    var name: String
+    var description: String?
+    var tasks: [ProtocolTask]
+    var importance: ProtocolImportance
+    var time: ProtocolTime
     
     func isAvailable(id: UUID) -> Bool {
         guard tasks.count > 0 else {
@@ -58,8 +48,16 @@ struct LinearVehicleProtocol {
 
 struct ProtocolTask {
     let id: UUID
-    let task: String
-    let description: String?
+    var taskName: String
+    var description: String?
     var isCompleted: Bool
-    let isActive: Bool
+    var isActive: Bool
+    
+    init(id: UUID = UUID(), taskName: String, description: String? = nil, isCompleted: Bool = false, isActive: Bool = false) {
+        self.id = id
+        self.taskName = taskName
+        self.description = description
+        self.isCompleted = isCompleted
+        self.isActive = isActive
+    }
 }

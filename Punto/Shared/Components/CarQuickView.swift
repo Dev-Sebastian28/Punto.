@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct CarQuickView: View {
-    var vehicle: VehicleInfo
+    var vehicle: VehicleInformation
     var title1: String
     var value1: Int
     var title2: String

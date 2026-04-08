@@ -165,7 +165,7 @@ struct AddVehicleForm: View {
     }
 
     private func addVehicle() {
-        let info = VehicleInfo(
+        let info = VehicleInformation(
             id: .init(),
             image: "volvo",
             plate: plate,

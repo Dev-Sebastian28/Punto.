@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct VehicleInfo: Identifiable {
+struct VehicleInformation: Identifiable {
     var id: UUID = UUID()
     let image: String
     let plate: String

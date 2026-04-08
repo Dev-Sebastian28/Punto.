@@ -19,7 +19,7 @@ struct MaintenanceView: View {
                 titleHeader
                 
                 // Carrusel
-                CarouselView(selectedIndex: $selectedVehicle, vehicles: vm.vehicles, titles: ["Urgency","Warning","Well"], numbers: [0,0,0])
+                CarouselView(selectedIndex: $selectedVehicle, vehicles: vm.vehicles, titles: ["Urgency","Warning","Well"], numbers: [0,0,0], color: .blue)
                 
                 Separator()
                 

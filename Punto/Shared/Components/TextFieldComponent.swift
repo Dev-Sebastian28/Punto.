@@ -10,7 +10,8 @@ struct TextFieldComponent: View {
     @Binding var text: String
     var prompt: String
     var image: String
-    var isRequired: Bool
+    var color: Color = .secondary
+    var isRequired: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -19,16 +20,17 @@ struct TextFieldComponent: View {
                     .foregroundStyle(.red)
                     .bold()
             }
+            
             HStack(spacing: 10) {
                 Image(systemName: image)
                     .padding(.leading)
                 TextField("", text: $text, prompt: Text(prompt))
             }
-            .frame(height: 54)
+            .frame(height: 48)
             .background {
-                Color(.gray.opacity(0.2))
+                color.opacity(0.2)
                 .clipShape(RoundedRectangle(cornerRadius: 15))
-
+                .shadow(radius: 10)
             }
         }
     }

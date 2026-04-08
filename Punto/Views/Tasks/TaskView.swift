@@ -23,7 +23,7 @@ struct TaskView: View {
                 titleHeader
                 
                 // Carrusel
-                CarouselView(selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles, titles: ["Total", "Todo", "Done"])
+                CarouselView(selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles, titles: ["Total", "Todo", "Done"], color: .blue)
                 
                 
                 Divider()

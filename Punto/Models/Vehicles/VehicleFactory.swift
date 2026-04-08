@@ -16,7 +16,7 @@ protocol Vehicle {
     var tasks: [Task] { get set }
     var protocols: [VehicleProtocol] { get set }
     var expenses: [Expense] { get set }
-    var vehicleInformation: VehicleInfo { get set }
+    var vehicleInformation: VehicleInformation { get set }
     var isActive: Bool { get set }
 
 }
@@ -28,12 +28,36 @@ class TransportationVehicle: Vehicle {
     var maintenance: [MaintainableComponent] = []
     var expenses: [Expense] = [.init(name: "warranty", description: "it is a warranty", amount: -200, date: .distantPast, type: "")]
     var tasks: [Task] = []
-    var protocols: [VehicleProtocol] = []
-    var vehicleInformation: VehicleInfo
+    var protocols: [VehicleProtocol] = [.init(
+        id: UUID(),
+        name: "Revisión Preoperacional PESV",
+        description: "Inspección técnica obligatoria según normatividad colombiana antes de iniciar ruta.",
+        tasks: [
+            ProtocolTask(id: UUID(), taskName: "Nivel de aceite y refrigerante", description: "Verificar que los fluidos estén en los niveles óptimos.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Estado de llantas (Labrado)", description: "Revisar que el desgaste no supere los límites legales.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Kit de carretera completo", description: "Extintor vigente, tacos, gata y señales reflectivas.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Luces y direccionales", description: "Comprobar funcionamiento de luces altas, bajas y frenado.", isCompleted: false, isActive: true)
+        ],
+        importance: .high,
+        time: .startingWork
+    ), .init(
+        id: UUID(),
+        name: "Revisión Preoperacional PESV",
+        description: "Inspección técnica obligatoria según normatividad colombiana antes de iniciar ruta.",
+        tasks: [
+            ProtocolTask(id: UUID(), taskName: "Nivel de aceite y refrigerante", description: "Verificar que los fluidos estén en los niveles óptimos.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Estado de llantas (Labrado)", description: "Revisar que el desgaste no supere los límites legales.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Kit de carretera completo", description: "Extintor vigente, tacos, gata y señales reflectivas.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Luces y direccionales", description: "Comprobar funcionamiento de luces altas, bajas y frenado.", isCompleted: false, isActive: true)
+        ],
+        importance: .high,
+        time: .startingWork
+    )]
+    var vehicleInformation: VehicleInformation
     var cargoInfo: CargoInfo?
     var isActive: Bool = false
 
-    init(vehicleInformation: VehicleInfo) {
+    init(vehicleInformation: VehicleInformation) {
         self.vehicleInformation = vehicleInformation
     }
 }
@@ -45,11 +69,35 @@ class PrivateVehicle: Vehicle {
     var maintenance: [MaintainableComponent] = []
     var expenses: [Expense] = []
     var tasks: [Task] = []
-    var protocols: [VehicleProtocol] = []
-    var vehicleInformation: VehicleInfo
+    var protocols: [VehicleProtocol] = [.init(
+        id: UUID(),
+        name: "Revisión Preoperacional PESV",
+        description: "Inspección técnica obligatoria según normatividad colombiana antes de iniciar ruta.",
+        tasks: [
+            ProtocolTask(id: UUID(), taskName: "Nivel de aceite y refrigerante", description: "Verificar que los fluidos estén en los niveles óptimos.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Estado de llantas (Labrado)", description: "Revisar que el desgaste no supere los límites legales.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Kit de carretera completo", description: "Extintor vigente, tacos, gata y señales reflectivas.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Luces y direccionales", description: "Comprobar funcionamiento de luces altas, bajas y frenado.", isCompleted: false, isActive: true)
+        ],
+        importance: .high,
+        time: .startingWork
+    ), .init(
+        id: UUID(),
+        name: "Revisión Preoperacional PESV",
+        description: "Inspección técnica obligatoria según normatividad colombiana antes de iniciar ruta.",
+        tasks: [
+            ProtocolTask(id: UUID(), taskName: "Nivel de aceite y refrigerante", description: "Verificar que los fluidos estén en los niveles óptimos.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Estado de llantas (Labrado)", description: "Revisar que el desgaste no supere los límites legales.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Kit de carretera completo", description: "Extintor vigente, tacos, gata y señales reflectivas.", isCompleted: false, isActive: true),
+            ProtocolTask(id: UUID(), taskName: "Luces y direccionales", description: "Comprobar funcionamiento de luces altas, bajas y frenado.", isCompleted: false, isActive: true)
+        ],
+        importance: .high,
+        time: .startingWork
+    )]
+    var vehicleInformation: VehicleInformation
     var isActive: Bool = false
 
-    init(vehicleInformation: VehicleInfo) {
+    init(vehicleInformation: VehicleInformation) {
         self.vehicleInformation = vehicleInformation
     }
 }

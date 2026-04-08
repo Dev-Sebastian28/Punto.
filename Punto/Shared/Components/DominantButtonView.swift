@@ -18,6 +18,7 @@ struct DominantButtonView: View {
     let image: String?
     var style: Style = .dominant
     var maxWidth: CGFloat? = nil
+    var maxHeight: CGFloat? = nil
     var isEnabled: Bool = true
     let action: () -> Void
 
@@ -32,7 +33,7 @@ struct DominantButtonView: View {
             }
             .font(labelFont)
             .foregroundStyle(foregroundColor)
-            .frame(maxWidth: maxWidth ?? .infinity)
+            .frame(maxWidth: maxWidth ?? .infinity, maxHeight: maxHeight)
             .padding(.vertical, verticalPadding)
             .padding(.horizontal, horizontalPadding)
             .background(backgroundStyle)
@@ -78,7 +79,7 @@ struct DominantButtonView: View {
                 )
             )
         case .neutral:
-            AnyShapeStyle(Color.platformGray6)
+            AnyShapeStyle(color.opacity(0.2))
         }
     }
 

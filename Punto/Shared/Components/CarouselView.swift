@@ -11,6 +11,7 @@ struct CarouselView: View {
     var vehicles: [Vehicle]
     var titles: [String] = Array(repeating: "", count: 3)
     var numbers: [Int] = Array(repeating: 0, count: 3)
+    var color: Color
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -23,29 +24,13 @@ struct CarouselView: View {
                                      title1: titles[0], value1: numbers[0],
                                      title2: titles[1], value2: numbers[0],
                                      title3: titles[2], value3: numbers[0],
-                                     selectedColor: Color.blue,
+                                     selectedColor: color,
                                      isSelected: selectedIndex == index)
                         .padding()
                         .scaleEffect(selectedIndex == index ? 1.05 : 1.0)
                     }
                 }
             }
-        }
-    }
-    
-    private func totalTasks() -> Int {
-        vehicles[selectedIndex].tasks.count
-    }
-
-    private func totalTodoTasks() -> Int {
-        vehicles[selectedIndex].tasks.reduce(0) { partialResult, task in
-            task.status == .pending ? partialResult + 1 : partialResult
-        }
-    }
-
-    private func totalDoneTasks() -> Int {
-        vehicles[selectedIndex].tasks.reduce(0) { partialResult, task in
-            task.status == .done ? partialResult + 1 : partialResult
         }
     }
 }
@@ -82,6 +67,6 @@ struct CarouselView: View {
                 )
             )
         ]
-        ,titles: ["Total", "ToDo", "Done"]
+        ,titles: ["Total", "ToDo", "Done"], color: .blue
     )
 }
