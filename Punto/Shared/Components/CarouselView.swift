@@ -27,7 +27,6 @@ struct CarouselView: View {
                         isCompresed.toggle()
                     }
                 }
-                .padding(.horizontal)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             else {
