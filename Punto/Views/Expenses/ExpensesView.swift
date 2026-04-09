@@ -8,169 +8,176 @@
 import SwiftUI
 
 struct ExpensesView: View {
-    @State private var isPresentedAddExpense: Bool = false
+    @State private var isPresentedAddExpe: Bool = false
     @State private var isPresentedFilter: Bool = false
     @State private var search: String = ""
-    @State private var vm = ExpensesViewModel(
-        userModel: .init(name: "", email: "", access: .admin, country: .argentina),
-        selectedVehicle: 0
-    )
-    private let primaryGreen = Color.green.mix(with: .teal, by: 0.25)
-    private let accentGreen = Color.green.mix(with: .mint, by: 0.35)
+    @State private var filterCollection: [Expense]
+    @State private var vm = ExpensesViewModel(userModel: .init(name: "", email: "", access: .admin, country: .argentina),selectedVehicle: 0)
+    let colors: [Color] = [.green.opacity(0.8),.brandGreenDark,.brandGreen]
     
     var body: some View {
-        @Bindable var bindableVM = vm
-        
         ZStack {
-            VStack (alignment: .leading) {
-                // Header
-                titleHeader
-                
-                // Search view, filter button and squeres
+            VStack (alignment: .leading, spacing: 5) {
+                Header
                 controlView
-                
-                // Over View Card
-                ExpenseOverviewCard(balance: vm.balance, profit: vm.profit, losses: vm.losses)
-                
+                CarouselView(selectedIndex: .constant(0), quickSummary: [], vehicles: vm.userModel.vehicles, color: .green)
                 information
-                                
+                
+                Separator()
+                
                 ScrollView(.vertical, showsIndicators: true) {
-                    
                     ForEach(vm.filteredCollection, id: \.id) { expense in
                         ExpenseCardView(expense: expense)
+                            .padding(.top, 2)
+                            .padding(.horizontal, 2)
                             .animation(.easeOut, value: isPresentedFilter)
                     }
                 }
-            }.padding(.horizontal, 4)
+            }.padding(.horizontal, 8)
             
-            if isPresentedFilter {
-                VStack {
-                    ExpenseFilterView(
-                        isPresented: $isPresentedFilter,
-                        basedCollection: vm.expenses,
-                        filterCollection: $bindableVM.filteredCollection
-                    )
-                    .padding(.vertical, 120)
-                    Spacer()
-                }.animation(.easeOut, value: isPresentedFilter)
-            }
-            
-            // Circle Button
-            VStack {
+            VStack(alignment: .trailing) {
+                if isPresentedFilter {
+                    ExpenseFilterView(isPresented: $isPresentedFilter,basedCollection: vm.expenses,filterCollection: $filterCollection)
+                        .transition(.move(edge: .top))
+                }
                 Spacer()
+                
                 HStack {
                     Spacer()
-                    Button {
-                        isPresentedAddExpense.toggle()
-                    } label: {
-                        Circle()
-                            .frame(width: 56, height: 56)
-                            .foregroundStyle(LinearGradient(colors: [primaryGreen, accentGreen], startPoint: .topLeading, endPoint: .bottomTrailing))
-                            .overlay {
-                                Image(systemName: "plus")
-                                    .font(.title2)
-                                    .bold()
-                                    .foregroundStyle(.white)
-                            }
-                    }.padding()
-                }
-            }
-            .sheet(isPresented: $isPresentedAddExpense) {
-                AddExpenseView(collection: expensesBinding, isPresented: $isPresentedAddExpense)
-                    .presentationDetents([.height(390)])
-                    .onDisappear {
-                        vm.resetFilters()
+                    ControlButton(iconName: "plus", isCircular: true) {
+                        
                     }
-            }
-        }.ignoresSafeArea(edges: .bottom)
-    }
-    var titleHeader: some View {
-        VStack(alignment: .leading, spacing: -5) {
-            Text("Expenses")
-                .font(.largeTitle.bold())
-                .foregroundStyle(LinearGradient(colors: [primaryGreen, accentGreen], startPoint: .topLeading, endPoint: .bottomTrailing))
-            
-            Text("Expenses of Volvo x900x")
-                .font(.caption)
-                .foregroundStyle(.gray)
+                }
+                .padding()
+                .sheet(isPresented: $isPresentedAddExpe) {
+                    AddExpenseView(collection: .constant([]), isPresented: $isPresentedAddExpe)
+                        .presentationDetents([.height(390)])
+                        .onDisappear {
+                            vm.resetFilters()
+                        }
+                }
+            }.ignoresSafeArea(edges: .bottom)
         }
+    }
+    
+    @ViewBuilder
+    var Header: some View {
+        Text("Expenses")
+            .font(.system(size: 44, weight: .bold))
+            .customGradient()
     }
     
     var controlView: some View {
         HStack {
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.gray)
-                    .padding(.leading)
-                TextField("", text: $search, prompt: Text("Search").foregroundStyle(.black).bold())
-            }
-            .frame(height: 44)
-            .background(Color.gray.opacity(0.2))
-            .clipShape(RoundedRectangle(cornerRadius: 30))
+            TextFieldComponent(text: $search, prompt: "Search for", image: "magnifyingglass")
             
             // Filter Button
-            Button {
-                withAnimation {isPresentedFilter.toggle()}
-            } label: {
-                RoundedRectangle(cornerRadius: 30)
-                    .frame(width: 50, height: 44)
-                    .foregroundStyle(LinearGradient(colors: [primaryGreen, accentGreen], startPoint: .topLeading, endPoint: .bottomTrailing))
-                    .overlay {
-                        Image(systemName: "slider.vertical.3")
-                            .font(.title2)
-                            .foregroundStyle(.white)
-                            .rotationEffect(.degrees(90.0))
-                    }
-                
+            ControlButton(iconName: "slider.vertical.3") {
+                isPresentedFilter.toggle()
             }
             
             // Over view button
-            Button {
-                // Show overview
-            } label: {
-                RoundedRectangle(cornerRadius: 30)
-                    .frame(width: 50, height: 44)
-                    .foregroundStyle(LinearGradient(colors: [primaryGreen, accentGreen], startPoint: .topLeading, endPoint: .bottomTrailing))
-                    .overlay {
-                        Image(systemName: "square.split.2x2.fill")
-                            .font(.title2)
-                            .foregroundStyle(.white)
-                    }
+            ControlButton(iconName: "square.split.2x2.fill") {
+                
             }
-        }
+            
+        }.bold()
     }
     
     var information: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Text("Transactions")
-                    .font(.title)
-                    .bold()
+        VStack(alignment: .leading, spacing: 10) {
+            
+            // Balance
+            HStack(spacing: 6) {
+                Label("Balance:", systemImage: "wallet.pass.fill")
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
                 
                 Spacer()
                 
-                Text("\(vm.totalExpenses) Total")
-                    .font(.headline)
-                    .foregroundStyle(.gray)
+                Text("$102.000")
+                    .font(.title3.bold())
+                    .foregroundStyle(.green)
+                
             }
-            
-            Text("Today")
-                .font(.headline)
-                .foregroundStyle(.gray)
-            
-            Separator()
-                .padding(.horizontal, 5)
+            .customBackground(color: .white)
+                        
+            HStack {
+                // Incomes
+                HStack(spacing: 6) {
+                        Image(systemName: "arrow.down.circle.fill")
+                            .foregroundStyle(.blue)
+                            .font(.title2)
 
+                    Text("$50.000")
+                        .font(.headline.bold())
+                        .foregroundStyle(.blue)
+                }
+                .customBackground(color: .blue.opacity(0.15))
+                
+                Spacer()
+                
+                // Losses
+                HStack(spacing: 6) {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .foregroundStyle(.red)
+                            .font(.title2)
+                    Text("$20.000")
+                        .font(.headline.bold())
+                        .foregroundStyle(.red)
+                }
+                .customBackground(color: .red.opacity(0.35))
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 8)
+        .background {
+            RoundedRectangle(cornerRadius: 20)
+                .customGradient().opacity(0.2)
         }
     }
     
-    private var expensesBinding: Binding<[Expense]> {
-        Binding(
-            get: { vm.expenses },
-            set: { vm.updateExpenses($0) }
-        )
+    init() {
+        self.isPresentedAddExpe = false
+        self.isPresentedFilter = false
+        self.filterCollection = []
     }
 }
+
+struct CustomLinearGradient: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(LinearGradient(colors: [
+                .green.opacity(0.8),
+                .brandGreenDark,
+                .brandGreen
+            ], startPoint: .topLeading, endPoint: .bottomTrailing))
+    }
+}
+
+private struct ControlButton: View {
+    let iconName: String
+    var isCircular: Bool = false
+    let action: () -> Void
+    var body: some View {
+        Button {
+            withAnimation(.linear) {
+                action()
+            }
+        } label: {
+            Image(systemName: iconName)
+                .font(.title2)
+                .foregroundStyle(.white)
+                .padding(11)
+                .background(
+                    RoundedRectangle(cornerRadius: isCircular ? .infinity : 10)
+                        .customGradient()
+                )
+        }
+    }
+}
+
 
 #Preview {
     ExpensesView()

@@ -11,115 +11,77 @@ struct ExpenseOverviewCard: View {
     var balance: Double
     var profit: Double
     var losses: Double
+    var bcColor: [Color]
     var body: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .frame(height: 200, alignment: .center)
-            .foregroundStyle(
-                RadialGradient(
-                    gradient: Gradient(stops: [
-                        .init(color: Color.green.mix(with: .mint, by: 0.25), location: 0.0),
-                        .init(color: Color.green, location: 0.55),
-                        .init(color: Color.green.mix(with: .teal, by: 0.35), location: 0.9)
-                    ]),
-                    center: .init(x: 0.25, y: 0.2),
-                    startRadius: 10,
-                    endRadius: 380
-                )
-            )
-    
-            .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 6)
-        
-            .overlay(alignment: .leading) {
-                VStack (alignment: .leading, spacing: 10){
-                    Group {
-                        Text("Balance")
-                            .font(.title2)
-                        Text(balance, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                            .font(.largeTitle)
-                            .bold()
-                    }.foregroundStyle(.white)
-
-                    HStack (spacing: 40){
-
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(
-                                AngularGradient(
-                                    gradient: Gradient(stops: [
-                                        .init(color: Color.green.mix(with: .teal, by: 0.45), location: 0.0),
-                                        .init(color: Color.green, location: 0.6),
-                                        .init(color: Color.green.mix(with: .mint, by: 0.35), location: 1.0)
-                                    ]),
-                                    center: .center,
-                                    angle: .degrees(210)
-                                )
-                            )
-                        
-                             // Profit Squere
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(.ultraThinMaterial.opacity(0.25))
-                            )
-                            .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 3)
-                            .overlay(alignment: .leading){
-                                VStack (alignment: .leading, spacing: 10) {
-                                    HStack{
-                                        Image(systemName: "arrow.up.forward")
-                                            .foregroundStyle(.blue)
-                                            .bold()
-                                        Text("Profit")
-                                            .bold()
-                                    }
-                                    Text(profit, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                        .font(.title2)
-                                        .foregroundStyle(.white)
-                                        .bold()
-                                }.padding(.leading, 10)
-                            }
-                        
-                        
-                        // Losses Squere
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(
-                                LinearGradient(
-                                    gradient: Gradient(stops: [
-                                        .init(color: Color.green.mix(with: .yellow, by: 0.25).opacity(0.95), location: 0.0),
-                                        .init(color: Color.green, location: 0.55),
-                                        .init(color: Color.green.mix(with: .mint, by: 0.15), location: 1.0)
-                                    ]),
-                                    startPoint: .bottomLeading,
-                                    endPoint: .topTrailing
-                                )
-                            )
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(.ultraThinMaterial.opacity(0.25))
-                            )
-                            .overlay(
-                                LinearGradient(
-                                    colors: [Color.white.opacity(0.18), Color.white.opacity(0.0)],
-                                    startPoint: .topLeading,
-                                    endPoint: .center
-                                )
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                            )
-                            .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 3)
-                            .overlay(alignment: .leading){
-                                VStack (alignment: .leading, spacing: 10) {
-                                    HStack{
-                                        Image(systemName: "arrow.down.right")
-                                            .foregroundStyle(.red)
-                                            .bold()
-                                        Text("Losses")
-                                            .bold()
-                                    }
-                                    Text(losses, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                        .font(.title2)
-                                        .foregroundStyle(.white)
-                                        .bold()
-                                }.padding(.leading, 10)
-                            }
-                    }
-                }.padding()
+        VStack(alignment: .leading, spacing: 10 ) {
+            VStack(alignment: .leading,spacing: 2) {
+                Text("Total Balance:")
+                    .font(.title).bold()
+                    .foregroundStyle(.white.opacity(0.82))
+                Text(balance, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    .font(.largeTitle.bold())
+                    .foregroundStyle(.white)
             }
+            
+            HStack(spacing: 14) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Image(systemName: "arrow.down.right")
+                            .foregroundStyle(.red)
+                            .bold()
+                        Text("Losses")
+                            .bold()
+                    }
+                    .foregroundStyle(.red.opacity(0.6))
+                    
+                    Text(losses, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        .font(.title2)
+                        .foregroundStyle(.black)
+                        .bold()
+                }
+                .frame(maxWidth: .infinity)
+                .padding(10)
+                .background(.white.opacity(0.85))
+                .cornerRadius(15)
+                
+                VStack {
+                    
+                    HStack {
+                        Image(systemName: "arrow.up.forward")
+                            .foregroundStyle(.blue)
+                            .bold()
+                        Text("Profit")
+                            .bold()
+                    }
+                    .foregroundStyle(.blue.opacity(0.6))
+                    
+                    Text(profit, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        .font(.title2)
+                        .foregroundStyle(.black)
+                        .bold()
+                    
+                }
+                .frame(maxWidth: .infinity)
+                .padding(10)
+                .background(.white.opacity(0.85))
+                .cornerRadius(15)
+            }
+        }
+        .padding(20)
+        .background(
+            LinearGradient(colors: bcColor, startPoint: .topLeading, endPoint: .bottomTrailing)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .strokeBorder(.white.opacity(0.14), lineWidth: 1)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .shadow(color: .brandGreenDark.opacity(0.24), radius: 18, x: 0, y: 10)
     }
+    
+   
+}
+
+#Preview {
+    ExpenseOverviewCard(balance: 0.0, profit: 0.0, losses: 0.0, bcColor: [.green, .green.opacity(0.3), .white.opacity(0.1)] )
 }
