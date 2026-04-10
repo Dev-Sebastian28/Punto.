@@ -14,15 +14,20 @@ struct ExpensesView: View {
     @State private var search: String = ""
     @State private var filterCollection: [Expense]
     @State private var vm = ExpensesViewModel(userModel: .init(name: "", email: "", access: .admin, country: .argentina))
-    let colors: [Color] = [.green.opacity(0.8),.brandGreenDark,.brandGreen]
     
     var body: some View {
         ZStack {
-            VStack (alignment: .leading, spacing: 0) {
-                Header
+            VStack (alignment: .leading, spacing: 10) {
+                Header(title: "Expenses", image: "dollarsign.circle", description: "Welcome to the expenses section, here you can manage your expenses and add them to your vehicles", color: .green, gradient: LinearGradient(colors: [
+                    .green.opacity(0.8),
+                    .brandGreenDark,
+                    .brandGreen
+                ], startPoint: .topLeading, endPoint: .bottomTrailing))
+                
                 controlView
                 
                 CarouselView(algorithm: algorithm, color: .green, selectedIndex: $vm.selectedVehicleIndex, vehicles: vm.vehicles)
+                
                 information
                                 
                 ScrollView(.vertical, showsIndicators: true) {
@@ -57,13 +62,6 @@ struct ExpensesView: View {
                 }
             }.ignoresSafeArea(edges: .bottom)
         }
-    }
-    
-    @ViewBuilder
-    var Header: some View {
-        Text("Expenses")
-            .font(.system(size: 44, weight: .bold))
-            .customGradient()
     }
     
     var controlView: some View {

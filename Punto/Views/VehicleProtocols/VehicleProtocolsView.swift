@@ -15,7 +15,8 @@ struct VehicleProtocolsView: View {
     var body: some View {
         VStack (alignment: .leading, spacing: 10) {
             
-            header
+            Header(title: "Protocols", image: "shield.fill", description: "Welcome to the Protocols section, here you can see the protocols that your vehicles have to follow.", color: .yellow, gradient: .none)
+            
             CarouselView(algorithm: ProtocolsAlgorithm(), color: .yellow, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
             selectedVehicleInfo
             
@@ -34,20 +35,6 @@ struct VehicleProtocolsView: View {
         .padding(.horizontal)
     }
     
-    private var header: some View {
- 
-        VStack(alignment: .leading ,spacing: 0) {
-            Text("Protocols")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.yellow)
-            
-            Text("Select a vehicle to add its protocols")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-        
-    }
     
     private var selectedVehicleInfo: some View {
         VStack(alignment: .leading) {

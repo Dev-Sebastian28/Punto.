@@ -19,7 +19,7 @@ struct TaskView: View {
         ZStack(alignment: .bottomTrailing) {
             VStack (alignment: .leading, spacing: 1) {
                 
-                titleHeader
+                Header(title: "Tasks", image: "line.3.horizontal", description: "Welcome to the tasks section. Here you can see the tasks of your vehicles. You can also add new tasks here.", color: .blue, gradient: .none)
                 
                 CarouselView(algorithm: TasklAlgorithm(), color: .blue, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
                 
@@ -49,18 +49,6 @@ struct TaskView: View {
         .sheet(isPresented: $isPresentingAddTask) {
             AddTaskView(tasks: $vm.userModel.vehicles[vm.selectedVehicle].tasks)
         }
-    }
-    
-    @ViewBuilder
-    var titleHeader: some View {
-        Text(Constants.textString)
-            .font(.system(size: 45))
-            .bold()
-            .foregroundStyle(.blue)
-        Text("Select a vehicle to see the tasks:")
-            .font(Font.callout.bold())
-            .foregroundStyle(.gray)
-            .padding(.bottom, 10)
     }
     
     @ViewBuilder

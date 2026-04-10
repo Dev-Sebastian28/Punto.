@@ -18,7 +18,7 @@ struct MaintenanceView: View {
         ZStack {
             VStack (alignment: .leading) {
                 
-                titleHeader
+                Header(title: "Maintenances", image: "wrench.and.screwdriver.fill", description: "Welcome to the maintenance section, here you monitor your maintenances and add new ones", color: .blue, gradient: .none)
                 
                 CarouselView(algorithm: MaintenanceCarrouselAlgorithm(), color: .blue, selectedIndex: $selectedVehicle, vehicles: vm.vehicles)
                                 
@@ -37,18 +37,6 @@ struct MaintenanceView: View {
         DominantButtonView(text: "Add Component", color: .blue, image: "plus") {
             
         }
-    }
-    
-    @ViewBuilder
-    var titleHeader: some View {
-        Text("Maintenance")
-            .font(.system(.largeTitle, design: .default))
-            .fontWeight(.bold)
-            .foregroundColor(.blue)
-        
-        Text("Select a vehicle to see and add its maintainable parts")
-            .font(.subheadline)
-            .foregroundColor(.secondary)
     }
 }
 
