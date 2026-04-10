@@ -8,38 +8,35 @@ import SwiftUI
 
 struct CarouselView: View {
     let algorithm: CarrouselAlgorithm
-    var color: Color
-    @Binding var selectedIndex: Int
-    @State private var isCompresed = false
-    var vehicles: [any Vehicle]
-    
+    let color: Color
     private let carouselAnimation: Animation = .spring(response: 0.4, dampingFraction: 0.82)
+    @Binding var selectedIndex: Int
+    @Environment(CarouselViewModel.self) var vm
     
     
     var body: some View {
         VStack(spacing: 0) {
-            
-            if isCompresed {
+            if vm.isCarousellHide {
                 DominantButtonView(
                     text: "Show your vehicles",
                     color: color,
                     image: "car.2.fill"
                 ) {
                     withAnimation(carouselAnimation) {
-                        isCompresed.toggle()
+                        vm.isCarousellHide.toggle()
                     }
                 }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             
-            if !isCompresed {
+            if !vm.isCarousellHide {
                 ScrollViewReader { proxy in
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         
                         HStack(alignment: .bottom, spacing: 12) {
                             
-                            ForEach(Array(vehicles.enumerated()), id: \.element.vehicleInformation.id) { index, vehicle in
+                            ForEach(Array(vm.vehicles.enumerated()), id: \.element.vehicleInformation.id) { index, vehicle in
                                 
                                 Button {
                                     withAnimation(carouselAnimation) {
@@ -86,13 +83,27 @@ struct CarouselView: View {
             
             Separator()
         }
-        .animation(carouselAnimation, value: isCompresed)
+        .animation(carouselAnimation, value: vm.isCarousellHide)
         .animation(carouselAnimation, value: selectedIndex)
+        .environment(vm)
+    }
+}
+
+@Observable
+class CarouselViewModel {
+    private(set) var user: User
+    var vehicles: [Vehicle] { user.vehicles }
+    
+    var isCarousellHide: Bool
+    
+    init(user: User) {
+        self.user = user
+        self.isCarousellHide = false
     }
 }
 
 #Preview {
-    CarouselView(algorithm: TasklAlgorithm(), color: .blue, selectedIndex: .constant(0), vehicles: User(name: "", email: "", access: .admin, country: .argentina).vehicles)
+    CarouselView(algorithm: TasklAlgorithm(), color: .blue, selectedIndex: .constant(0))
 }
 
 

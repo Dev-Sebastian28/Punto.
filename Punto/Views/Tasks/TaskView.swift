@@ -8,32 +8,32 @@
 import SwiftUI
 
 struct TaskView: View {
+    let title = "Tasks"
+    let description = "Welcome to the tasks section. Here you can see the tasks of your vehicles. You can also add new tasks here."
     @State var vm: TaskListViewModel = .init(userModel: .init(name: "", email: "", access: .admin, country: .argentina), selectedVehicle: 0)
     @State private var isPresentingAddTask: Bool = false
-
-    enum Constants {
-        static let textString = "Tasks" // Localization
-    }
        
     var body: some View {
+
         ZStack(alignment: .bottomTrailing) {
             VStack (alignment: .leading, spacing: 1) {
-                
-                Header(title: "Tasks", image: "line.3.horizontal", description: "Welcome to the tasks section. Here you can see the tasks of your vehicles. You can also add new tasks here.", color: .blue, gradient: .none)
-                
-                CarouselView(algorithm: TasklAlgorithm(), color: .blue, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
-                
-                selectedVehicleInfo
-                
-                ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack(spacing: 10) {
-                        ForEach(vm.vehicles[vm.selectedVehicle].tasks, id: \.id) { task in
-                            TaskCardView(task: task)
-                                .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .bottom)),
-                                                      removal: .opacity))
+                Header(title: title , image: "line.3.horizontal", description: description, color: .blue, gradient: .none)
+
+                if !vm.vehicles.isEmpty {
+                    CarouselView(algorithm: TasklAlgorithm(), color: .blue, selectedIndex: $vm.selectedVehicle)
+                    
+                    selectedVehicleInfo
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVStack(spacing: 10) {
+                            ForEach(vm.vehicles[vm.selectedVehicle].tasks, id: \.id) { task in
+                                TaskCardView(task: task)
+                            }
                         }
-                    }.padding(.top, 10)
-                }.animation(.spring(response: 0.4, dampingFraction: 0.8), value: vm.selectedVehicle)
+                    }
+                } else {
+                    ContentUnavailableView("No Vehicles", systemImage: "car.fill", description: Text("Add a vehicle to see tasks."))
+                }
             }.padding(.horizontal, 7)
             
             // Add Task Button
@@ -97,4 +97,5 @@ private struct ButtonView: View {
 
 #Preview {
     TaskView()
+        .environment(CarouselViewModel(user: .init(name: "Sebastian", email: "sebas@example.com", access: .admin, country: .colombia)))
 }

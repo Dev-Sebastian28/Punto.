@@ -17,8 +17,7 @@ struct Header: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var currentTime = 0
     @State private var timerSubscription: Cancellable?
-    @State private var isHide: Bool = false
-    
+    @Environment(CarouselViewModel.self) var vm
         
     var body: some View {
         
@@ -31,7 +30,7 @@ struct Header: View {
                Spacer()
     
                CommonButton(title: "Hide Vehicles Section", icon: "chevron.down",style: nil) {
-                   
+                   vm.isCarousellHide.toggle()
                }
             }
         } else {
@@ -114,18 +113,6 @@ struct CommonButton: View {
 }
 
 #Preview {
-    VStack(spacing: 20) {
-        Header(title: "Tasks",
-               image: "plus",
-               description: "Welcome to task, here you can add and organize your tasks",
-               color: .blue,
-               gradient: nil)
-        
-        Header(title: "Premium",
-               image: "star.fill",
-               description: "Unlock all features",
-               color: .purple,
-               gradient: LinearGradient(colors: [.purple, .blue], startPoint: .leading, endPoint: .trailing))
-    }
-    .padding()
+    Header(title: "", image: "", description: "", color: .red, gradient: .none)
+        .environment(CarouselViewModel(user: .init(name: "", email: "", access: .admin, country: .argentina)))
 }

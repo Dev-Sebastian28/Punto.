@@ -8,19 +8,21 @@
 import SwiftUI
 
 struct MaintenanceView: View {
-    
+    let title = "Maintenances"
+    let description = "Welcome to the maintenance section, here you monitor your maintenances and add new ones"
     let algorithm = MaintenanceCarrouselAlgorithm()
     @State var vm: MaintenanceViewModel = .init()
     @State var selectedVehicle: Int = 0
-    var quickSummary: [QuickSummary2]
+    @State var isHide: Bool = false
+    
     
     var body: some View {
         ZStack {
             VStack (alignment: .leading) {
                 
-                Header(title: "Maintenances", image: "wrench.and.screwdriver.fill", description: "Welcome to the maintenance section, here you monitor your maintenances and add new ones", color: .blue, gradient: .none)
+                Header(title: title , image: "wrench.and.screwdriver.fill", description: description , color: .blue, gradient: .none)
                 
-                CarouselView(algorithm: MaintenanceCarrouselAlgorithm(), color: .blue, selectedIndex: $selectedVehicle, vehicles: vm.vehicles)
+                CarouselView(algorithm: MaintenanceCarrouselAlgorithm(), color: .blue, selectedIndex: $selectedVehicle)
                                 
                 MaintenanceFilterView(vm: vm)
                 
@@ -43,9 +45,7 @@ struct MaintenanceView: View {
 
 
 #Preview {
-    MaintenanceView(quickSummary: [
-        .init(title: "Critical", value: 0, color: .red),
-        .init(title: "Warning", value: 0, color: .yellow),
-        .init(title: "Well", value: 0, color: .green)
-    ])
+    MaintenanceView()
+        .environment(CarouselViewModel(user: .init(name: "Sebastian", email: "sebas@example.com", access: .admin, country: .colombia)))
+
 }

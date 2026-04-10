@@ -9,24 +9,29 @@ import SwiftUI
 
 struct ExpensesView: View {
     let algorithm = ExpenseAlgorithm()
+    let title = "Expenses"
+    let description = "Welcome to the expenses section, here you can manage your expenses and add them to your vehicles"
+    let viewStyle =  LinearGradient(colors: [
+        .green.opacity(0.8),
+        .brandGreenDark,
+        .brandGreen
+    ], startPoint: .topLeading, endPoint: .bottomTrailing)
+    
     @State private var isPresentedAddExpe: Bool = false
     @State private var isPresentedFilter: Bool = false
     @State private var search: String = ""
     @State private var filterCollection: [Expense]
+    @State private var isHide: Bool = false
     @State private var vm = ExpensesViewModel(userModel: .init(name: "", email: "", access: .admin, country: .argentina))
     
     var body: some View {
         ZStack {
             VStack (alignment: .leading, spacing: 10) {
-                Header(title: "Expenses", image: "dollarsign.circle", description: "Welcome to the expenses section, here you can manage your expenses and add them to your vehicles", color: .green, gradient: LinearGradient(colors: [
-                    .green.opacity(0.8),
-                    .brandGreenDark,
-                    .brandGreen
-                ], startPoint: .topLeading, endPoint: .bottomTrailing))
+                Header(title: title , image: "dollarsign.circle", description: description , color: .green, gradient: viewStyle)
                 
                 controlView
                 
-                CarouselView(algorithm: algorithm, color: .green, selectedIndex: $vm.selectedVehicleIndex, vehicles: vm.vehicles)
+                CarouselView(algorithm: algorithm, color: .green, selectedIndex: $vm.selectedVehicleIndex)
                 
                 information
                                 
@@ -131,7 +136,7 @@ struct ExpensesView: View {
         .padding(.vertical, 8)
         .background {
             RoundedRectangle(cornerRadius: 20)
-                .customGradient().opacity(0.2)
+                .foregroundStyle(viewStyle).opacity(0.2)
         }
     }
     
@@ -142,18 +147,12 @@ struct ExpensesView: View {
     }
 }
 
-struct CustomLinearGradient: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .foregroundStyle(LinearGradient(colors: [
-                .green.opacity(0.8),
-                .brandGreenDark,
-                .brandGreen
-            ], startPoint: .topLeading, endPoint: .bottomTrailing))
-    }
-}
-
 private struct ControlButton: View {
+    let viewStyle =  LinearGradient(colors: [
+        .green.opacity(0.8),
+        .brandGreenDark,
+        .brandGreen
+    ], startPoint: .topLeading, endPoint: .bottomTrailing)
     let iconName: String
     var isCircular: Bool = false
     let action: () -> Void
@@ -169,8 +168,7 @@ private struct ControlButton: View {
                 .padding(11)
                 .background(
                     RoundedRectangle(cornerRadius: isCircular ? .infinity : 10)
-                        .customGradient()
-                )
+                        .foregroundStyle(viewStyle)                )
         }
     }
 }
@@ -178,4 +176,6 @@ private struct ControlButton: View {
 
 #Preview {
     ExpensesView()
+        .environment(CarouselViewModel(user: .init(name: "Sebastian", email: "sebas@example.com", access: .admin, country: .colombia)))
+
 }

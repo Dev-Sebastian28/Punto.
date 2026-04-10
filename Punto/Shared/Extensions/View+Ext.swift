@@ -20,10 +20,6 @@ struct CustomBackground: ViewModifier {
 }
 
 extension View {
-    func customGradient () -> some View {
-        modifier(CustomLinearGradient())
-    }
-    
     func customBackground (color: Color) -> some View {
         modifier(CustomBackground(color: color))
     }

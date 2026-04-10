@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct PuntoApp: App {
+    @State private var carouselVM = CarouselViewModel(user: .init(name: "", email: "", access: .admin, country: .argentina))
     @State private var router = NavigationRouter()
     @State private var userExample = User(
         name: "Sebastian",
@@ -51,11 +52,11 @@ struct PuntoApp: App {
                                 case .tasks:
                                     TaskView()
                                 case .protocols:
-                                    VehicleProtocolsView(quickSummary: [])
+                                    VehicleProtocolsView()
                                 case .addprotocols:
                                     AddProtocolView()
                                 case .manteinances:
-                                    MaintenanceView(quickSummary: [])
+                                    MaintenanceView()
                                 case .expenses:
                                     ExpensesView()
                                 

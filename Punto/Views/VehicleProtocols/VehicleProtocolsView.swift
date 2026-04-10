@@ -9,7 +9,7 @@ import SwiftUI
 
 struct VehicleProtocolsView: View {
     @State private var vm = VehicleProtocoslViewModel(user: .init(name: "", email: "", access: .admin, country: .argentina))
-    var quickSummary: [QuickSummary2]
+    @State private var isHidden: Bool = false
     @Environment(NavigationRouter.self) var router
 
     var body: some View {
@@ -17,7 +17,7 @@ struct VehicleProtocolsView: View {
             
             Header(title: "Protocols", image: "shield.fill", description: "Welcome to the Protocols section, here you can see the protocols that your vehicles have to follow.", color: .yellow, gradient: .none)
             
-            CarouselView(algorithm: ProtocolsAlgorithm(), color: .yellow, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
+            CarouselView(algorithm: ProtocolsAlgorithm(), color: .yellow, selectedIndex: $vm.selectedVehicle)
             selectedVehicleInfo
             
             ScrollView(.vertical, showsIndicators: false) {
@@ -54,10 +54,8 @@ struct VehicleProtocolsView: View {
 }
 
 #Preview {
-    VehicleProtocolsView(quickSummary: [
-        .init(title: "Critical", value: 0, color: .red),
-        .init(title: "Warning", value: 0, color: .yellow),
-        .init(title: "Well", value: 0, color: .green)
-    ])
+    VehicleProtocolsView()
         .environment(NavigationRouter())
+        .environment(CarouselViewModel(user: .init(name: "Sebastian", email: "sebas@example.com", access: .admin, country: .colombia)))
+
 }
