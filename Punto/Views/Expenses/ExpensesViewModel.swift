@@ -44,7 +44,7 @@ final class ExpensesViewModel {
     
     func addNewExpense(name: String, description: String, amount: Double, date: Date, type: String  ) {
         let newExpense = Expense(name: name, description: description, amount: amount, date: date, type: type)
-        userModel.vehicles[selectedVehicle].expenses.addExpense(expense: newExpense)
+        userModel.vehicles[selectedVehicle].expenses.append(newExpense)
     }
 
     func resetFilters() {

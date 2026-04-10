@@ -7,10 +7,10 @@
 import SwiftUI
 
 
-struct CarQuickView: View {
-    var vehicle: VehicleInformation
+struct VehicleQuickView: View {
+    let vehicle: VehicleInformation
     var quickSummary : [QuickSummary2]
-    var selectedColor: Color
+    let selectedColor: Color
     var isSelected: Bool = true
     var body: some View {
         VStack(spacing: -2) {
@@ -34,44 +34,41 @@ struct CarQuickView: View {
                                 .frame(width: 96, height: 68)
                         }
                         
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(vehicle.brand + " " + vehicle.model )
-                                .font(.headline)
-                                .foregroundStyle(.primary)
-                            
-                            Text(vehicle.plate)
-                            
-                            Text( "Year: "  + vehicle.year.description)
-                            
-                        }
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        Spacer(minLength: 0)
+                        vehicleInfo
                     }
                     
                     Divider()
-                        .padding(.horizontal, 2)
-                    
+            
                     HStack {
                         ForEach(quickSummary, id: \.title) { summary in
                             StatPill(title: summary.title, value: summary.value, color: summary.color)
                         }
-                    }
-                    .font(.footnote)
-                }
-                .padding(10)
-            }
-            .background {
+                    }.font(.footnote)
+                }.padding(10)
+            }.background {
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(.ultraThinMaterial)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        RoundedRectangle(cornerRadius: 16)
                             .strokeBorder(isSelected ? selectedColor : Color.gray.opacity(0.2), lineWidth: isSelected ? 2 : 0)
-                        
                     )
                     .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
             }
         }
+    }
+    private var vehicleInfo: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(vehicle.brand + " " + vehicle.model )
+                .font(.headline)
+                .foregroundStyle(.primary)
+            
+            Text(vehicle.plate)
+            
+            Text( "Year: "  + vehicle.year.description)
+            
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
     }
 }
 
@@ -107,5 +104,5 @@ private struct StatPill: View {
 
 
 #Preview {
-    CarQuickView(vehicle: DummyData().dummyDataVehicleInformation(), quickSummary: [.init(title: "Done", value: 0, color: .green), .init(title: "Not Done", value: 0, color: .red)], selectedColor: .red)
+    VehicleQuickView(vehicle: VehicleInformation.mock, quickSummary: [], selectedColor: .brandAmber)
 }

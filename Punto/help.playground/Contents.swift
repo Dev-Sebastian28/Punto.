@@ -34,3 +34,15 @@ print(date as Any) // Output will be in UTC by default, e.g., "2023-03-15 00:00:
 
 
 
+struct X {
+   public var num = 1
+    
+    mutating func increment() {
+        num += 1
+        print(num.description)
+    }
+}
+
+var x = X()
+
+x.increment()

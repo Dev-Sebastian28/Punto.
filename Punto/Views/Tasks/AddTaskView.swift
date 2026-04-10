@@ -99,7 +99,7 @@ private extension AddTaskView {
 // MARK: - Actions
 private extension AddTaskView {
     func saveTask() {
-        tasks.addTask(task: .init(title: title, description: description, date: date, importance: importance, status: .pending))
+        tasks.append(.init(title: title, description: description, date: date, importance: importance, status: .done))
         print("Task saved:", title, description, importance, date, location)
         dismiss()
     }

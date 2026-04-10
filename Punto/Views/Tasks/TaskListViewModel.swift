@@ -53,7 +53,5 @@ final class TaskListViewModel { //When do you use final, open, public, private, 
     init(userModel: User, selectedVehicle: Int) {
         self.userModel = userModel
         self.selectedVehicle = selectedVehicle
-        self.userModel.vehicles.append(TransportationVehicle(vehicleInformation: .init(id: UUID(), image: "volvo", plate: "DMW-2342", brand: "Volvo", model: "X900x", year: 2020, mileage: 20000, engine: "V8", transmission: .automatic, fuel: .diesel)))
-        self.userModel.vehicles[0].tasks.addTask(task: .init(title: "Go to Shop 1", description: "Go to Shop 1 and buy some stuff", date: .distantFuture, importance: .high, status: .pending))
     }
 }

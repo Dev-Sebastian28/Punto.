@@ -6,6 +6,17 @@
 //
 import Foundation
 
+enum TransmissionType: String {
+    case manual = "Manual"
+    case automatic = "Automático"
+}
+
+enum FuelType: String {
+    case diesel = "Diesel"
+    case gasoline = "Gasoline"
+    case other = "Other"
+}
+
 struct VehicleInformation: Identifiable {
     var id: UUID = UUID()
     let image: String
@@ -18,22 +29,12 @@ struct VehicleInformation: Identifiable {
     let engine: String
     let transmission: TransmissionType
     let fuel: FuelType
-
-}
-
-enum TransmissionType: String {
-    case manual = "Manual"
-    case automatic = "Automático"
-}
-
-enum FuelType: String {
-    case diesel = "Diesel"
-    case gasoline = "Gasoline"
-    case other = "Other"
-}
-
-struct DummyData {
-    func dummyDataVehicleInformation() -> VehicleInformation {
-        .init(id: .init(), image: "volvo", plate: "DMW-243", brand: "Volvo", model: "dwadwadwdwadwaFMX", year: 2025, mileage: 10000, engine: "V8", transmission: .automatic, fuel: .diesel)
+    
+    static var mock: Self {
+        .init(image: "ford", plate: "DLK-1234", brand: "Ford", model: "F150", year: 2020, mileage: 100_000, engine: "V8", transmission: .automatic, fuel: .diesel)
     }
 }
+
+
+
+

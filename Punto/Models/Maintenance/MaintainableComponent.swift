@@ -8,8 +8,6 @@
 import Foundation
 // define some basic part (oil, breaks, liquido refrigerante, tires, oil filter)
 
-
-
 struct MaintainableComponent {
     // Name of the part, Ex: Breaks, Tires, Oil, etc
     var componentName: String

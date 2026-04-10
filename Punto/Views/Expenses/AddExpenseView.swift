@@ -90,15 +90,7 @@ struct AddExpenseView: View {
                     // Actions
                     HStack(spacing: 12) {
                         Button {
-                            collection.addExpense(
-                                expense: Expense(
-                                    name: name,
-                                    description: description,
-                                    amount: amount,
-                                    date: .now,
-                                    type: "Manual"
-                                )
-                            )
+                            collection.append(.init(name: name, description: description, amount: amount, date: Date(), type: ""))
                             isPresented.toggle()
                         } label: {
                             HStack {

@@ -25,15 +25,7 @@ struct User {
     let access: ProfileAccess
     // Nunca  !!!! var password: String = "123456$" que opciones hay para guardar datos sensibles
     var country: AvailableCountries
-    var vehicles: [Vehicle] =
-    [
-        TransportationVehicle(vehicleInformation: .init(id: UUID(), image: "volvo", plate: "DMW-2342", brand: "Volvo", model: "X900x", year: 2020, mileage: 200000, engine: "V8", transmission: .automatic, fuel: .diesel))
-        
-        ,PrivateVehicle(vehicleInformation: .init(id: UUID(), image: "ford", plate: "AFV-2342", brand: "Ford", model: "F-150", year: 2020, mileage: 20000, engine: "V8o", transmission: .automatic, fuel: .diesel))
-        
-        ,TransportationVehicle(vehicleInformation: .init(id: UUID(), image: "ken", plate: "TGB-2342", brand: "kenworth", model: "T800", year: 214, mileage: 2000000, engine: "V8", transmission: .manual, fuel: .gasoline))
-    ]
-    
+    var vehicles: [Vehicle] = []
     var drivers: [User] = []
     
     init(id: UUID = UUID(), name: String, email: String, access: ProfileAccess, country: AvailableCountries) {
@@ -45,4 +37,5 @@ struct User {
         
     }
 }
+
 

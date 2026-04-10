@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct Separator: View {
+    let color: Color = .gray
     var body: some View {
         // Separator
-        Rectangle()
+        RoundedRectangle(cornerRadius: .infinity)
             .frame(height: 1)
-            .foregroundStyle(.gray)
+            .foregroundStyle(color)
             .padding(.horizontal,2)
             .padding(.vertical,4)
 
