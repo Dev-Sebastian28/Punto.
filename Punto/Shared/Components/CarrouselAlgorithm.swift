@@ -11,30 +11,30 @@ protocol CarrouselAlgorithm {
     func perform(vehicle: any Vehicle) -> [QuickSummary2]
 }
 
-struct TaskCarrouselAlgorithm: CarrouselAlgorithm {
+struct TasklAlgorithm: CarrouselAlgorithm {
     func perform(vehicle: any Vehicle) -> [QuickSummary2] {
-        let totalTasks = vehicle.tasks.count
-        let doneTasks = vehicle.tasks.filter({ $0.status == .done }).count
-        let pendingTasks = vehicle.tasks.filter({ $0.status == .pending }).count
+        let total = vehicle.tasks.count
+        let done = vehicle.tasks.filter({ $0.status == .done }).count
+        let pending = vehicle.tasks.filter({ $0.status == .pending }).count
 
         return [
-            QuickSummary2(title: "Total tasks", value: totalTasks, color: .blue),
-            QuickSummary2(title: "Done tasks", value: doneTasks, color: .green),
-            QuickSummary2(title: "Pending tasks", value: pendingTasks, color: .orange)
+            QuickSummary2(title: "Total tasks", value: total, color: .blue),
+            QuickSummary2(title: "Done tasks", value: done, color: .green),
+            QuickSummary2(title: "Pending tasks", value: pending, color: .orange)
         ]
     }
 }
 
-struct ProtocolsCarrouselAlgorithm: CarrouselAlgorithm {
+struct ProtocolsAlgorithm: CarrouselAlgorithm {
     func perform(vehicle: any Vehicle) -> [QuickSummary2] {
-        let totalhigh = vehicle.protocols.filter({ $0.importance == .high }).count
-        let totalmid = vehicle.protocols.filter({ $0.importance == .medium }).count
-        let totallow = vehicle.protocols.filter({ $0.importance == .low }).count
+        let high = vehicle.protocols.filter({ $0.importance == .high }).count
+        let mid = vehicle.protocols.filter({ $0.importance == .medium }).count
+        let low = vehicle.protocols.filter({ $0.importance == .low }).count
 
         return [
-            QuickSummary2(title: "High", value: totalhigh, color: .red),
-            QuickSummary2(title: "Mid", value: totalmid, color: .yellow),
-            QuickSummary2(title: "Low", value: totallow, color: .gray)
+            QuickSummary2(title: "High", value: high, color: .red),
+            QuickSummary2(title: "Mid", value: mid, color: .yellow),
+            QuickSummary2(title: "Low", value: low, color: .gray)
         ]
     }
 }
@@ -72,16 +72,16 @@ struct MaintenanceCarrouselAlgorithm: CarrouselAlgorithm {
     }
 }
 
-struct ExpenseCarrouselAlgorithm: CarrouselAlgorithm {
+struct ExpenseAlgorithm: CarrouselAlgorithm {
     func perform(vehicle: any Vehicle) -> [QuickSummary2] {
-        let totalTasks = vehicle.tasks.count
-        let doneTasks = vehicle.tasks.filter({ $0.status == .done })
-        let pendingTasks = vehicle.tasks.filter({ $0.status == .pending })
+        let total = vehicle.expenses.count
+        let incomes = vehicle.expenses.filter({ $0.amount > 0 }).count
+        let losses = vehicle.expenses.filter({ $0.amount < 0 }).count
 
         return [
-            QuickSummary2(title: "Total tasks", value: totalTasks, color: .blue),
-            QuickSummary2(title: "Done tasks", value: doneTasks.count, color: .green),
-            QuickSummary2(title: "Pending tasks", value: pendingTasks.count, color: .orange)
+            QuickSummary2(title: "Total", value: total, color: .blue),
+            QuickSummary2(title: "Incomes", value: incomes, color: .green),
+            QuickSummary2(title: "Losses", value: losses, color: .orange)
         ]
     }
 }

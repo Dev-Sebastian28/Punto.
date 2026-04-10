@@ -16,7 +16,7 @@ struct VehicleProtocolsView: View {
         VStack (alignment: .leading, spacing: 10) {
             
             header
-            CarouselView(algorithm: ProtocolsCarrouselAlgorithm(), color: .yellow, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
+            CarouselView(algorithm: ProtocolsAlgorithm(), color: .yellow, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
             selectedVehicleInfo
             
             ScrollView(.vertical, showsIndicators: false) {

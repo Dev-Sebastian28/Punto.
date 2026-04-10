@@ -92,7 +92,7 @@ struct CarouselView: View {
 }
 
 #Preview {
-    CarouselView(algorithm: TaskCarrouselAlgorithm(), color: .blue, selectedIndex: .constant(0), vehicles: User(name: "", email: "", access: .admin, country: .argentina).vehicles)
+    CarouselView(algorithm: TasklAlgorithm(), color: .blue, selectedIndex: .constant(0), vehicles: User(name: "", email: "", access: .admin, country: .argentina).vehicles)
 }
 
 

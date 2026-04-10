@@ -21,7 +21,7 @@ struct TaskView: View {
                 
                 titleHeader
                 
-                CarouselView(algorithm: TaskCarrouselAlgorithm(), color: .blue, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
+                CarouselView(algorithm: TasklAlgorithm(), color: .blue, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
                 
                 selectedVehicleInfo
                 

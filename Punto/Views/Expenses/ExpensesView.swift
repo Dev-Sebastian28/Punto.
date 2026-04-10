@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ExpensesView: View {
-    let algorithm = ExpenseCarrouselAlgorithm()
+    let algorithm = ExpenseAlgorithm()
     @State private var isPresentedAddExpe: Bool = false
     @State private var isPresentedFilter: Bool = false
     @State private var search: String = ""
@@ -22,7 +22,7 @@ struct ExpensesView: View {
                 Header
                 controlView
                 
-                CarouselView(algorithm: ExpenseCarrouselAlgorithm(), color: .green, selectedIndex: $vm.selectedVehicleIndex, vehicles: vm.vehicles)
+                CarouselView(algorithm: algorithm, color: .green, selectedIndex: $vm.selectedVehicleIndex, vehicles: vm.vehicles)
                 information
                                 
                 ScrollView(.vertical, showsIndicators: true) {
