@@ -10,44 +10,30 @@ import SwiftUI
 struct TaskView: View {
     @State var vm: TaskListViewModel = .init(userModel: .init(name: "", email: "", access: .admin, country: .argentina), selectedVehicle: 0)
     @State private var isPresentingAddTask: Bool = false
-    var quickSummary: [QuickSummary2]
 
-    
     enum Constants {
         static let textString = "Tasks" // Localization
     }
-    
+       
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack (alignment: .leading, spacing: 1) {
                 
-                // Header
                 titleHeader
                 
-                // Carrusel
-                CarouselView(selectedIndex: $vm.selectedVehicle, quickSummary: quickSummary, vehicles: vm.vehicles,  color: .blue)
+                CarouselView(algorithm: TaskCarrouselAlgorithm(), color: .blue, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
                 
-                
-                Divider()
-                    .padding(5)
-                
-                // Quick Info of the selected Vehicle
                 selectedVehicleInfo
                 
                 ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack(spacing: 10) { // Espacio uniforme entre tarjetas
+                    LazyVStack(spacing: 10) {
                         ForEach(vm.vehicles[vm.selectedVehicle].tasks, id: \.id) { task in
                             TaskCardView(task: task)
-                                // Transición para que entren/salgan suavemente al filtrar
                                 .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .bottom)),
                                                       removal: .opacity))
                         }
-                    }
-                    .padding(.top, 10)
-   
-                }
-                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: vm.selectedVehicle)
-                
+                    }.padding(.top, 10)
+                }.animation(.spring(response: 0.4, dampingFraction: 0.8), value: vm.selectedVehicle)
             }.padding(.horizontal, 7)
             
             // Add Task Button
@@ -65,9 +51,8 @@ struct TaskView: View {
         }
     }
     
-    // @viewBuilder property wrapper Cuando usarlo y cuando no
     @ViewBuilder
-    var titleHeader: some View { // some vs Any
+    var titleHeader: some View {
         Text(Constants.textString)
             .font(.system(size: 45))
             .bold()
@@ -123,9 +108,5 @@ private struct ButtonView: View {
 
 
 #Preview {
-    TaskView(quickSummary: [
-        .init(title: "Critical", value: 0, color: .red),
-        .init(title: "Warning", value: 0, color: .yellow),
-        .init(title: "Well", value: 0, color: .green)
-    ])
+    TaskView()
 }

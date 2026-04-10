@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct VehicleProtocolsView: View {
-    @State var selectedVehicle: Int = 0
     @State private var vm = VehicleProtocoslViewModel(user: .init(name: "", email: "", access: .admin, country: .argentina))
     var quickSummary: [QuickSummary2]
     @Environment(NavigationRouter.self) var router
@@ -17,11 +16,7 @@ struct VehicleProtocolsView: View {
         VStack (alignment: .leading, spacing: 10) {
             
             header
-            
-            CarouselView(selectedIndex: $vm.selectedVehicle, quickSummary: quickSummary, vehicles: vm.vehicles, color: .yellow)
-            
-            Separator()
-            
+            CarouselView(algorithm: ProtocolsCarrouselAlgorithm(), color: .yellow, selectedIndex: $vm.selectedVehicle, vehicles: vm.vehicles)
             selectedVehicleInfo
             
             ScrollView(.vertical, showsIndicators: false) {

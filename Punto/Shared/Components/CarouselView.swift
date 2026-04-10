@@ -7,61 +7,49 @@
 import SwiftUI
 
 struct CarouselView: View {
+    let algorithm: CarrouselAlgorithm
+    var color: Color
     @Binding var selectedIndex: Int
     @State private var isCompresed = false
-    var quickSummary: [QuickSummary2]
-    var vehicles: [Vehicle]
-    var color: Color
-
+    var vehicles: [any Vehicle]
+    
     private let carouselAnimation: Animation = .spring(response: 0.4, dampingFraction: 0.82)
     
     
     var body: some View {
         VStack(spacing: 0) {
+            
             if isCompresed {
                 DominantButtonView(
-                    text:  "Show your vehicles" ,
-                    color:  color,
-                    image: "car.2.fill") {
+                    text: "Show your vehicles",
+                    color: color,
+                    image: "car.2.fill"
+                ) {
                     withAnimation(carouselAnimation) {
                         isCompresed.toggle()
                     }
                 }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
-            else {
-                Button {
-                    withAnimation(carouselAnimation) {
-                        isCompresed.toggle()
-                    }
-                } label: {
-                    HStack {
-                        Spacer()
-                        Text("Hide Section")
-                        Image(systemName: "chevron.right")
-
-                    }
-                    .foregroundStyle(.gray)
-                    .underline()
-                }
-                .padding(.trailing)
-                .transition(.move(edge: .trailing))
-            }
             
             if !isCompresed {
                 ScrollViewReader { proxy in
+                    
                     ScrollView(.horizontal, showsIndicators: false) {
+                        
                         HStack(alignment: .bottom, spacing: 12) {
-                            ForEach(Array(vehicles.indices), id: \.self) { index in
+                            
+                            ForEach(Array(vehicles.enumerated()), id: \.element.vehicleInformation.id) { index, vehicle in
+                                
                                 Button {
                                     withAnimation(carouselAnimation) {
                                         selectedIndex = index
                                         proxy.scrollTo(index, anchor: .center)
                                     }
                                 } label: {
-                                    CarQuickView(
-                                        vehicle: vehicles[index].vehicleInformation,
-                                        quickSummary: quickSummary,
+                                    VehicleQuickView(
+                                        vehicle: vehicle.vehicleInformation,
+                                        quickSummary: algorithm.perform(vehicle: vehicle),
                                         selectedColor: color,
                                         isSelected: selectedIndex == index
                                     )
@@ -76,10 +64,18 @@ struct CarouselView: View {
                         }
                         .padding(.horizontal)
                     }
-                    .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .opacity), removal: .scale(scale: 0.95).combined(with: .opacity)))
+                    
+                    .transition(
+                        .asymmetric(
+                            insertion: .move(edge: .top).combined(with: .opacity),
+                            removal: .scale(scale: 0.95).combined(with: .opacity)
+                        )
+                    )
+                    
                     .onAppear {
                         proxy.scrollTo(selectedIndex, anchor: .center)
                     }
+                    
                     .onChange(of: selectedIndex) { _, newValue in
                         withAnimation(carouselAnimation) {
                             proxy.scrollTo(newValue, anchor: .center)
@@ -87,6 +83,8 @@ struct CarouselView: View {
                     }
                 }
             }
+            
+            Separator()
         }
         .animation(carouselAnimation, value: isCompresed)
         .animation(carouselAnimation, value: selectedIndex)
@@ -94,36 +92,8 @@ struct CarouselView: View {
 }
 
 #Preview {
-    CarouselView(
-        selectedIndex: .constant(0), quickSummary: [.init(title: "Done", value: 0, color: .brandAmber), .init(title: "Done", value: 0, color: .brandAmber), .init(title: "Done", value: 0, color: .brandAmber),], vehicles: [
-            TransportationVehicle(
-                vehicleInformation: .init(
-                    id: UUID(),
-                    image: "volvo",
-                    plate: "DMW-2342",
-                    brand: "Volvo",
-                    model: "X900x",
-                    year: 2020,
-                    mileage: 20000,
-                    engine: "V8",
-                    transmission: .automatic,
-                    fuel: .diesel
-                )
-            ),
-            TransportationVehicle(
-                vehicleInformation: .init(
-                    id: UUID(),
-                    image: "volvo",
-                    plate: "DMW-2342",
-                    brand: "Volvo",
-                    model: "X900x",
-                    year: 2020,
-                    mileage: 20000,
-                    engine: "V8",
-                    transmission: .automatic,
-                    fuel: .diesel
-                )
-            )
-        ], color: .red
-    )
+    CarouselView(algorithm: TaskCarrouselAlgorithm(), color: .blue, selectedIndex: .constant(0), vehicles: User(name: "", email: "", access: .admin, country: .argentina).vehicles)
 }
+
+
+

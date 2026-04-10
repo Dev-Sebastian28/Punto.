@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MaintenanceView: View {
+    
+    let algorithm = MaintenanceCarrouselAlgorithm()
     @State var vm: MaintenanceViewModel = .init()
     @State var selectedVehicle: Int = 0
     var quickSummary: [QuickSummary2]
@@ -18,10 +20,8 @@ struct MaintenanceView: View {
                 
                 titleHeader
                 
-                CarouselView(selectedIndex: $selectedVehicle, quickSummary: quickSummary, vehicles: vm.vehicles, color: .blue)
-                
-                Separator()
-                
+                CarouselView(algorithm: MaintenanceCarrouselAlgorithm(), color: .blue, selectedIndex: $selectedVehicle, vehicles: vm.vehicles)
+                                
                 MaintenanceFilterView(vm: vm)
                 
                     ScrollView(.vertical, showsIndicators: false) {
@@ -31,7 +31,7 @@ struct MaintenanceView: View {
                                 .padding(.horizontal, 5)
                         }
                     }
-            }.padding(.horizontal, 5)
+            }.padding(.horizontal, 8)
         }
         
         DominantButtonView(text: "Add Component", color: .blue, image: "plus") {

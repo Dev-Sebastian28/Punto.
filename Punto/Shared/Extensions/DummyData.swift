@@ -52,17 +52,17 @@ extension Array where Element == Task {
 extension Array where Element == Expense {
     mutating func dummyData() {
         self.append(contentsOf: [
-            Expense(name: "Gasolina Extra", description: "Tanqueada completa camión 01", amount: 185000.0, date: Date(), type: "Combustible"),
+            Expense(name: "Gasolina Extra", description: "Tanqueada completa camión 01", amount: -185000.0, date: Date(), type: "Combustible"),
             Expense(name: "Peaje Andes", description: "Salida norte de la ciudad", amount: 12400.0, date: Date(), type: "Peaje"),
             Expense(name: "Cambio de Aceite", description: "Mantenimiento preventivo 10k km", amount: 250000.0, date: Date().addingTimeInterval(-86400), type: "Mantenimiento"),
             Expense(name: "Parqueadero Nocturno", description: nil, amount: 45000.0, date: Date().addingTimeInterval(-86400 * 2), type: "Otros"),
-            Expense(name: "Almuerzo Ruta", description: "Restaurante El Camionero", amount: 22000.0, date: Date(), type: "Alimentación"),
+            Expense(name: "Almuerzo Ruta", description: "Restaurante El Camionero", amount: -22000.0, date: Date(), type: "Alimentación"),
             Expense(name: "Peaje Fusagasugá", description: "Ruta sur", amount: 11800.0, date: Date().addingTimeInterval(-3600), type: "Peaje"),
             Expense(name: "Reparación Llanta", description: "Despinchada rueda trasera izquierda", amount: 35000.0, date: Date().addingTimeInterval(-86400 * 3), type: "Mantenimiento"),
-            Expense(name: "Gasolina Corriente", description: "Van de reparto urbana", amount: 95000.0, date: Date().addingTimeInterval(-1800), type: "Combustible"),
-            Expense(name: "Seguro Obligatorio", description: "Renovación SOAT", amount: 640000.0, date: Date().addingTimeInterval(-86400 * 5), type: "Seguros"),
+            Expense(name: "Gasolina Corriente", description: "Van de reparto urbana", amount: -95000.0, date: Date().addingTimeInterval(-1800), type: "Combustible"),
+            Expense(name: "Seguro Obligatorio", description: "Renovación SOAT", amount: -640000.0, date: Date().addingTimeInterval(-86400 * 5), type: "Seguros"),
             Expense(name: "Lavado General", description: "Limpieza externa e interna", amount: 55000.0, date: Date().addingTimeInterval(-86400 * 4), type: "Limpieza"),
-            Expense(name: "Bombillo LED", description: "Repuesto luz frontal derecha", amount: 15000.0, date: Date(), type: "Repuestos"),
+            Expense(name: "Bombillo LED", description: "Repuesto luz frontal derecha", amount: -15000.0, date: Date(), type: "Repuestos"),
             Expense(name: "Café y Snacks", description: "Parada técnica en vía", amount: 8500.0, date: Date().addingTimeInterval(-7200), type: "Alimentación")
         ])
     }

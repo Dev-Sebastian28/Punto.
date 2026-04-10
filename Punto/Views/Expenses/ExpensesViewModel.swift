@@ -6,60 +6,62 @@
 //
 
 import Foundation
+import Observation // Required for @Observable
 
 @Observable
 final class ExpensesViewModel {
     private(set) var userModel: User
-    var selectedVehicle: Int = 0
-    var accountingService: AccountingService
-    var filteredCollection: [Expense]
-
-    var vehicles: [Vehicle] {
-        userModel.vehicles
-    }
-        
-    var balance: Double {
-        accountingService.calculateTotalBalance()
-    }
+    var selectedVehicleIndex: Int = 0
     
-    var profit: Double {
-        accountingService.calculateTotalIncomes()
-    }
-    
-    var losses: Double {
-        accountingService.calculateTotalExpenses()
-    }
-    
-    var totalExpenses: Int {
-        vehicles[selectedVehicle].expenses.count
+    // Safety check for empty vehicle list
+    private var currentVehicle: Vehicle? {
+        guard userModel.vehicles.indices.contains(selectedVehicleIndex) else { return nil }
+        return userModel.vehicles[selectedVehicleIndex]
     }
 
+    var vehicles: [Vehicle] { userModel.vehicles }
+    
+    // Computed property ensures UI always gets the latest list for the selected vehicle
     var expenses: [Expense] {
-        vehicles[selectedVehicle].expenses
-    }
-    
-    var selectedVehicleInfo: VehicleInformation {
-        userModel.vehicles[selectedVehicle].vehicleInformation
-    }
-    
-    func addNewExpense(name: String, description: String, amount: Double, date: Date, type: String  ) {
-        let newExpense = Expense(name: name, description: description, amount: amount, date: date, type: type)
-        userModel.vehicles[selectedVehicle].expenses.append(newExpense)
+        currentVehicle?.expenses ?? []
     }
 
-    func resetFilters() {
-        filteredCollection = expenses
+    // Dynamic AccountingService: Always uses the current vehicle's data
+    var accountingService: AccountingService {
+        AccountingService(entries: expenses)
     }
-    
-    init(userModel: User,selectedVehicle: Int,accountingService: AccountingService? = nil,filteredCollection: [Expense]? = nil ) {
-        
-        let selectedVehicleExpenses = userModel.vehicles.indices.contains(selectedVehicle)
-            ? userModel.vehicles[selectedVehicle].expenses
-            : []
 
+    // Financial summaries computed on-the-fly
+    var balance: String { accountingService.calculateTotalBalance().description }
+    var profit: String { accountingService.calculateTotalIncomes().description }
+    var losses: String { accountingService.calculateTotalExpenses().description }
+    var totalExpensesCount: Int { expenses.count }
+
+    var selectedVehicleInfo: VehicleInformation? {
+        currentVehicle?.vehicleInformation
+    }
+
+    init(userModel: User) {
         self.userModel = userModel
-        self.selectedVehicle = selectedVehicle
-        self.accountingService = accountingService ?? AccountingService(entries: selectedVehicleExpenses)
-        self.filteredCollection = filteredCollection ?? selectedVehicleExpenses
+        randomDummyData()
+        randomDummyData()
+        randomDummyData()
+    }
+
+    func addNewExpense(name: String, description: String, amount: Double, date: Date, type: String) {
+        let newExpense = Expense(name: name, description: description, amount: amount, date: date, type: type)
+        if userModel.vehicles.indices.contains(selectedVehicleIndex) {
+            userModel.vehicles[selectedVehicleIndex].expenses.append(newExpense)
+        }
+    }
+}
+
+extension ExpensesViewModel {
+    func randomDummyData() {
+        guard !userModel.vehicles.isEmpty else { return }
+        
+        let randomIndex = Int.random(in: 0..<userModel.vehicles.count)
+        
+        userModel.vehicles[randomIndex].expenses.dummyData()
     }
 }

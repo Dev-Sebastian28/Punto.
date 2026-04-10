@@ -69,31 +69,7 @@ class PrivateVehicle: Vehicle {
     var maintenance: [MaintainableComponent] = []
     var expenses: [Expense] = []
     var tasks: [Task] = []
-    var protocols: [VehicleProtocol] = [.init(
-        id: UUID(),
-        name: "Revisión Preoperacional PESV",
-        description: "Inspección técnica obligatoria según normatividad colombiana antes de iniciar ruta.",
-        tasks: [
-            ProtocolTask(id: UUID(), taskName: "Nivel de aceite y refrigerante", description: "Verificar que los fluidos estén en los niveles óptimos.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Estado de llantas (Labrado)", description: "Revisar que el desgaste no supere los límites legales.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Kit de carretera completo", description: "Extintor vigente, tacos, gata y señales reflectivas.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Luces y direccionales", description: "Comprobar funcionamiento de luces altas, bajas y frenado.", isCompleted: false, isActive: true)
-        ],
-        importance: .high,
-        time: .startingWork
-    ), .init(
-        id: UUID(),
-        name: "Revisión Preoperacional PESV",
-        description: "Inspección técnica obligatoria según normatividad colombiana antes de iniciar ruta.",
-        tasks: [
-            ProtocolTask(id: UUID(), taskName: "Nivel de aceite y refrigerante", description: "Verificar que los fluidos estén en los niveles óptimos.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Estado de llantas (Labrado)", description: "Revisar que el desgaste no supere los límites legales.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Kit de carretera completo", description: "Extintor vigente, tacos, gata y señales reflectivas.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Luces y direccionales", description: "Comprobar funcionamiento de luces altas, bajas y frenado.", isCompleted: false, isActive: true)
-        ],
-        importance: .high,
-        time: .startingWork
-    )]
+    var protocols: [VehicleProtocol] = []
     var vehicleInformation: VehicleInformation
     var isActive: Bool = false
 

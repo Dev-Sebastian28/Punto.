@@ -49,7 +49,7 @@ struct PuntoApp: App {
                             .navigationDestination(for: AppRoute.self) { route in
                                 switch route {
                                 case .tasks:
-                                    TaskView(quickSummary: [])
+                                    TaskView()
                                 case .protocols:
                                     VehicleProtocolsView(quickSummary: [])
                                 case .addprotocols:

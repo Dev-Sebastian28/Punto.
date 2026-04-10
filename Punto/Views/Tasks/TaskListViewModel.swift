@@ -9,7 +9,6 @@ import Foundation
 
 @Observable
 final class TaskListViewModel { //When do you use final, open, public, private, etc
-    
     var userModel: User
     var vehicles: [Vehicle] {
         userModel.vehicles
@@ -53,5 +52,18 @@ final class TaskListViewModel { //When do you use final, open, public, private, 
     init(userModel: User, selectedVehicle: Int) {
         self.userModel = userModel
         self.selectedVehicle = selectedVehicle
+        randomDummyData()
+        randomDummyData()
+        randomDummyData()
+    }
+}
+
+extension TaskListViewModel {
+    func randomDummyData() {
+        guard !userModel.vehicles.isEmpty else { return }
+        
+        let randomIndex = Int.random(in: 0..<userModel.vehicles.count)
+        
+        userModel.vehicles[randomIndex].tasks.dummyData()
     }
 }

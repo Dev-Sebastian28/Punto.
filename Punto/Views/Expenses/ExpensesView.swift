@@ -8,27 +8,26 @@
 import SwiftUI
 
 struct ExpensesView: View {
+    let algorithm = ExpenseCarrouselAlgorithm()
     @State private var isPresentedAddExpe: Bool = false
     @State private var isPresentedFilter: Bool = false
     @State private var search: String = ""
     @State private var filterCollection: [Expense]
-    @State private var vm = ExpensesViewModel(userModel: .init(name: "", email: "", access: .admin, country: .argentina),selectedVehicle: 0)
+    @State private var vm = ExpensesViewModel(userModel: .init(name: "", email: "", access: .admin, country: .argentina))
     let colors: [Color] = [.green.opacity(0.8),.brandGreenDark,.brandGreen]
     
     var body: some View {
         ZStack {
-            VStack (alignment: .leading, spacing: 5) {
+            VStack (alignment: .leading, spacing: 0) {
                 Header
                 controlView
-                CarouselView(selectedIndex: .constant(0), quickSummary: [], vehicles: vm.userModel.vehicles, color: .green)
+                
+                CarouselView(algorithm: ExpenseCarrouselAlgorithm(), color: .green, selectedIndex: $vm.selectedVehicleIndex, vehicles: vm.vehicles)
                 information
-                
-                Separator()
-                
+                                
                 ScrollView(.vertical, showsIndicators: true) {
-                    ForEach(vm.filteredCollection, id: \.id) { expense in
+                    ForEach(vm.expenses, id: \.id) { expense in
                         ExpenseCardView(expense: expense)
-                            .padding(.top, 2)
                             .padding(.horizontal, 2)
                             .animation(.easeOut, value: isPresentedFilter)
                     }
@@ -53,7 +52,7 @@ struct ExpensesView: View {
                     AddExpenseView(collection: .constant([]), isPresented: $isPresentedAddExpe)
                         .presentationDetents([.height(390)])
                         .onDisappear {
-                            vm.resetFilters()
+                            
                         }
                 }
             }.ignoresSafeArea(edges: .bottom)
@@ -95,7 +94,7 @@ struct ExpensesView: View {
                 
                 Spacer()
                 
-                Text("$102.000")
+                Text(vm.balance)
                     .font(.title3.bold())
                     .foregroundStyle(.green)
                 
@@ -109,7 +108,7 @@ struct ExpensesView: View {
                             .foregroundStyle(.blue)
                             .font(.title2)
 
-                    Text("$50.000")
+                    Text(vm.losses)
                         .font(.headline.bold())
                         .foregroundStyle(.blue)
                 }
@@ -122,7 +121,7 @@ struct ExpensesView: View {
                         Image(systemName: "arrow.up.circle.fill")
                             .foregroundStyle(.red)
                             .font(.title2)
-                    Text("$20.000")
+                    Text(vm.profit)
                         .font(.headline.bold())
                         .foregroundStyle(.red)
                 }
