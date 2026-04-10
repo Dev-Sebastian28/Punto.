@@ -6,64 +6,40 @@
 //
 
 import Foundation
+import Observation
 
 @Observable
-final class TaskListViewModel { //When do you use final, open, public, private, etc
-    var userModel: User
-    var vehicles: [Vehicle] {
-        userModel.vehicles
-    }
-    
+final class TaskListViewModel {
+    private let user: User
     var selectedVehicle: Int
 
-    var totalTasks: Int {
-        userModel.vehicles[self.selectedVehicle].tasks.count
-    }
-    
-    var totalTodoTasks: Int {
-        userModel.vehicles[self.selectedVehicle].tasks.reduce(0) { partialResult, task in
-            task.status == .pending ? partialResult + 1 : partialResult
-        }
-    }
-    
-    var totalDoneTasks: Int {
-        userModel.vehicles[self.selectedVehicle].tasks.reduce(0) { partialResult, task in
-            task.status == .done ? partialResult + 1 : partialResult
-        }
-    }
+    var vehicles: [Vehicle] { user.vehicles }
 
+    var totalTasks: Int {
+        user.vehicles[selectedVehicle].tasks.count
+    }
+    var totalTodoTasks: Int {
+        user.vehicles[selectedVehicle].tasks.filter { $0.status == .pending }.count
+    }
+    var totalDoneTasks: Int {
+        user.vehicles[selectedVehicle].tasks.filter { $0.status == .done }.count
+    }
     var selectedVehicleModel: String {
-        userModel.vehicles[self.selectedVehicle].vehicleInformation.model
+        user.vehicles[selectedVehicle].vehicleInformation.model
     }
     var selectedVehicleBrand: String {
-        userModel.vehicles[self.selectedVehicle].vehicleInformation.brand
-
+        user.vehicles[selectedVehicle].vehicleInformation.brand
     }
     var selectedVehiclePlate: String {
-        userModel.vehicles[self.selectedVehicle].vehicleInformation.plate
-
+        user.vehicles[selectedVehicle].vehicleInformation.plate
     }
-
 
     func updateSelectedVehicle(index: Int) {
         selectedVehicle = index
     }
-    
-    init(userModel: User, selectedVehicle: Int) {
-        self.userModel = userModel
-        self.selectedVehicle = selectedVehicle
-        randomDummyData()
-        randomDummyData()
-        randomDummyData()
-    }
-}
 
-extension TaskListViewModel {
-    func randomDummyData() {
-        guard !userModel.vehicles.isEmpty else { return }
-        
-        let randomIndex = Int.random(in: 0..<userModel.vehicles.count)
-        
-        userModel.vehicles[randomIndex].tasks.dummyData()
+    init(user: User, selectedVehicle: Int = 0) {
+        self.user = user
+        self.selectedVehicle = selectedVehicle
     }
 }

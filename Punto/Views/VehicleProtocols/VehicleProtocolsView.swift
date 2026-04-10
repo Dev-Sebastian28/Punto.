@@ -8,16 +8,28 @@
 import SwiftUI
 
 struct VehicleProtocolsView: View {
-    @State private var vm = VehicleProtocoslViewModel(user: .init(name: "", email: "", access: .admin, country: .argentina))
-    @State private var isHidden: Bool = false
+    @State private var vm : VehicleProtocoslViewModel
     @Environment(NavigationRouter.self) var router
+    
+    init(user: User) {
+        _vm = State(wrappedValue: VehicleProtocoslViewModel(user: user))
+    }
 
     var body: some View {
         VStack (alignment: .leading, spacing: 10) {
             
-            Header(title: "Protocols", image: "shield.fill", description: "Welcome to the Protocols section, here you can see the protocols that your vehicles have to follow.", color: .yellow, gradient: .none)
+            Header(title: "Protocols",
+                   image: "shield.fill",
+                   description: "Welcome to the Protocols section, here you can see the protocols that your vehicles have to follow.",
+                   color: .yellow,
+                   gradient: .none
+            )
             
-            CarouselView(algorithm: ProtocolsAlgorithm(), color: .yellow, selectedIndex: $vm.selectedVehicle)
+            CarouselView(
+                algorithm: ProtocolsAlgorithm(), color: .yellow,
+                selectedIndex: $vm.selectedVehicle
+            )
+            
             selectedVehicleInfo
             
             ScrollView(.vertical, showsIndicators: false) {
@@ -31,8 +43,8 @@ struct VehicleProtocolsView: View {
             DominantButtonView(text: "Add Protocol", color: .yellow, image: "shield") {
                 router.navigate(to: .addprotocols)
             }
-        }
-        .padding(.horizontal)
+        }.padding(.horizontal)
+        
     }
     
     
@@ -54,8 +66,8 @@ struct VehicleProtocolsView: View {
 }
 
 #Preview {
-    VehicleProtocolsView()
+    VehicleProtocolsView(user: .mock)
         .environment(NavigationRouter())
-        .environment(CarouselViewModel(user: .init(name: "Sebastian", email: "sebas@example.com", access: .admin, country: .colombia)))
+        .environment(CarouselViewModel(user: .mock))
 
 }

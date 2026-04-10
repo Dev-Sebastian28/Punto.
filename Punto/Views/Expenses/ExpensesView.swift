@@ -8,30 +8,33 @@
 import SwiftUI
 
 struct ExpensesView: View {
-    let algorithm = ExpenseAlgorithm()
-    let title = "Expenses"
-    let description = "Welcome to the expenses section, here you can manage your expenses and add them to your vehicles"
-    let viewStyle =  LinearGradient(colors: [
-        .green.opacity(0.8),
-        .brandGreenDark,
-        .brandGreen
-    ], startPoint: .topLeading, endPoint: .bottomTrailing)
-    
     @State private var isPresentedAddExpe: Bool = false
     @State private var isPresentedFilter: Bool = false
+    
     @State private var search: String = ""
-    @State private var filterCollection: [Expense]
-    @State private var isHide: Bool = false
-    @State private var vm = ExpensesViewModel(userModel: .init(name: "", email: "", access: .admin, country: .argentina))
+    @State private var vm : ExpensesViewModel
+    
+    init(user: User) {
+        _vm = State(wrappedValue: ExpensesViewModel(userModel: user))
+    }
     
     var body: some View {
         ZStack {
             VStack (alignment: .leading, spacing: 10) {
-                Header(title: title , image: "dollarsign.circle", description: description , color: .green, gradient: viewStyle)
+                Header(
+                    title: "title",
+                    image: "dollarsign.circle",
+                    description: "description",
+                    color: .green,
+                    gradient: viewStyle)
                 
                 controlView
                 
-                CarouselView(algorithm: algorithm, color: .green, selectedIndex: $vm.selectedVehicleIndex)
+                CarouselView(
+                    algorithm: ExpenseAlgorithm(),
+                    color: .green,
+                    selectedIndex: $vm.selectedVehicleIndex
+                )
                 
                 information
                                 
@@ -46,7 +49,9 @@ struct ExpensesView: View {
             
             VStack(alignment: .trailing) {
                 if isPresentedFilter {
-                    ExpenseFilterView(isPresented: $isPresentedFilter,basedCollection: vm.expenses,filterCollection: $filterCollection)
+                    ExpenseFilterView(
+                        isPresented: $isPresentedFilter,
+                        basedCollection: vm.expenses, filterCollection: .constant([]))
                         .transition(.move(edge: .top))
                 }
                 Spacer()
@@ -140,10 +145,12 @@ struct ExpensesView: View {
         }
     }
     
-    init() {
-        self.isPresentedAddExpe = false
-        self.isPresentedFilter = false
-        self.filterCollection = []
+    private var viewStyle: LinearGradient {
+        LinearGradient(colors: [
+            .green.opacity(0.8),
+            .brandGreenDark,
+            .brandGreen
+        ], startPoint: .topLeading, endPoint: .bottomTrailing)
     }
 }
 
@@ -175,7 +182,7 @@ private struct ControlButton: View {
 
 
 #Preview {
-    ExpensesView()
-        .environment(CarouselViewModel(user: .init(name: "Sebastian", email: "sebas@example.com", access: .admin, country: .colombia)))
+    ExpensesView(user: .mock)
+        .environment(CarouselViewModel(user: .mock))
 
 }

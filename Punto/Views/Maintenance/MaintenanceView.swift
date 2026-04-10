@@ -8,21 +8,30 @@
 import SwiftUI
 
 struct MaintenanceView: View {
-    let title = "Maintenances"
-    let description = "Welcome to the maintenance section, here you monitor your maintenances and add new ones"
-    let algorithm = MaintenanceCarrouselAlgorithm()
-    @State var vm: MaintenanceViewModel = .init()
+    @State private var vm: MaintenanceViewModel
     @State var selectedVehicle: Int = 0
-    @State var isHide: Bool = false
+    
+    init(user: User) {
+        _vm = State(wrappedValue: MaintenanceViewModel(user: user))
+    }
     
     
     var body: some View {
         ZStack {
             VStack (alignment: .leading) {
                 
-                Header(title: title , image: "wrench.and.screwdriver.fill", description: description , color: .blue, gradient: .none)
+                Header(
+                    title: "" ,
+                       image: "wrench.and.screwdriver.fill",
+                       description: "" ,
+                       color: .blue,
+                       gradient: .none
+                )
                 
-                CarouselView(algorithm: MaintenanceCarrouselAlgorithm(), color: .blue, selectedIndex: $selectedVehicle)
+                CarouselView(
+                    algorithm: MaintenanceCarrouselAlgorithm(), color: .blue,
+                    selectedIndex: $selectedVehicle
+                )
                                 
                 MaintenanceFilterView(vm: vm)
                 
@@ -45,7 +54,7 @@ struct MaintenanceView: View {
 
 
 #Preview {
-    MaintenanceView()
-        .environment(CarouselViewModel(user: .init(name: "Sebastian", email: "sebas@example.com", access: .admin, country: .colombia)))
+    MaintenanceView(user: .mock)
+        .environment(CarouselViewModel(user: .mock))
 
 }

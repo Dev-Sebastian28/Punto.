@@ -9,7 +9,6 @@ import SwiftUI
 struct CarouselView: View {
     let algorithm: CarrouselAlgorithm
     let color: Color
-    private let carouselAnimation: Animation = .spring(response: 0.4, dampingFraction: 0.82)
     @Binding var selectedIndex: Int
     @Environment(CarouselViewModel.self) var vm
     
@@ -46,7 +45,7 @@ struct CarouselView: View {
                                 } label: {
                                     VehicleQuickView(
                                         vehicle: vehicle.vehicleInformation,
-                                        quickSummary: algorithm.perform(vehicle: vehicle),
+                                        quickSummary: algorithm.perform(vehicle: vehicle) ,
                                         selectedColor: color,
                                         isSelected: selectedIndex == index
                                     )
@@ -87,13 +86,15 @@ struct CarouselView: View {
         .animation(carouselAnimation, value: selectedIndex)
         .environment(vm)
     }
+    private var carouselAnimation: Animation {
+        .spring(response: 0.4, dampingFraction: 0.82)
+    }
 }
 
 @Observable
 class CarouselViewModel {
     private(set) var user: User
     var vehicles: [Vehicle] { user.vehicles }
-    
     var isCarousellHide: Bool
     
     init(user: User) {
@@ -103,7 +104,8 @@ class CarouselViewModel {
 }
 
 #Preview {
-    CarouselView(algorithm: TasklAlgorithm(), color: .blue, selectedIndex: .constant(0))
+    CarouselView(algorithm: TasklAlgorithm(), color: .red, selectedIndex: .constant(0))
+        .environment(CarouselViewModel(user: .mock))
 }
 
 

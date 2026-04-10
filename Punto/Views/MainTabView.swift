@@ -16,7 +16,7 @@ struct MainTabView: View {
                 }
 
                 Tab("Expenses", systemImage: "banknote.fill") {
-                    ExpensesView()
+                    EmptyView()
                 }
 
                 Tab("Driver", systemImage: "person.crop.circle.fill") {

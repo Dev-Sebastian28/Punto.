@@ -16,13 +16,25 @@ enum TaskStatus: String, Codable {
 }
 
 struct Task {
-    let id: UUID = UUID()
+    let id: UUID
     var title: String
     var description: String
     var date: Date
     var importance: TaskImportance
     var status: TaskStatus
+    
+    init(title: String, description: String, date: Date, importance: TaskImportance, status: TaskStatus) {
+        self.id = UUID()
+        self.title = title
+        self.description = description
+        self.date = date
+        self.importance = importance
+        self.status = status
+    }
 }
+
+
+
 
 
 

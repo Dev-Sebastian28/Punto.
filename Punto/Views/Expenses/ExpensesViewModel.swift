@@ -10,7 +10,7 @@ import Observation // Required for @Observable
 
 @Observable
 final class ExpensesViewModel {
-    private(set) var userModel: User
+    private var userModel: User
     var selectedVehicleIndex: Int = 0
     
     // Safety check for empty vehicle list
@@ -43,9 +43,6 @@ final class ExpensesViewModel {
 
     init(userModel: User) {
         self.userModel = userModel
-        randomDummyData()
-        randomDummyData()
-        randomDummyData()
     }
 
     func addNewExpense(name: String, description: String, amount: Double, date: Date, type: String) {
@@ -56,12 +53,4 @@ final class ExpensesViewModel {
     }
 }
 
-extension ExpensesViewModel {
-    func randomDummyData() {
-        guard !userModel.vehicles.isEmpty else { return }
-        
-        let randomIndex = Int.random(in: 0..<userModel.vehicles.count)
-        
-        userModel.vehicles[randomIndex].expenses.dummyData()
-    }
-}
+

@@ -71,5 +71,5 @@ struct MaintenanceFilterView: View {
 }
 
 #Preview {
-    MaintenanceFilterView(vm: .init())
+    MaintenanceFilterView(vm: .init(user: .mock))
 }

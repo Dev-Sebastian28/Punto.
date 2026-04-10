@@ -19,17 +19,7 @@ final class VehicleProtocoslViewModel {
     
     init(user: User) {
         self.user = user
-        randomDummyData()
-        randomDummyData()
-        randomDummyData()
     }
 }
 
-extension VehicleProtocoslViewModel {
-    func randomDummyData() {
-        guard !user.vehicles.isEmpty else { return }
-        let randomIndex = Int.random(in: 0..<protocols.count)
-        user.vehicles[randomIndex].protocols.dummyData()
-    }
-}
 

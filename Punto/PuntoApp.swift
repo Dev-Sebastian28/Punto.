@@ -9,15 +9,9 @@ import SwiftUI
 
 @main
 struct PuntoApp: App {
-    @State private var carouselVM = CarouselViewModel(user: .init(name: "", email: "", access: .admin, country: .argentina))
+    @State private var carouselVM = CarouselViewModel(user: .mock)
     @State private var router = NavigationRouter()
-    @State private var userExample = User(
-        name: "Sebastian",
-        email: "ejemplo@correo.com",
-        access: .admin, // Ajusta según tus enums
-        country: .colombia
-    )
-    
+    @State private var user: User = .mock
     var body: some Scene {
         WindowGroup {
             Group {
@@ -50,15 +44,15 @@ struct PuntoApp: App {
                             .navigationDestination(for: AppRoute.self) { route in
                                 switch route {
                                 case .tasks:
-                                    TaskView()
+                                    TaskView(user: user)
                                 case .protocols:
-                                    VehicleProtocolsView()
+                                    VehicleProtocolsView(user: user)
                                 case .addprotocols:
                                     AddProtocolView()
                                 case .manteinances:
-                                    MaintenanceView()
+                                    MaintenanceView(user: user)
                                 case .expenses:
-                                    ExpensesView()
+                                    ExpensesView(user: user)
                                 
                                 }
                             }
@@ -67,6 +61,8 @@ struct PuntoApp: App {
                 }
             }
             .environment(router)
+            .environment(user)
         }
     }
 }
+

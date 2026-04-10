@@ -114,5 +114,5 @@ struct CommonButton: View {
 
 #Preview {
     Header(title: "", image: "", description: "", color: .red, gradient: .none)
-        .environment(CarouselViewModel(user: .init(name: "", email: "", access: .admin, country: .argentina)))
+        .environment(CarouselViewModel(user: .mock))
 }

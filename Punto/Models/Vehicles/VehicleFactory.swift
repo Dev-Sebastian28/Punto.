@@ -25,56 +25,63 @@ protocol Vehicle {
 class TransportationVehicle: Vehicle {
     
     var id: UUID = UUID()
-    var maintenance: [MaintainableComponent] = []
-    var expenses: [Expense] = [.init(name: "warranty", description: "it is a warranty", amount: -200, date: .distantPast, type: "")]
-    var tasks: [Task] = []
-    var protocols: [VehicleProtocol] = [.init(
-        id: UUID(),
-        name: "Revisión Preoperacional PESV",
-        description: "Inspección técnica obligatoria según normatividad colombiana antes de iniciar ruta.",
-        tasks: [
-            ProtocolTask(id: UUID(), taskName: "Nivel de aceite y refrigerante", description: "Verificar que los fluidos estén en los niveles óptimos.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Estado de llantas (Labrado)", description: "Revisar que el desgaste no supere los límites legales.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Kit de carretera completo", description: "Extintor vigente, tacos, gata y señales reflectivas.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Luces y direccionales", description: "Comprobar funcionamiento de luces altas, bajas y frenado.", isCompleted: false, isActive: true)
-        ],
-        importance: .high,
-        time: .startingWork
-    ), .init(
-        id: UUID(),
-        name: "Revisión Preoperacional PESV",
-        description: "Inspección técnica obligatoria según normatividad colombiana antes de iniciar ruta.",
-        tasks: [
-            ProtocolTask(id: UUID(), taskName: "Nivel de aceite y refrigerante", description: "Verificar que los fluidos estén en los niveles óptimos.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Estado de llantas (Labrado)", description: "Revisar que el desgaste no supere los límites legales.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Kit de carretera completo", description: "Extintor vigente, tacos, gata y señales reflectivas.", isCompleted: false, isActive: true),
-            ProtocolTask(id: UUID(), taskName: "Luces y direccionales", description: "Comprobar funcionamiento de luces altas, bajas y frenado.", isCompleted: false, isActive: true)
-        ],
-        importance: .high,
-        time: .startingWork
-    )]
+    var maintenance: [MaintainableComponent]
+    var expenses: [Expense]
+    var tasks: [Task]
+    var protocols: [VehicleProtocol]
     var vehicleInformation: VehicleInformation
     var cargoInfo: CargoInfo?
     var isActive: Bool = false
-
-    init(vehicleInformation: VehicleInformation) {
+    
+    init(
+        id: UUID = UUID(),
+        maintenance: [MaintainableComponent] = [],
+        expenses: [Expense] = [],
+        tasks: [Task] = [],
+        protocols: [VehicleProtocol] = [],
+        vehicleInformation: VehicleInformation,
+        isActive: Bool = false
+    ) {
+        self.id = id
         self.vehicleInformation = vehicleInformation
+        self.isActive = isActive
+        
+        // Llamadas aleatorias usando las extensiones corregidas
+        self.maintenance = Array([MaintainableComponent].dummyData().shuffled().prefix(Int.random(in: 2...4)))
+        self.expenses = Array([Expense].dummyData().shuffled().prefix(Int.random(in: 3...6)))
+        self.tasks = Array([Task].dummyData().shuffled().prefix(Int.random(in: 3...6)))
+        self.protocols = Array([VehicleProtocol].dummyData().shuffled().prefix(2))
     }
 }
 
 // Second Concrete Product: vehiculos de trasporte privado: uber - didi, etc
 class PrivateVehicle: Vehicle {
-
     var id: UUID = UUID()
-    var maintenance: [MaintainableComponent] = []
-    var expenses: [Expense] = []
-    var tasks: [Task] = []
-    var protocols: [VehicleProtocol] = []
+    var maintenance: [MaintainableComponent]
+    var expenses: [Expense]
+    var tasks: [Task]
+    var protocols: [VehicleProtocol]
     var vehicleInformation: VehicleInformation
     var isActive: Bool = false
-
-    init(vehicleInformation: VehicleInformation) {
+    
+    init(
+        id: UUID = UUID(),
+        maintenance: [MaintainableComponent] = [],
+        expenses: [Expense] = [],
+        tasks: [Task] = [],
+        protocols: [VehicleProtocol] = [],
+        vehicleInformation: VehicleInformation,
+        isActive: Bool = false
+    ) {
+        self.id = id
         self.vehicleInformation = vehicleInformation
+        self.isActive = isActive
+        
+        // Llamadas aleatorias usando las extensiones corregidas
+        self.maintenance = Array([MaintainableComponent].dummyData().shuffled().prefix(Int.random(in: 2...4)))
+        self.expenses = Array([Expense].dummyData().shuffled().prefix(Int.random(in: 3...6)))
+        self.tasks = Array([Task].dummyData().shuffled().prefix(3))
+        self.protocols = Array([VehicleProtocol].dummyData().shuffled().prefix(2))
     }
 }
 
@@ -97,3 +104,4 @@ enum VehicleType {
     case transportVehicle
     case privateVehicle
 }
+
