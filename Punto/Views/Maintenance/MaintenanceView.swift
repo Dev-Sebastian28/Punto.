@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MaintenanceView: View {
     @State private var vm: MaintenanceViewModel
-    @State var selectedVehicle: Int = 0
     
     init(user: User) {
         _vm = State(wrappedValue: MaintenanceViewModel(user: user))
@@ -17,37 +16,32 @@ struct MaintenanceView: View {
     
     
     var body: some View {
-        ZStack {
-            VStack (alignment: .leading) {
-                
-                Header(
-                    title: "" ,
-                       image: "wrench.and.screwdriver.fill",
-                       description: "" ,
-                       color: .blue,
-                       gradient: .none
-                )
-                
-                CarouselView(
-                    algorithm: MaintenanceCarrouselAlgorithm(), color: .blue,
-                    selectedIndex: $selectedVehicle
-                )
-                                
-                MaintenanceFilterView(vm: vm)
-                
-                    ScrollView(.vertical, showsIndicators: false) {
-                        ForEach(vm.vehicles[selectedVehicle].maintenance, id: \.componentName) { part in
-                            MaintenanceCard(maintainablePart: part)
-                                .padding(.top, 5)
-                                .padding(.horizontal, 5)
-                        }
-                    }
-            }.padding(.horizontal, 8)
-        }
         
-        DominantButtonView(text: "Add Component", color: .blue, image: "plus") {
+        VStack (alignment: .leading, spacing: 10) {
             
-        }
+            HeaderComp(
+                title: "Maintenances" ,
+                image: "wrench.and.screwdriver.fill",
+                description: "Welcome to maintenance, here you can monitor your vehicle maintenances and add new ones" ,
+                color: .blue,
+                gradient: .none
+            )
+            
+            CarouselComp(
+                strategy: MaintenanceCarouselAlgorithm(), color: .blue,
+                selectedIndex: $vm.selectedVehicle
+            )
+              
+            MaintenanceFilterView(millage: vm.currentRange, totalParts: vm.totalMaintenances)
+            
+            ScrollView(.vertical, showsIndicators: false) {
+                ForEach(vm.components, id: \.id) { part in
+                    MaintenanceCard(part: MaintenaceDataTransfer().perform(comp: part))
+                        .padding(.top, 5)
+                        .padding(.horizontal, 5)
+                }
+            }
+        }.padding(.horizontal, 8)
     }
 }
 
@@ -56,5 +50,5 @@ struct MaintenanceView: View {
 #Preview {
     MaintenanceView(user: .mock)
         .environment(CarouselViewModel(user: .mock))
-
+    
 }

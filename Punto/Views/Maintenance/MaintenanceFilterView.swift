@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct MaintenanceFilterView: View {
-    var vm: MaintenanceViewModel
+    var millage: String
+    let totalParts: String
     var body: some View {
         // Filter View
         HStack(spacing: 12) {
@@ -20,7 +21,7 @@ struct MaintenanceFilterView: View {
                         .foregroundStyle(.secondary)
                     
                     HStack {
-                        Text("\(vm.currentRange)")
+                        Text(millage)
                             .font(.system(.subheadline, design: .rounded))
                             .bold()
                         
@@ -34,7 +35,7 @@ struct MaintenanceFilterView: View {
                 // Total Parts
                 HStack(spacing: 4) {
                     Image(systemName: "wrench.and.screwdriver.fill")
-                    Text("\(vm.totalMaintenances)")
+                    Text(totalParts)
                         .bold()
                 }
                 .foregroundStyle(.primary)
@@ -71,5 +72,5 @@ struct MaintenanceFilterView: View {
 }
 
 #Preview {
-    MaintenanceFilterView(vm: .init(user: .mock))
+    MaintenanceFilterView(millage: "10000", totalParts: "0")
 }

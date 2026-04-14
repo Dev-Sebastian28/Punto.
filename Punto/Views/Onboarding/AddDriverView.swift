@@ -25,7 +25,7 @@ struct AddDriverView: View {
             DriverCardView(driverName: "Sebastian Garcia", driverNumber: "ADW", driverMail: "")
             }
             
-            DominantButtonView(text: "Add Driver", color: .green, image: "plus") {
+            DButtonComp(text: "Add Driver", color: .green, image: "plus") {
                 isAddDriverPresented.toggle()
             }.sheet(isPresented: $isAddDriverPresented) {
                 AddDriverForm(index: 0, isPresented: $isAddDriverPresented)

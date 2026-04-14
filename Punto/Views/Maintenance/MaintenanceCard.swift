@@ -1,156 +1,169 @@
-//
 //  MaintenanceCard.swift
 //  Punto
-//
-//  Created by Sebastian Garcia on 20/03/26.
-//
 
 import SwiftUI
 
 struct MaintenanceCard: View {
-    @State var maintainablePart: MaintainableComponent
+    let part: MaintenanceCardData
 
-    private var usefulLifeText: String {
-        "\(maintainablePart.rangeOfUsefulLife) km"
+    private var stateColor: Color {
+        switch part.state {
+        case .good:    Color(hex: "3B6D11")
+        case .warning: Color(hex: "854F0B")
+        case .overdue: Color(hex: "A32D2D")
+        }
     }
 
-    private var maintenanceDateText: String {
-        maintainablePart.lastTimeMaintainedInformation.0.formatted(date: .abbreviated, time: .omitted)
-    }
-
-    private var nextReviewDateText: String {
-        maintainablePart.rangeDateOfUsefulLife.upperBound.formatted(date: .abbreviated, time: .omitted)
+    private var stateFill: Color {
+        switch part.state {
+        case .good:    Color(hex: "EAF3DE")
+        case .warning: Color(hex: "FAEEDA")
+        case .overdue: Color(hex: "FCEBEB")
+        }
     }
 
     var body: some View {
-        VStack(spacing: 10) {
-            headerSection
-
-            Divider()
-                .padding(.horizontal, 5)
-
-            metricsSection
-
-            Divider()
-                .padding(.horizontal, 5)
-
-            progressSection
+        VStack(alignment: .leading, spacing: 0) {
+            header
+            metrics
+            progressBar
         }
-        .padding(.horizontal, 13)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(stateColor.opacity(0.6), lineWidth: 0.8)
+        )
+    }
+
+    // MARK: – Header
+    private var header: some View {
+        HStack(alignment: .top, spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(stateFill)
+                    .frame(width: 44, height: 44)
+                Image(systemName: part.image)
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundStyle(stateColor)
+            }
+
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(alignment: .center, spacing: 8) {
+                    Text(part.name)
+                        .font(.system(.body, design: .monospaced).bold())
+                    StateBadge(state: part.state, color: stateColor, fill: stateFill)
+                }
+                Text("Vida útil técnica: \(part.usefulDescription)")
+                    .font(.system(size: 11, design: .monospaced))
+                    .foregroundStyle(.secondary)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+    }
+
+    // MARK: – Tab bar
+
+    // MARK: – Metrics grid
+    private var metrics: some View {
+        HStack(spacing: 8) {
+            MetricTile(label: "Progreso", icon: "clock", value: "\(part.porcent)%", color: stateColor)
+            MetricTile(label: "Restante", icon: "arrow.right", value: part.remaining, color: stateColor)
+            MetricTile(label: "Próximo", icon: "calendar", value: "~45 días", color: .primary)
+        }
+        .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .background(Color.gray.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-    }
-}
-
-private extension MaintenanceCard {
-    var headerSection: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "engine.combustion.badge.exclamationmark.fill")
-                .font(.title2)
-
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 10) {
-                    Text(maintainablePart.componentName)
-                        .font(.title2.bold())
-
-                    Spacer()
-
-                    StatusBadge(text: "Critical", color: .red)
-                }
-
-                HStack {
-                    Text("Useful Life:")
-                        .foregroundStyle(.black.opacity(0.8))
-
-                    Text(usefulLifeText)
-                        .foregroundStyle(.gray)
-                }
-                .font(.caption)
-            }
-        }
     }
 
-    var metricsSection: some View {
-        HStack {
-            infoPill(title: "Last Service", value: maintenanceDateText)
-
-            Spacer()
-
-            Text("-")
-                .font(.largeTitle.bold())
-
-            Spacer()
-
-            infoPill(title: "Next Review", value: nextReviewDateText)
-        }
-    }
-
-    var progressSection: some View {
-        VStack {
-            ProgressView(value: 1.0) {
-                HStack(spacing: 5) {
-                    Text("Wear Progress")
-                    Text("100%")
-                        .bold()
-                }
-                .font(.caption)
-                .foregroundStyle(.gray)
-            }
-
+    // MARK: – Progress bar
+    private var progressBar: some View {
+        VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(maintenanceDateText)
-
+                Label("Vida útil restante", systemImage: "waveform.path.ecg")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.secondary)
                 Spacer()
-
-                Text(nextReviewDateText)
+                Text("\(part.porcent)%")
+                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
             }
-            .font(.caption)
-            .foregroundStyle(.gray)
-            .bold()
-        }
-        .progressViewStyle(.linear)
-        .padding(.vertical, 6)
-    }
 
-    func infoPill(title: String, value: String) -> some View {
-        VStack {
-            Text(title)
-                .font(.caption.bold())
-
-            HStack {
-                Image(systemName: "info.circle")
-                Text(value)
-                    .font(.footnote)
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(Color(.systemGray5)).frame(height: 8)
+                    Capsule()
+                        .fill(stateColor)
+                        .frame(width: geo.size.width * CGFloat(part.porcent) / 100, height: 8)
+                }
             }
-            .foregroundStyle(.blue)
-            .bold()
+            .frame(height: 8)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 6)
-        .background(Color.gray.opacity(0.25))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(.horizontal, 16)
+        .padding(.bottom, 16)
+        .padding(.top, 4)
     }
 }
 
+// MARK: – Subcomponents
 
-private struct StatusBadge: View {
-    let text: String
+private struct StateBadge: View {
+    let state: MaintenanceState
     let color: Color
+    let fill: Color
+
     var body: some View {
-        Text(text.capitalized)
-            .font(.subheadline.bold())
+        Text(state.rawValue.uppercased())
+            .font(.system(size: 9, weight: .bold))
+            .tracking(0.6)
             .foregroundStyle(color)
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
-            .background(color.opacity(0.35))
-            .clipShape(Capsule())
+            .background(fill, in: Capsule())
     }
 }
 
+private struct MetricTile: View {
+    let label: String
+    let icon: String
+    let value: String
+    let color: Color
 
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 9))
+                    .foregroundStyle(.tertiary)
+                Text(label)
+                    .font(.system(size: 9, weight: .semibold))
+                    .tracking(0.5)
+                    .textCase(.uppercase)
+                    .foregroundStyle(.tertiary)
+            }
+            Text(value)
+                .font(.system(size: 13, weight: .medium, design: .monospaced))
+                .foregroundStyle(color)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 8))
+    }
+}
 
+// MARK: – Color hex helper
+extension Color {
+    init(hex: String) {
+        let v = Int(hex, radix: 16) ?? 0
+        self.init(
+            red:   Double((v >> 16) & 0xFF) / 255,
+            green: Double((v >> 8)  & 0xFF) / 255,
+            blue:  Double( v        & 0xFF) / 255
+        )
+    }
+}
 
-//#Preview {
-//    MaintenanceCard(maintainablePart: MaintainableComponent(componentName: "Oil Filter", lastTimeMaintainedInformation: (Date().addingTimeInterval(-30000), 35000), rangeOfUsefulLife: 5000...8000, rangeDateOfUsefulLife: Date()...Date()))
-//}
+#Preview {
+    MaintenanceCard(part: .init(image: "plus", name: "Aceite de motor", state: .overdue, usefulDescription: "3.000 - 5.0000 km", remaining: "2000", porcent: 90))
+}

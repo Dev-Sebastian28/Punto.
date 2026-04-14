@@ -24,8 +24,6 @@ struct SignInView: View {
     @Environment(NavigationRouter.self) var router
 
 
-    
-    
     var body: some View {
             ZStack {
                 LinearGradient(colors: [.myBlue, .myBlue, .white], startPoint: .top, endPoint: .bottom)
@@ -127,7 +125,7 @@ struct SignInView: View {
             }
             
             
-            DominantButtonView(text: "Sign In to Punto",color: .myBlue, image: "arrow.right.circle.fill", isEnabled: /*!email.isEmpty &&  !password.isEmpty*/true, action: continueToOnboarding)
+            DButtonComp(text: "Sign In to Punto",color: .myBlue, image: "arrow.right.circle.fill", isEnabled: /*!email.isEmpty &&  !password.isEmpty*/true, action: continueToOnboarding)
             
             Button {
                 router.navigate(to: .appIntroduction)
@@ -162,7 +160,7 @@ struct SignInView: View {
             secureInputField(title: "Confirm Password", binding: $confirmPassword, prompt: "Confirm your password")
                 .padding(.bottom)
             
-            DominantButtonView(text: "Sign Up to Punto",color: .myBlue, image: "arrow.right", isEnabled: /*!email.isEmpty && !password.isEmpty*/true, action: continueToOnboarding)
+            DButtonComp(text: "Sign Up to Punto",color: .myBlue, image: "arrow.right", isEnabled: /*!email.isEmpty && !password.isEmpty*/true, action: continueToOnboarding)
             
             Button {
                 router.navigate(to: .appIntroduction)

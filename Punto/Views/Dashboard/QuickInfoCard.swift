@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct QuickSummary {
+struct qQuickSummary {
     var title1: String
     var value1: Int
     var title2: String
@@ -36,7 +36,7 @@ struct QuickInfoCard: View {
     var imageCard: String
     var itemsNumber: Int
     var color: Color
-    var quick: QuickSummary?
+    var quick: qQuickSummary?
     var collection: [QuickInfoItem] = []
     
     var body: some View {

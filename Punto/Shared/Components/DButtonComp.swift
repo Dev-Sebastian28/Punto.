@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DominantButtonView: View {
+struct DButtonComp: View {
     enum Style {
         case dominant
         case neutral
@@ -137,10 +137,10 @@ private struct AnimatedPressButtonStyle: ButtonStyle {
 
 #Preview {
     VStack(spacing: 16) {
-        DominantButtonView(text: "Add", color: .green, image: "plus") {
+        DButtonComp(text: "Add", color: .green, image: "plus") {
         }
 
-        DominantButtonView(
+        DButtonComp(
             text: "Cancel",
             color: .gray,
             image: "xmark",

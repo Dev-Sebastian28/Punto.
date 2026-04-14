@@ -6,8 +6,8 @@
 //
 import SwiftUI
 
-struct CarouselView: View {
-    let algorithm: CarrouselAlgorithm
+struct CarouselComp: View {
+    let strategy: CarouselStrategy
     let color: Color
     @Binding var selectedIndex: Int
     @Environment(CarouselViewModel.self) var vm
@@ -15,18 +15,6 @@ struct CarouselView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if vm.isCarousellHide {
-                DominantButtonView(
-                    text: "Show your vehicles",
-                    color: color,
-                    image: "car.2.fill"
-                ) {
-                    withAnimation(carouselAnimation) {
-                        vm.isCarousellHide.toggle()
-                    }
-                }
-                .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
             
             if !vm.isCarousellHide {
                 ScrollViewReader { proxy in
@@ -45,7 +33,7 @@ struct CarouselView: View {
                                 } label: {
                                     VehicleQuickView(
                                         vehicle: vehicle.vehicleInformation,
-                                        quickSummary: algorithm.perform(vehicle: vehicle) ,
+                                        quickSummary: vm.summaries(for: vehicle, algorithm: strategy),
                                         selectedColor: color,
                                         isSelected: selectedIndex == index
                                     )
@@ -78,9 +66,9 @@ struct CarouselView: View {
                         }
                     }
                 }
+                Separator()
+
             }
-            
-            Separator()
         }
         .animation(carouselAnimation, value: vm.isCarousellHide)
         .animation(carouselAnimation, value: selectedIndex)
@@ -96,15 +84,30 @@ class CarouselViewModel {
     private(set) var user: User
     var vehicles: [Vehicle] { user.vehicles }
     var isCarousellHide: Bool
-    
+    private var summaryCache: [UUID: [QuickSummary]] = [:]
+
     init(user: User) {
         self.user = user
         self.isCarousellHide = false
     }
+
+    func summaries(for vehicle: any Vehicle, algorithm: CarouselStrategy) -> [QuickSummary] {
+        let id = vehicle.vehicleInformation.id
+        if let cached = summaryCache[id] {
+            return cached
+        }
+        let result = algorithm.perform(vehicle: vehicle)
+        summaryCache[id] = result
+        return result
+    }
+
+    func invalidateCache() {
+        summaryCache.removeAll()
+    }
 }
 
 #Preview {
-    CarouselView(algorithm: TasklAlgorithm(), color: .red, selectedIndex: .constant(0))
+    CarouselComp(strategy: TaskAlgorithm(), color: .red, selectedIndex: .constant(0))
         .environment(CarouselViewModel(user: .mock))
 }
 

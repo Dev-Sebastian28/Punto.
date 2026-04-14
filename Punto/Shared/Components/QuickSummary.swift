@@ -7,7 +7,7 @@
 import Foundation
 import SwiftUI
 
-struct QuickSummary2 {
+struct QuickSummary {
     var title: String
     var value: Int
     var color: Color

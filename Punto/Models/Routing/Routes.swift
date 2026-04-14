@@ -30,7 +30,6 @@ enum AppRoute: Hashable {
     
 }
 
-
 @Observable @MainActor
 final class NavigationRouter {
     var root: AppRoot = .onboarding

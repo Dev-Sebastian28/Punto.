@@ -125,39 +125,95 @@ extension Array where Element == VehicleProtocol {
     }
 }
 
-// MARK: - MaintainableComponent Extensions
-extension Array where Element == MaintainableComponent {
-    static func dummyData() -> [MaintainableComponent] {
+extension Array where Element == VehiclePartWrapper {
+    static func dummyData() -> [VehiclePartWrapper] {
+        let calendar = Calendar.current
+        let today = Date()
+        
         return [
-            MaintainableComponent(
-                componentName: "Aceite de Motor (Sintético)",
-                lastTimeMaintainedInformation: (Calendar.current.date(byAdding: .month, value: -4, to: Date())!, 45000),
-                rangeOfUsefulLife: 5000...8000,
-                rangeDateOfUsefulLife: Date()...Calendar.current.date(byAdding: .month, value: 6, to: Date())!
+            // 1. ACEITE DE MOTOR: Caso de KM Fijo (Cerca del límite -> Warning)
+            // km_fixed: 10,000 | Recorrido: 9,950 (está dentro del 1% de margen)
+            VehiclePartWrapper(
+                vehiclePart: VehiclePart(
+                    partName: "Aceite de Motor",
+                    category: "fluids",
+                    intervalType: "fixed",
+                    kmFixed: 10_000,
+                    kmMin: nil,
+                    kmMax: nil,
+                    months: 6
+                ), id: .init(),
+                lastMaintenanceDate: calendar.date(byAdding: .month, value: -5, to: today)!,
+                lastMaintenanceUnity: 5_000,
+                currentUnity: 7_950 // Traveled: 9,950
             ),
-            MaintainableComponent(
-                componentName: "Llantas Delanteras",
-                lastTimeMaintainedInformation: (Calendar.current.date(byAdding: .year, value: -1, to: Date())!, 30000),
-                rangeOfUsefulLife: 40000...50000,
-                rangeDateOfUsefulLife: Date()...Calendar.current.date(byAdding: .year, value: 2, to: Date())!
+            
+            // 2. PASTILLAS DE FRENO: Caso de Rango (Dentro del rango -> Warning)
+            // km_min: 20,000, km_max: 30,000 | Recorrido: 25,000
+            VehiclePartWrapper(
+                vehiclePart: VehiclePart(
+                    partName: "Pastillas de Freno Delanteras",
+                    category: "brakes",
+                    intervalType: "range",
+                    kmFixed: nil,
+                    kmMin: 20_000,
+                    kmMax: 30_000,
+                    months: 24
+                ), id: .init(),
+                lastMaintenanceDate: calendar.date(byAdding: .year, value: -1, to: today)!,
+                lastMaintenanceUnity: 40000,
+                currentUnity: 65000 // Traveled: 25,000
             ),
-            MaintainableComponent(
-                componentName: "Pastillas de Frenos",
-                lastTimeMaintainedInformation: (Calendar.current.date(byAdding: .month, value: -8, to: Date())!, 40000),
-                rangeOfUsefulLife: 20000...30000,
-                rangeDateOfUsefulLife: Date()...Calendar.current.date(byAdding: .year, value: 1, to: Date())!
+            
+            // 3. FILTRO DE AIRE: Caso de KM Fijo (Excedido -> Overdue)
+            // km_fixed: 15,000 | Recorrido: 16,000
+            VehiclePartWrapper(
+                vehiclePart: VehiclePart(
+                    partName: "Filtro de Aire",
+                    category: "filters",
+                    intervalType: "fixed",
+                    kmFixed: 15_000,
+                    kmMin: nil,
+                    kmMax: nil,
+                    months: 12
+                ), id: .init(),
+                lastMaintenanceDate: calendar.date(byAdding: .month, value: -14, to: today)!,
+                lastMaintenanceUnity: 30_000,
+                currentUnity: 46000 // Traveled: 16,000
             ),
-            MaintainableComponent(
-                componentName: "Líquido Refrigerante",
-                lastTimeMaintainedInformation: (Calendar.current.date(byAdding: .month, value: -18, to: Date())!, 25000),
-                rangeOfUsefulLife: 30000...40000,
-                rangeDateOfUsefulLife: Date()...Calendar.current.date(byAdding: .year, value: 2, to: Date())!
+            
+            // 4. BATERÍA: Caso de Rango (Por debajo del mínimo -> Good)
+            // km_min: 40,000, km_max: 60,000 | Recorrido: 10,000
+            VehiclePartWrapper(
+                vehiclePart: VehiclePart(
+                    partName: "Batería",
+                    category: "electrical",
+                    intervalType: "range",
+                    kmFixed: nil,
+                    kmMin: 40_000,
+                    kmMax: 60_000,
+                    months: 48
+                ), id: .init(),
+                lastMaintenanceDate: calendar.date(byAdding: .month, value: -8, to: today)!,
+                lastMaintenanceUnity: 55_000,
+                currentUnity: 65_000 // Traveled: 10,000
             ),
-            MaintainableComponent(
-                componentName: "Filtro de Aire",
-                lastTimeMaintainedInformation: (Calendar.current.date(byAdding: .month, value: -2, to: Date())!, 48000),
-                rangeOfUsefulLife: 10000...15000,
-                rangeDateOfUsefulLife: Date()...Calendar.current.date(byAdding: .month, value: 12, to: Date())!
+            
+            // 5. LLANTAS: Caso de KM Fijo (Muy por debajo -> Good)
+            // km_fixed: 50,000 | Recorrido: 5,000
+            VehiclePartWrapper(
+                vehiclePart: VehiclePart(
+                    partName: "Rotación de Llantas",
+                    category: "tires",
+                    intervalType: "fixed",
+                    kmFixed: 10_000,
+                    kmMin: nil,
+                    kmMax: nil,
+                    months: 6
+                ), id: .init(),
+                lastMaintenanceDate: calendar.date(byAdding: .month, value: -2, to: today)!,
+                lastMaintenanceUnity: 60_000,
+                currentUnity: 65000 // Traveled: 5,000
             )
         ]
     }

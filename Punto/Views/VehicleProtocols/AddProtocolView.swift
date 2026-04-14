@@ -23,9 +23,9 @@ struct AddProtocolView: View {
                 header
                 
                 VStack(spacing: 4) {
-                    TextFieldComponent(text: $name, prompt: "Protocol Name", image: "pencil", color: .yellow)
+                    TextFieldComp(text: $name, prompt: "Protocol Name", image: "pencil", color: .yellow)
                     
-                    TextFieldComponent(text: $protocolDescription, prompt: "Protocol Description", image: "list.dash")
+                    TextFieldComp(text: $protocolDescription, prompt: "Protocol Description", image: "list.dash")
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -74,11 +74,11 @@ struct AddProtocolView: View {
                         taskRow(task)
                     }
                     HStack {
-                        DominantButtonView(text: "Pop last", color: .gray, image: "",style: .neutral ,  maxHeight: 10) {
+                        DButtonComp(text: "Pop last", color: .gray, image: "",style: .neutral ,  maxHeight: 10) {
                             
                         }
                         
-                        DominantButtonView(text: "Add Task", color: .yellow, image: "plus", maxHeight: 10) {
+                        DButtonComp(text: "Add Task", color: .yellow, image: "plus", maxHeight: 10) {
                             isPresented.toggle()
                         }
                        
@@ -103,7 +103,7 @@ struct AddProtocolView: View {
         
         
         VStack {
-            DominantButtonView(text: "Create Protocol", color: .green, image: "plus", isEnabled: !name.isEmpty && !tasks.isEmpty ) {
+            DButtonComp(text: "Create Protocol", color: .green, image: "plus", isEnabled: !name.isEmpty && !tasks.isEmpty ) {
                 
             }.padding(.horizontal)
         }
@@ -150,16 +150,16 @@ private struct Sheet: View {
     @State private var description: String = ""
     var body: some View {
         VStack {
-            TextFieldComponent(text: $name, prompt: "Task Name", image: "pencil", color: .yellow)
+            TextFieldComp(text: $name, prompt: "Task Name", image: "pencil", color: .yellow)
             
-            TextFieldComponent(text: $description, prompt: "Task Description (optional)", image: "list.dash")
+            TextFieldComp(text: $description, prompt: "Task Description (optional)", image: "list.dash")
             
             HStack {
-                DominantButtonView(text: "Cancel", color: .gray, image: "",style: .neutral ,  maxHeight: 10) {
+                DButtonComp(text: "Cancel", color: .gray, image: "",style: .neutral ,  maxHeight: 10) {
                     
                 }
                 
-                DominantButtonView(text: "Add Task", color: .blue, image: "plus", maxHeight: 10, isEnabled: name.count > 0) {
+                DButtonComp(text: "Add Task", color: .blue, image: "plus", maxHeight: 10, isEnabled: name.count > 0) {
                     collection.append(ProtocolTask(taskName: name, description: description))
                     
                 }

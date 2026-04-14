@@ -11,16 +11,24 @@ import Foundation
 final class MaintenanceViewModel {
     private let user: User
     var selectedVehicle: Int = 0
+    var vehicles: [Vehicle] {
+        user.vehicles
+    }
     
-    var vehicles: [Vehicle] {user.vehicles}
+    var components: [VehiclePartWrapper] {
+        user.vehicles[selectedVehicle].maintenance
+    }
     
-    var maintainableComponents: [MaintainableComponent] {user.vehicles[selectedVehicle].maintenance}
+    var totalMaintenances: String {
+        components.count.description
+    }
     
-    var totalMaintenances: Int { maintainableComponents.count }
-
-    var currentRange: Int {vehicles[self.selectedVehicle].vehicleInformation.mileage}
+    var currentRange: String {
+        vehicles[self.selectedVehicle].vehicleInformation.mileage.description
+    }
     
     init(user: User) {
         self.user = user
     }
 }
+

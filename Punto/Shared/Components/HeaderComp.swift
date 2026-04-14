@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-struct Header: View {
+struct HeaderComp: View {
     let title: String
     let image: String?
     let description: String?
@@ -29,10 +29,13 @@ struct Header: View {
                
                Spacer()
     
-               CommonButton(title: "Hide Vehicles Section", icon: "chevron.down",style: nil) {
+               CommonButton(
+                title: vm.isCarousellHide ? "Show Vehicles Section" : "Hide Vehicles Section",
+                icon: "chevron.down",style:  vm.isCarousellHide ? .blue : .red
+               ) {
                    vm.isCarousellHide.toggle()
                }
-            }
+           }
         } else {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
@@ -113,6 +116,6 @@ struct CommonButton: View {
 }
 
 #Preview {
-    Header(title: "", image: "", description: "", color: .red, gradient: .none)
+    HeaderComp(title: "", image: "", description: "", color: .red, gradient: .none)
         .environment(CarouselViewModel(user: .mock))
 }

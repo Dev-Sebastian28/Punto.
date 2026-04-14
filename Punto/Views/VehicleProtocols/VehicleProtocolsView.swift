@@ -18,15 +18,15 @@ struct VehicleProtocolsView: View {
     var body: some View {
         VStack (alignment: .leading, spacing: 10) {
             
-            Header(title: "Protocols",
+            HeaderComp(title: "Protocols",
                    image: "shield.fill",
                    description: "Welcome to the Protocols section, here you can see the protocols that your vehicles have to follow.",
                    color: .yellow,
                    gradient: .none
             )
             
-            CarouselView(
-                algorithm: ProtocolsAlgorithm(), color: .yellow,
+            CarouselComp(
+                strategy: ProtocolsAlgorithm(), color: .yellow,
                 selectedIndex: $vm.selectedVehicle
             )
             
@@ -40,7 +40,7 @@ struct VehicleProtocolsView: View {
             
             }
             
-            DominantButtonView(text: "Add Protocol", color: .yellow, image: "shield") {
+            DButtonComp(text: "Add Protocol", color: .yellow, image: "shield") {
                 router.navigate(to: .addprotocols)
             }
         }.padding(.horizontal)

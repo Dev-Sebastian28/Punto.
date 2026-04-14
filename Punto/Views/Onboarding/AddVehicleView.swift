@@ -29,7 +29,7 @@ struct AddVehicleView: View {
                 }
                 
                 
-                DominantButtonView(text: "Add Vehicle", color: .blue, image: "plus") {
+                DButtonComp(text: "Add Vehicle", color: .blue, image: "plus") {
                     isAddVehiclePresented.toggle()
                     
                 }.sheet(isPresented: $isAddVehiclePresented) {

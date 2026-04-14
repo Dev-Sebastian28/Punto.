@@ -11,13 +11,6 @@ import Foundation
 final class FleetViewModel {
     private(set) var user: User
     var vehicles: [Vehicle] { user.vehicles }
-    var manteinices: [MaintainableComponent] {
-        var colection = [MaintainableComponent]()
-        for vehicle in vehicles {
-            colection.append(contentsOf: vehicle.maintenance )
-        }
-        return colection
-    }
     
     var filterCollection: [any Vehicle]
     
@@ -32,21 +25,7 @@ final class FleetViewModel {
     }
     
     var manteinicesCount: Int {
-        
-        let total = manteinices.reduce(0) { partialResult, maintainableComponent in
-            let state = MaintenanceLogic(
-                componet: maintainableComponent,
-                factors: 1.0,
-                unitMeasurement: 0
-            ).analysisState()
-
-            if state == .critical || state == .warning {
-                return partialResult + 1
-            } else {
-                return partialResult
-            }
-        }
-        return total
+        0
     }
     
     var vehiclesCount: Int { vehicles.count }

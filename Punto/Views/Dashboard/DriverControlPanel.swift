@@ -9,8 +9,7 @@ import SwiftUI
 
 struct DriverControlPanel: View {
     @State private var showHeader: Bool = true
-
-    
+   
     var body: some View {
         VStack(alignment: .center) {
             header
@@ -38,6 +37,7 @@ struct DriverControlPanel: View {
                 QuickInfoCard(titleCard: "Expeneses", imageCard: "tag", itemsNumber: 10, color: .green)
                 QuickInfoCard(titleCard: "Protocols", imageCard: "shield", itemsNumber: 10, color: .yellow)
                 QuickInfoCard(titleCard: "Maintenances", imageCard: "wrench", itemsNumber: 10, color: .blue)
+                
             }.ignoresSafeArea(edges: .top)
             .padding(.horizontal, 6)
             .padding(.vertical, 6)

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct VehicleQuickView: View {
     let vehicle: VehicleInformation
-    var quickSummary : [QuickSummary2]
+    var quickSummary : [QuickSummary]
     let selectedColor: Color
     var isSelected: Bool = true
     var body: some View {

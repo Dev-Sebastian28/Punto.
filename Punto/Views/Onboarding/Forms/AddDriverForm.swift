@@ -16,15 +16,15 @@ struct AddDriverForm: View {
 
     var body: some View {
         VStack(spacing: 6) {
-            TextFieldComponent(text: $name, prompt: "Driver Name", image: "person.fill", isRequired: false)
+            TextFieldComp(text: $name, prompt: "Driver Name", image: "person.fill", isRequired: false)
                 .padding(.bottom, 8)
 
-            TextFieldComponent(text: $number, prompt: "Driver Phone Number", image: "number", isRequired: true)
+            TextFieldComp(text: $number, prompt: "Driver Phone Number", image: "number", isRequired: true)
 
-            TextFieldComponent(text: $mail, prompt: "Driver Mail", image: "at", isRequired: true)
+            TextFieldComp(text: $mail, prompt: "Driver Mail", image: "at", isRequired: true)
 
             HStack {
-                DominantButtonView(
+                DButtonComp(
                     text: "Cancel",
                     color: .gray,
                     image: "x.circle.fill",
@@ -35,7 +35,7 @@ struct AddDriverForm: View {
                 }
                 .padding(.top, 30)
 
-                DominantButtonView(
+                DButtonComp(
                     text: "Send Invitation",
                     color: .blue,
                     image: "paperplane.fill",

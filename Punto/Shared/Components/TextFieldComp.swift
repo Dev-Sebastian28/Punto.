@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct TextFieldComponent: View {
+struct TextFieldComp: View {
     @Binding var text: String
     var prompt: String
     var image: String
@@ -37,5 +37,5 @@ struct TextFieldComponent: View {
 }
 
 #Preview {
-    TextFieldComponent(text: .constant("Volvo"), prompt: "Vehicle Brand", image: "plus", isRequired: true)
+    TextFieldComp(text: .constant("Volvo"), prompt: "Vehicle Brand", image: "plus", isRequired: true)
 }

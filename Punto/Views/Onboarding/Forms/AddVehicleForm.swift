@@ -59,35 +59,35 @@ struct AddVehicleForm: View {
 
     private var formFields: some View {
         VStack {
-            TextFieldComponent(
+            TextFieldComp(
                 text: $brand,
                 prompt: "Vehicle Brand, Ex: Toyota, Ford, Volvo",
                 image: "",
                 isRequired: false
             )
 
-            TextFieldComponent(
+            TextFieldComp(
                 text: $model,
                 prompt: "Vehicle Model, Ex: Corolla, Mustang, XC90",
                 image: "car.rear.fill",
                 isRequired: false
             )
             
-            TextFieldComponent(
+            TextFieldComp(
                 text: $engine,
                 prompt: "Engine Size, Ex: 1.5L, 2.0L",
                 image: "engine.combustion.fill",
                 isRequired: false
             )
 
-            TextFieldComponent(
+            TextFieldComp(
                 text: $year,
                 prompt: "Year, Ex: 2020",
                 image: "calendar",
                 isRequired: false
             )
             
-            TextFieldComponent(
+            TextFieldComp(
                 text: $plate,
                 prompt: "Plate, Ex: ABC-1234",
                 image: "rectangle.and.pencil.and.ellipsis",
@@ -96,7 +96,7 @@ struct AddVehicleForm: View {
 
             vehicleSpecsSection
 
-            TextFieldComponent(
+            TextFieldComp(
                 text: $mileage,
                 prompt: "Vehicle Mileage",
                 image: "gauge.with.dots.needle.50percent",
@@ -132,7 +132,7 @@ struct AddVehicleForm: View {
 
     private var actionButtons: some View {
         HStack(spacing: 16) {
-            DominantButtonView(
+            DButtonComp(
                 text: "Cancel",
                 color: .gray,
                 image: nil,
@@ -142,7 +142,7 @@ struct AddVehicleForm: View {
                 isAddVehiclePresented.toggle()
             }
 
-            DominantButtonView(
+            DButtonComp(
                 text: "Add Vehicle",
                 color: .blue,
                 image: "car.fill",

@@ -12,7 +12,7 @@ import Foundation
 
 // Product Interface
 protocol Vehicle {
-    var maintenance: [MaintainableComponent] { get set }
+    var maintenance: [VehiclePartWrapper] { get set }
     var tasks: [Task] { get set }
     var protocols: [VehicleProtocol] { get set }
     var expenses: [Expense] { get set }
@@ -25,7 +25,7 @@ protocol Vehicle {
 class TransportationVehicle: Vehicle {
     
     var id: UUID = UUID()
-    var maintenance: [MaintainableComponent]
+    var maintenance: [VehiclePartWrapper]
     var expenses: [Expense]
     var tasks: [Task]
     var protocols: [VehicleProtocol]
@@ -35,7 +35,7 @@ class TransportationVehicle: Vehicle {
     
     init(
         id: UUID = UUID(),
-        maintenance: [MaintainableComponent] = [],
+        maintenance: [VehiclePartWrapper] = [],
         expenses: [Expense] = [],
         tasks: [Task] = [],
         protocols: [VehicleProtocol] = [],
@@ -47,7 +47,7 @@ class TransportationVehicle: Vehicle {
         self.isActive = isActive
         
         // Llamadas aleatorias usando las extensiones corregidas
-        self.maintenance = Array([MaintainableComponent].dummyData().shuffled().prefix(Int.random(in: 2...4)))
+        self.maintenance = Array([VehiclePartWrapper].dummyData().shuffled().prefix(Int.random(in: 2...5)))
         self.expenses = Array([Expense].dummyData().shuffled().prefix(Int.random(in: 3...6)))
         self.tasks = Array([Task].dummyData().shuffled().prefix(Int.random(in: 3...6)))
         self.protocols = Array([VehicleProtocol].dummyData().shuffled().prefix(2))
@@ -57,7 +57,7 @@ class TransportationVehicle: Vehicle {
 // Second Concrete Product: vehiculos de trasporte privado: uber - didi, etc
 class PrivateVehicle: Vehicle {
     var id: UUID = UUID()
-    var maintenance: [MaintainableComponent]
+    var maintenance: [VehiclePartWrapper]
     var expenses: [Expense]
     var tasks: [Task]
     var protocols: [VehicleProtocol]
@@ -66,7 +66,7 @@ class PrivateVehicle: Vehicle {
     
     init(
         id: UUID = UUID(),
-        maintenance: [MaintainableComponent] = [],
+        maintenance: [VehiclePartWrapper] = [],
         expenses: [Expense] = [],
         tasks: [Task] = [],
         protocols: [VehicleProtocol] = [],
@@ -78,7 +78,7 @@ class PrivateVehicle: Vehicle {
         self.isActive = isActive
         
         // Llamadas aleatorias usando las extensiones corregidas
-        self.maintenance = Array([MaintainableComponent].dummyData().shuffled().prefix(Int.random(in: 2...4)))
+        self.maintenance = Array([VehiclePartWrapper].dummyData().shuffled().prefix(Int.random(in: 3...6)))
         self.expenses = Array([Expense].dummyData().shuffled().prefix(Int.random(in: 3...6)))
         self.tasks = Array([Task].dummyData().shuffled().prefix(3))
         self.protocols = Array([VehicleProtocol].dummyData().shuffled().prefix(2))

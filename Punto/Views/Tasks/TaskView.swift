@@ -19,7 +19,7 @@ struct TaskView: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(alignment: .leading, spacing: 10) {
-                Header(
+                HeaderComp(
                     title: "Tasks",
                     image: "line.3.horizontal",
                     description: "Gestiona las tareas de tus vehículos y agrega nuevas desde aquí.",
@@ -34,8 +34,8 @@ struct TaskView: View {
                         description: Text("Agrega un vehículo para ver sus tareas.")
                     )
                 } else {
-                    CarouselView(
-                        algorithm: TasklAlgorithm(),
+                    CarouselComp(
+                        strategy: TaskAlgorithm(),
                         color: .blue,
                         selectedIndex: $vm.selectedVehicle
                     )

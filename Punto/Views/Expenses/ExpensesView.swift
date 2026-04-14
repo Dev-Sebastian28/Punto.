@@ -21,7 +21,7 @@ struct ExpensesView: View {
     var body: some View {
         ZStack {
             VStack (alignment: .leading, spacing: 10) {
-                Header(
+                HeaderComp(
                     title: "title",
                     image: "dollarsign.circle",
                     description: "description",
@@ -30,8 +30,8 @@ struct ExpensesView: View {
                 
                 controlView
                 
-                CarouselView(
-                    algorithm: ExpenseAlgorithm(),
+                CarouselComp(
+                    strategy: ExpenseAlgorithm(),
                     color: .green,
                     selectedIndex: $vm.selectedVehicleIndex
                 )
@@ -76,7 +76,7 @@ struct ExpensesView: View {
     
     var controlView: some View {
         HStack {
-            TextFieldComponent(text: $search, prompt: "Search for", image: "magnifyingglass")
+            TextFieldComp(text: $search, prompt: "Search for", image: "magnifyingglass")
             
             // Filter Button
             ControlButton(iconName: "slider.vertical.3") {
