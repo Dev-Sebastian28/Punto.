@@ -79,32 +79,6 @@ struct CarouselComp: View {
     }
 }
 
-@Observable
-class CarouselViewModel {
-    private(set) var user: User
-    var vehicles: [Vehicle] { user.vehicles }
-    var isCarousellHide: Bool
-    private var summaryCache: [UUID: [QuickSummary]] = [:]
-
-    init(user: User) {
-        self.user = user
-        self.isCarousellHide = false
-    }
-
-    func summaries(for vehicle: any Vehicle, algorithm: CarouselStrategy) -> [QuickSummary] {
-        let id = vehicle.vehicleInformation.id
-        if let cached = summaryCache[id] {
-            return cached
-        }
-        let result = algorithm.perform(vehicle: vehicle)
-        summaryCache[id] = result
-        return result
-    }
-
-    func invalidateCache() {
-        summaryCache.removeAll()
-    }
-}
 
 #Preview {
     CarouselComp(strategy: TaskAlgorithm(), color: .red, selectedIndex: .constant(0))

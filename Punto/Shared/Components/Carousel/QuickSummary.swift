@@ -1,10 +1,9 @@
 //
-//  QuickSummary2.swift
+//  QuickSummary.swift
 //  Punto
 //
-//  Created by Sebastian Garcia on 8/04/26.
+//  Created by Sebastian Garcia on 14/04/26.
 //
-import Foundation
 import SwiftUI
 
 struct QuickSummary {

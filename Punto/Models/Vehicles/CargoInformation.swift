@@ -32,9 +32,8 @@ enum TrailerType: String, CaseIterable {
        }
 }
 
-struct CargoInfo {
+struct CargoInformation {
     var trailerType: TrailerType
     var numberOfWheels: Int
 }
 
-// mirar los mantenimoentos 

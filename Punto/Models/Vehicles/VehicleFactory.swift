@@ -30,7 +30,7 @@ class TransportationVehicle: Vehicle {
     var tasks: [Task]
     var protocols: [VehicleProtocol]
     var vehicleInformation: VehicleInformation
-    var cargoInfo: CargoInfo?
+    var cargoInfo: CargoInformation?
     var isActive: Bool = false
     
     init(

@@ -6,7 +6,8 @@
 //
 import Foundation
 
-struct VehiclePart: Codable {
+// Name DTO (Data Transfer Object) to every objet fetched externaly not bussines model objetcs
+struct VehiclePartDTO: Codable {
     let partName: String
     let category: String
     let intervalType: String 
@@ -28,7 +29,7 @@ struct VehiclePart: Codable {
 
 
 struct VehiclePartWrapper {
-    let vehiclePart: VehiclePart
+    let vehiclePart: VehiclePartDTO
     let id: UUID
     
     // Last mainteined Info
@@ -40,7 +41,7 @@ struct VehiclePartWrapper {
 
 }
 
-extension VehiclePart {
+extension VehiclePartDTO {
     var systemImage: String {
         switch category {
         case "fluids":      return "drop.fill"

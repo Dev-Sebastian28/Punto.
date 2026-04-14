@@ -7,12 +7,7 @@
 
 import Foundation
 
-struct RouteModel: Codable {
-    var startPointDirection: String
-    var endPointDirection: String
-    var distance: Double
-    var duration: Double
-}
+
 
 class RouteAnalytics: Codable {
     var routes: [RouteModel]

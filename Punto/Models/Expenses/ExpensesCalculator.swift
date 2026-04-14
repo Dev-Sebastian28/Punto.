@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AccountingService {
+struct ExpensesCalculator {
 
     var entries: [Expense]
 

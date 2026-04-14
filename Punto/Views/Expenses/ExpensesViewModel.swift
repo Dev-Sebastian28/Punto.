@@ -26,9 +26,9 @@ final class ExpensesViewModel {
         currentVehicle?.expenses ?? []
     }
 
-    // Dynamic AccountingService: Always uses the current vehicle's data
-    var accountingService: AccountingService {
-        AccountingService(entries: expenses)
+    // Dynamic ExpensesCalculator: Always uses the current vehicle's data
+    var accountingService: ExpensesCalculator {
+        ExpensesCalculator(entries: expenses)
     }
 
     // Financial summaries computed on-the-fly

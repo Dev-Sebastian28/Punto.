@@ -134,7 +134,7 @@ extension Array where Element == VehiclePartWrapper {
             // 1. ACEITE DE MOTOR: Caso de KM Fijo (Cerca del límite -> Warning)
             // km_fixed: 10,000 | Recorrido: 9,950 (está dentro del 1% de margen)
             VehiclePartWrapper(
-                vehiclePart: VehiclePart(
+                vehiclePart: VehiclePartDTO(
                     partName: "Aceite de Motor",
                     category: "fluids",
                     intervalType: "fixed",
@@ -151,7 +151,7 @@ extension Array where Element == VehiclePartWrapper {
             // 2. PASTILLAS DE FRENO: Caso de Rango (Dentro del rango -> Warning)
             // km_min: 20,000, km_max: 30,000 | Recorrido: 25,000
             VehiclePartWrapper(
-                vehiclePart: VehiclePart(
+                vehiclePart: VehiclePartDTO(
                     partName: "Pastillas de Freno Delanteras",
                     category: "brakes",
                     intervalType: "range",
@@ -168,7 +168,7 @@ extension Array where Element == VehiclePartWrapper {
             // 3. FILTRO DE AIRE: Caso de KM Fijo (Excedido -> Overdue)
             // km_fixed: 15,000 | Recorrido: 16,000
             VehiclePartWrapper(
-                vehiclePart: VehiclePart(
+                vehiclePart: VehiclePartDTO(
                     partName: "Filtro de Aire",
                     category: "filters",
                     intervalType: "fixed",
@@ -185,7 +185,7 @@ extension Array where Element == VehiclePartWrapper {
             // 4. BATERÍA: Caso de Rango (Por debajo del mínimo -> Good)
             // km_min: 40,000, km_max: 60,000 | Recorrido: 10,000
             VehiclePartWrapper(
-                vehiclePart: VehiclePart(
+                vehiclePart: VehiclePartDTO(
                     partName: "Batería",
                     category: "electrical",
                     intervalType: "range",
@@ -202,7 +202,7 @@ extension Array where Element == VehiclePartWrapper {
             // 5. LLANTAS: Caso de KM Fijo (Muy por debajo -> Good)
             // km_fixed: 50,000 | Recorrido: 5,000
             VehiclePartWrapper(
-                vehiclePart: VehiclePart(
+                vehiclePart: VehiclePartDTO(
                     partName: "Rotación de Llantas",
                     category: "tires",
                     intervalType: "fixed",
