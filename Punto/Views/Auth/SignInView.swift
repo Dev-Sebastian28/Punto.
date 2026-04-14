@@ -20,42 +20,55 @@ struct SignInView: View {
     @State private var alertMessage = ""
     @State private var showPassword = false
     @State private var authMode: AuthMode = .signUp
-    
     @Environment(NavigationRouter.self) var router
-
-
+    
     var body: some View {
-            ZStack {
-                LinearGradient(colors: [.myBlue, .myBlue, .white], startPoint: .top, endPoint: .bottom)
+        ZStack {
+            LinearGradient(colors: [.myBlue, .myBlue, .white], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
-                
-                VStack(spacing: 20) {
-                    
-                    if authMode == .signUp {
-                        signUpCard
-                        
-                    } else {
-                        signInCard
-                    }
-                    socialSection
-                }
-                .animation(.easeInOut(duration: 0.2), value: authMode)
-                .padding(.horizontal, 15)
-                .padding(.vertical, 28)
-                .background(alignment: .top) {
-                    selectedWay
-                }
-                
-            }
             
-            .alert("Check Fields Please", isPresented: $showingAlert) {
-            } message: {
-                Text(alertMessage)
+            VStack(spacing: 25) {
+                selectedWay
+                
+                if authMode == .signUp {
+                    signUpCard
+                    
+                } else {
+                    signInCard
+                }
+                socialSection
             }
+            .animation(.snappy, value: authMode)
+            .padding(.horizontal, 15)
+            .padding(.vertical, 28)
+            
+                
+            
+            
+        }.alert("Check Fields Please", isPresented: $showingAlert) {
+        } message: {
+            Text(alertMessage)
+        }
+    }
+    
+    private var appIntroduction: some View {
+        Button {
+            router.navigate(to: .appIntroduction)
+        } label: {
+            HStack {
+                Text("Watch App Introduction")
+            }
+            .font(.headline)
+            .foregroundStyle(.black)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .underline(true, pattern: .solid, color: .gray)
+            
+        }
     }
     
     private var selectedWay: some View {
-        HStack(spacing: 20) {
+        HStack(spacing: 50) {
             Button {
                 authMode = .signUp
             } label: {
@@ -64,14 +77,13 @@ struct SignInView: View {
                     .bold(authMode == .signUp)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 44)
-                    .padding(.bottom, 30)
                     .background(
                         authMode == .signUp ? .white : .white.opacity(0.8)
                     ).clipShape(RoundedRectangle(cornerRadius: 10))
                     .scaleEffect(authMode == .signUp ? 1.2 : 1)
             }
-
-                                        
+            
+            
             Button {
                 authMode = .signIn
             } label: {
@@ -80,7 +92,6 @@ struct SignInView: View {
                     .bold(authMode == .signIn)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 44)
-                    .padding(.bottom, 30)
                     .background(
                         authMode == .signIn ? .white : .white.opacity(0.8)
                         
@@ -88,9 +99,9 @@ struct SignInView: View {
                         RoundedRectangle(cornerRadius: 10)
                         
                     )
-                    
+                
                     .scaleEffect(authMode == .signIn ? 1.2 : 1)
-
+                
             }
         }
     }
@@ -107,8 +118,7 @@ struct SignInView: View {
                     .foregroundStyle(.secondary)
             }
             
-            inputField
-            
+            TextFieldComp(text: $email, prompt: "Email", image: "plus", color: .myBlue)
             secureInputField(title: "Password", binding: $password, prompt: "Make it strong")
             
             HStack {
@@ -124,23 +134,7 @@ struct SignInView: View {
                 }
             }
             
-            
             DButtonComp(text: "Sign In to Punto",color: .myBlue, image: "arrow.right.circle.fill", isEnabled: /*!email.isEmpty &&  !password.isEmpty*/true, action: continueToOnboarding)
-            
-            Button {
-                router.navigate(to: .appIntroduction)
-            } label: {
-                HStack {
-                    Text("Watch App Introduction")
-                }
-                .font(.headline)
-                .foregroundStyle(.black)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .underline(true, pattern: .solid, color: .gray)
-
-               
-            }
         }
         .padding(22)
         .background(.white)
@@ -153,28 +147,15 @@ struct SignInView: View {
                 .font(.system(.title2, design: .default , weight: .bold))
                 .foregroundStyle(Color(red: 0.08, green: 0.16, blue: 0.24))
             
-            
-            inputField
-
+            TextFieldComp(text: $email, prompt: "Email", image: "plus", color: .myBlue)
             secureInputField(title: "Password", binding: $password, prompt: "Make it strong")
             secureInputField(title: "Confirm Password", binding: $confirmPassword, prompt: "Confirm your password")
                 .padding(.bottom)
             
             DButtonComp(text: "Sign Up to Punto",color: .myBlue, image: "arrow.right", isEnabled: /*!email.isEmpty && !password.isEmpty*/true, action: continueToOnboarding)
             
-            Button {
-                router.navigate(to: .appIntroduction)
-            } label: {
-                HStack {
-                    Text("Watch App Introduction")
-                }
-                .font(.headline)
-                .foregroundStyle(.black)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .underline(true, pattern: .solid, color: .gray)
-                
-            }
+            appIntroduction
+            
         }
         .padding(22)
         .background(.white)
@@ -257,39 +238,27 @@ struct SignInView: View {
         }
     }
     
-    @ViewBuilder
-    private var inputField: some View {
-        TextField("Email", text: $email)
-            .textFieldStyle(.plain)
-            .padding(10)
-            .autocapitalization(.none)
-            .keyboardType(.emailAddress)
-            .background(.blue.opacity(0.1))
-            .cornerRadius(18)
-    }
-    
-    
     private func continueToOnboarding() {
         router.navigate(to: .form1)
-
         
-//        if authMode == .signUp, password != confirmPassword {
-//            alertMessage = "Passwords do not match"
-//            showingAlert = true
-//            return
-//        }
-//
-//        do {
-//            try AuthValidator().validate(email: email, password: password)
-//            alertMessage = ""
-//            showingAlert = false
-//        } catch let error as ValidatorError {
-//            alertMessage = error.suggestion
-//            showingAlert = true
-//        } catch {
-//            alertMessage = "Unexpected error"
-//            showingAlert = true
-//        }
+        
+        //        if authMode == .signUp, password != confirmPassword {
+        //            alertMessage = "Passwords do not match"
+        //            showingAlert = true
+        //            return
+        //        }
+        //
+        //        do {
+        //            try AuthValidator().validate(email: email, password: password)
+        //            alertMessage = ""
+        //            showingAlert = false
+        //        } catch let error as ValidatorError {
+        //            alertMessage = error.suggestion
+        //            showingAlert = true
+        //        } catch {
+        //            alertMessage = "Unexpected error"
+        //            showingAlert = true
+        //        }
     }
 }
 

@@ -10,6 +10,7 @@ import SwiftUI
 struct MaintenanceFilterView: View {
     var millage: String
     let totalParts: String
+    
     var body: some View {
         // Filter View
         HStack(spacing: 12) {
@@ -67,10 +68,13 @@ struct MaintenanceFilterView: View {
         }
         .padding(6)
         .background(Color.blue.gradient)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
 
 #Preview {
-    MaintenanceFilterView(millage: "10000", totalParts: "0")
+    MaintenanceFilterView(
+        millage: "10000",
+        totalParts: "0"
+    )
 }

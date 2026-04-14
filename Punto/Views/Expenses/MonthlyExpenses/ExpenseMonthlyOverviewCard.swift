@@ -7,7 +7,7 @@
 import SwiftUI
 import Foundation
 
-struct ExpenseOverviewCard: View {
+struct ExpenseMonthlyOverviewCard: View {
     var balance: Double
     var profit: Double
     var losses: Double
@@ -83,5 +83,5 @@ struct ExpenseOverviewCard: View {
 }
 
 #Preview {
-    ExpenseOverviewCard(balance: 0.0, profit: 0.0, losses: 0.0, bcColor: [.green, .green.opacity(0.3), .white.opacity(0.1)] )
+    ExpenseMonthlyOverviewCard(balance: 0.0, profit: 0.0, losses: 0.0, bcColor: [.green, .green.opacity(0.3), .white.opacity(0.1)] )
 }

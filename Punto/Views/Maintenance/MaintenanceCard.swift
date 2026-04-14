@@ -8,17 +8,17 @@ struct MaintenanceCard: View {
 
     private var stateColor: Color {
         switch part.state {
-        case .good:    Color(hex: "3B6D11")
-        case .warning: Color(hex: "854F0B")
-        case .overdue: Color(hex: "A32D2D")
+        case .good:    .green
+        case .warning: .yellow
+        case .overdue: .red
         }
     }
 
     private var stateFill: Color {
         switch part.state {
-        case .good:    Color(hex: "EAF3DE")
-        case .warning: Color(hex: "FAEEDA")
-        case .overdue: Color(hex: "FCEBEB")
+        case .good:    .green.opacity(0.1)
+        case .warning: .yellow.opacity(0.1)
+        case .overdue: .red.opacity(0.1)
         }
     }
 
@@ -28,11 +28,11 @@ struct MaintenanceCard: View {
             metrics
             progressBar
         }
-        .background(Color(.systemBackground))
+        .background(stateFill)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(stateColor.opacity(0.6), lineWidth: 0.8)
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(stateColor.opacity(0.6), lineWidth: 2)
         )
     }
 
@@ -42,39 +42,49 @@ struct MaintenanceCard: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(stateFill)
-                    .frame(width: 44, height: 44)
+                    .frame(width: 54, height: 54)
                 Image(systemName: part.image)
                     .font(.system(size: 20, weight: .medium))
                     .foregroundStyle(stateColor)
             }
 
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(alignment: .center, spacing: 8) {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .top) {
                     Text(part.name)
-                        .font(.system(.body, design: .monospaced).bold())
-                    StateBadge(state: part.state, color: stateColor, fill: stateFill)
+                        .font(.title3).bold()
+                    
+                    Spacer()
+                    
+                    StateBadge(
+                        state: part.state,
+                        color: stateColor,
+                        fill: stateFill
+                    )
                 }
                 Text("Vida útil técnica: \(part.usefulDescription)")
-                    .font(.system(size: 11, design: .monospaced))
+                    .font(.system(size: 11))
                     .foregroundStyle(.secondary)
+                Text("Vida útil técnica: \(part.usefulDescription)")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+                
             }
-            Spacer(minLength: 0)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
     }
 
-    // MARK: – Tab bar
-
-    // MARK: – Metrics grid
+    // MARK: – Metrics
     private var metrics: some View {
-        HStack(spacing: 8) {
-            MetricTile(label: "Progreso", icon: "clock", value: "\(part.porcent)%", color: stateColor)
-            MetricTile(label: "Restante", icon: "arrow.right", value: part.remaining, color: stateColor)
-            MetricTile(label: "Próximo", icon: "calendar", value: "~45 días", color: .primary)
+        ScrollView(.horizontal) {
+            HStack(spacing: 8) {
+                MetricTile(label: "Progreso", icon: "clock", value: "\(part.porcent)%", color: stateColor)
+                MetricTile(label: "Restante", icon: "arrow.right", value: part.remaining, color: stateColor)
+                MetricTile(label: "Próximo", icon: "calendar", value: "~45 días", color: .primary)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 6)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
     }
 
     // MARK: – Progress bar
@@ -113,16 +123,12 @@ private struct StateBadge: View {
     let fill: Color
 
     var body: some View {
-        Text(state.rawValue.uppercased())
-            .font(.system(size: 9, weight: .bold))
-            .tracking(0.6)
+        Text(state.rawValue.uppercased()).bold()
+            .underline()
+            .font(.title3)
             .foregroundStyle(color)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(fill, in: Capsule())
     }
 }
-
 private struct MetricTile: View {
     let label: String
     let icon: String
@@ -139,31 +145,25 @@ private struct MetricTile: View {
                     .font(.system(size: 9, weight: .semibold))
                     .tracking(0.5)
                     .textCase(.uppercase)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
             }
             Text(value)
                 .font(.system(size: 13, weight: .medium, design: .monospaced))
                 .foregroundStyle(color)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-// MARK: – Color hex helper
-extension Color {
-    init(hex: String) {
-        let v = Int(hex, radix: 16) ?? 0
-        self.init(
-            red:   Double((v >> 16) & 0xFF) / 255,
-            green: Double((v >> 8)  & 0xFF) / 255,
-            blue:  Double( v        & 0xFF) / 255
-        )
+        .customBackground(color: .gray.opacity(0.2))
     }
 }
 
 #Preview {
-    MaintenanceCard(part: .init(image: "plus", name: "Aceite de motor", state: .overdue, usefulDescription: "3.000 - 5.0000 km", remaining: "2000", porcent: 90))
+    MaintenanceCard(
+        part: .init(
+            image: "plus",
+            name: "Aceite de motor",
+            state: .good,
+            usefulDescription: "3.000 - 5.0000 km",
+            remaining: "2000",
+            porcent: 90
+        )
+    )
 }

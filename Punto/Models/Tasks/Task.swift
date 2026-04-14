@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TaskImportance: String, Codable {
+enum TaskImportance: String, CaseIterable {
     case low, medium, high
 }
 

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MonthyExpensesView: View {
+struct MonthlyExpensesView: View {
     let today = Date()
     let componets = Calendar.current.dateComponents([.year, .month, .day], from: Date())
     
@@ -18,7 +18,12 @@ struct MonthyExpensesView: View {
             VStack(alignment: .center, spacing: 16) {
                 header
                 selectedMonth
-                ExpenseOverviewCard(balance: 0.0, profit: 0.0, losses: 0.0, bcColor: [.blue.opacity(0.8),.green,.brandGreen  ])
+                ExpenseMonthlyOverviewCard(
+                    balance: 0.0,
+                    profit: 0.0,
+                    losses: 0.0,
+                    bcColor: [.blue.opacity(0.8),.green,.brandGreen  ]
+                )
                 
                 // Create table incomes and expenses
                 
@@ -132,7 +137,7 @@ private struct Category: View {
 private struct CustomProgressViewStyle: ProgressViewStyle {
     func makeBody(configuration: Configuration) -> some View {
         ProgressView(configuration)
-            .frame(height: 10) // Altura personalizada
+            .frame(height: 10) 
             .cornerRadius(.infinity)
             .scaleEffect(y: 2)
     }
@@ -141,5 +146,5 @@ private struct CustomProgressViewStyle: ProgressViewStyle {
 
 
 #Preview {
-    MonthyExpensesView()
+    MonthlyExpensesView()
 }

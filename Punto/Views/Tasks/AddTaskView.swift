@@ -2,12 +2,14 @@ import SwiftUI
 
 struct AddTaskView: View {
     @Environment(\.dismiss) private var dismiss
-
     @State private var title: String = ""
     @State private var description: String = ""
     @State private var importance: TaskImportance = .medium
     @State private var date: Date = .now
+    @State private var isOn: Bool = false
     @State private var location: String = ""
+    let colors: [Color] = [.green, .yellow, .red]
+
     
     @Binding var tasks: [Task]
     
@@ -15,160 +17,87 @@ struct AddTaskView: View {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
+    
     var body: some View {
-        ZStack {
-            Color.platformGroupedBackground.ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 10) {
-                    detailsSection
-                    importanceSection
-                    dateSection
-                    locationSection
-                    saveButton
+        ScrollView {
+            VStack(alignment: .leading, spacing: 30) {
+                    header
+                    .padding(.bottom)
+                    nameandDescription
+                    importanceView
+                    taskDeadline
+                    locationView
+            }.padding(.horizontal)
+        }
+        
+        DButtonComp(text: "Add Task", color: .blue, image: "plus") {
+            
+        }
+    }
+    
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Image(systemName: "plus")
+                Text("Add New task")
+            }
+            .font(.title.bold())
+            .foregroundColor(.blue)
+            
+            
+            Text("Add title, description and even location")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+    }
+    private var nameandDescription: some View {
+        VStack(spacing: 4) {
+            TextFieldComp(text: $title, prompt: "Task Name", image: "pencil", color: .blue)
+            
+            TextFieldComp(text: $description, prompt: "Task Description", image: "list.dash")
+        }
+    }
+    private var importanceView: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            
+            Text("Select the protocol's importance")
+                .foregroundStyle(.secondary)
+            
+            Picker("Importance", selection: $importance) {
+                ForEach(TaskImportance.allCases, id: \.self) { item in
+                    Text(item.rawValue).tag(item)
                 }
-                .padding()
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") { dismiss() }
-            }
-        }
-        #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
-        #endif
-    }
-}
-
-// MARK: - Sections
-private extension AddTaskView {
-    var detailsSection: some View {
-        SectionCard(title: "Details") {
-            InputField(icon: "textformat", title: "Title", placeholder: "Task name", text: $title)
-
-            InputField(icon: "text.alignleft", title: "Description", placeholder: "Optional description", text: $description, isMultiline: true)
+            }.pickerStyle(.segmented)
+            
+            HStack {
+                ForEach(colors, id: \.self) { color in
+                    Capsule()
+                        .foregroundStyle(color)
+                }
+            }.frame(maxHeight: 10)
         }
     }
-
-    var importanceSection: some View {
-        SectionCard(title: "Importance") {
-            Picker("", selection: $importance) {
-                Label("Low", systemImage: "arrow.down").tag(TaskImportance.low)
-                Label("Medium", systemImage: "arrow.left.and.right").tag(TaskImportance.medium)
-                Label("High", systemImage: "arrow.up").tag(TaskImportance.high)
-            }
-            .pickerStyle(.segmented)
-        }
-    }
-
-    var dateSection: some View {
-        SectionCard(title: "Date") {
+    private var taskDeadline: some View {
+        VStack {
             DatePicker("Select date", selection: $date, displayedComponents: [.date, .hourAndMinute])
                 .datePickerStyle(.compact)
-        }
+        }.customBackground(color: .gray.opacity(0.2))
     }
-
-    var locationSection: some View {
-        SectionCard(title: "Location") {
-            InputField(icon: "mappin", title: "Location", placeholder: "Add a location", text: $location)
-        }
-    }
-}
-
-// MARK: - Save Button
-private extension AddTaskView {
-    var saveButton: some View {
-        Button(action: saveTask) {
-            HStack {
-                Spacer()
-                Label("Save Task", systemImage: "checkmark.circle.fill")
-                    .font(.headline)
-                Spacer()
+    private var locationView: some View {
+        VStack {
+            Toggle("Use location (Google Maps)", isOn: $isOn)
+                .tint(.blue)
+            if isOn {
+                TextFieldComp(text: $location, prompt: "Location", image: "location", color: .blue)
             }
-            .padding()
-            .background(isValid ? Color.accentColor : Color.gray.opacity(0.3))
-            .foregroundColor(.white)
-            .cornerRadius(14)
-        }
-        .disabled(!isValid)
-        .padding(.top, 10)
+        }.customBackground(color: .gray.opacity(0.2))
     }
+
 }
-
-// MARK: - Actions
-private extension AddTaskView {
-    func saveTask() {
-        tasks.append(.init(title: title, description: description, date: date, importance: importance, status: .done))
-        print("Task saved:", title, description, importance, date, location)
-        dismiss()
-    }
-}
-
-// MARK: - Reusable Components
-
-struct SectionCard<Content: View>: View {
-    let title: String
-    let content: Content
-
-    init(title: String, @ViewBuilder content: () -> Content) {
-        self.title = title
-        self.content = content()
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .font(.headline)
-
-            VStack(spacing: 12) {
-                content
-            }
-        }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.platformSystemBackground)
-                .shadow(color: .black.opacity(0.04), radius: 5, x: 0, y: 2)
-        )
-    }
-}
-
-struct InputField: View {
-    let icon: String
-    let title: String
-    let placeholder: String
-    @Binding var text: String
-    var isMultiline: Bool = false
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            HStack(alignment: .top, spacing: 10) {
-                Image(systemName: icon)
-                    .foregroundStyle(.secondary)
-
-                if isMultiline {
-                    TextField(placeholder, text: $text, axis: .vertical)
-                        .lineLimit(3...6)
-                } else {
-                    TextField(placeholder, text: $text)
-                }
-            }
-            .padding(12)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.platformSecondaryBackground)
-            )
-        }
-    }
-}
-
+    
 #Preview {
-    NavigationStack {
-        AddTaskView(tasks: .constant([]))
-    }
+    AddTaskView(
+            tasks: .constant([])
+    )
 }

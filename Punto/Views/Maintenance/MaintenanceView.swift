@@ -14,7 +14,6 @@ struct MaintenanceView: View {
         _vm = State(wrappedValue: MaintenanceViewModel(user: user))
     }
     
-    
     var body: some View {
         
         VStack (alignment: .leading, spacing: 10) {
@@ -28,11 +27,15 @@ struct MaintenanceView: View {
             )
             
             CarouselComp(
-                strategy: MaintenanceCarouselAlgorithm(), color: .blue,
+                strategy: MaintenanceCarouselAlgorithm(),
+                color: .blue,
                 selectedIndex: $vm.selectedVehicle
             )
               
-            MaintenanceFilterView(millage: vm.currentRange, totalParts: vm.totalMaintenances)
+            MaintenanceFilterView(
+                millage: vm.currentRange,
+                totalParts:vm.totalMaintenances
+            )
             
             ScrollView(.vertical, showsIndicators: false) {
                 ForEach(vm.components, id: \.id) { part in
