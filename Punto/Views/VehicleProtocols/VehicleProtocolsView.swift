@@ -8,56 +8,79 @@
 import SwiftUI
 
 struct VehicleProtocolsView: View {
-    @State private var vm : VehicleProtocoslViewModel
-    @Environment(NavigationRouter.self) var router
-    
+    @State private var vm : ProtocoslListViewModel
+    var user: User
     init(user: User) {
-        _vm = State(wrappedValue: VehicleProtocoslViewModel(user: user))
+        _vm = State(wrappedValue: ProtocoslListViewModel(user: user))
+        self.user = user
     }
-
+    
     var body: some View {
-        VStack (alignment: .leading, spacing: 10) {
-            
-            if vm.areVehicles {
+            VStack (alignment: .leading, spacing: 10) {
                 
-                HeaderComp(title: "Protocols",
-                       image: "shield.fill",
-                       description: "Welcome to the Protocols section, here you can see the protocols that your vehicles have to follow.",
-                       color: .yellow,
-                       gradient: .none
-                )
-                
-                CarouselComp(
-                    strategy: ProtocolsAlgorithm(),
-                    color: .yellow,
-                    selectedIndex: $vm.selectedVehicleIndex
-                )
-                selectedVehicleInfo
-                
-                // Content
-                ScrollView(.vertical, showsIndicators: false) {
-                    ForEach(vm.protocols,id: \.id ) { protocolData in
-                            ProtocolCardView(protocolM: protocolData)
-                            .padding(2)
+
+                if vm.areVehicles {
+                    HeaderComp(title: "Protocols",
+                               image: "shield.fill",
+                               description: "Welcome to the Protocols section, here you can see the protocols that your vehicles have to follow.",
+                               color: .yellow,
+                               gradient: .none
+                    )
+                    CarouselComp(
+                        strategy: ProtocolsAlgorithm(),
+                        color: .yellow,
+                        selectedIndex: $vm.selectedVehicleIndex
+                    )
+                    selectedVehicleInfo
+                    
+                    if vm.areProtocols {
+                        // Content
+                        ScrollView(.vertical, showsIndicators: false) {
+                            ForEach(vm.protocols.enumerated(),id: \.element.id ) { index ,protocolData in
+                                
+                                NavigationLink {
+                                    ProtocolDetailView(user: user, element: protocolData, index: index)
+                                } label: {
+                                    ProtocolCardView(protocolM: protocolData)
+                                        .padding(2)
+                                }.buttonStyle(.automatic)
+                            }
                         }
-                
+                    } else {
+                        ContentUnavailableView(
+                            "There are no Protocols",
+                            systemImage: "Shield",
+                            description: Text("Add New protocols.")
+                        )
+                    }
+                    
+                    NavigationLink {
+                       
+                        ProtocolDetailView(user: user, index: vm.selectedVehicleIndex)
+                        
+                    } label: {
+                        HStack {
+                            Text("Add Protocol")
+                            Image(systemName: "plus")
+                        }
+                        .foregroundStyle(.white).bold()
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical)
+                        .background(
+                            Color.yellow
+                                .cornerRadius(10)
+                        )
+                    }
+                    
+                } else {
+                    ContentUnavailableView(
+                        "There are no vehicles",
+                        systemImage: "car.fill",
+                        description: Text("Add a vehicle to see their protocols.")
+                    )
                 }
-                
-                DButtonComp(text: "Add Protocol", color: .yellow, image: "shield") {
-                    router.navigate(to: .addprotocols)
-                }
-                
-            } else {
-                ContentUnavailableView(
-                    "There are no vehicles",
-                    systemImage: "car.fill",
-                    description: Text("Add a vehicle to see their protocols.")
-                )
-            }
-        }.padding(.horizontal, 8)
+            }.padding(.horizontal, 8)
     }
-    
-    
     private var selectedVehicleInfo: some View {
         VStack(alignment: .leading) {
             
@@ -81,5 +104,5 @@ struct VehicleProtocolsView: View {
     VehicleProtocolsView(user: .mock)
         .environment(NavigationRouter())
         .environment(CarouselViewModel(user: .mock))
-
+    
 }

@@ -45,7 +45,6 @@ struct PuntoApp: App {
                                 switch route {
                                 case .tasks:        TaskView(user: appState.user)
                                 case .protocols:    VehicleProtocolsView(user: appState.user)
-                                case .addprotocols: AddProtocolView()
                                 case .manteinances: MaintenanceView(user: appState.user)
                                 case .expenses:     ExpensesView(user: appState.user)
                                 }
@@ -54,7 +53,7 @@ struct PuntoApp: App {
                     }
                 }
             }
-            // ↓ environments en el Group, no en MaintenanceView
+
             .environment(carouselVM)
             .environment(router)
             .environment(appState)

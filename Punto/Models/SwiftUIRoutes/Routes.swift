@@ -24,10 +24,8 @@ enum OnboardingRoute: Hashable {
 enum AppRoute: Hashable {
     case tasks
     case protocols
-    case addprotocols
     case manteinances
     case expenses
-    
 }
 
 @Observable @MainActor

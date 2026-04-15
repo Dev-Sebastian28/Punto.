@@ -21,8 +21,8 @@ enum ProtocolTime: String, CaseIterable {
 
 }
 
-struct VehicleProtocol {
-    let id: UUID
+struct VehicleProtocol: Equatable {
+    var id: UUID
     var name: String
     var description: String?
     var tasks: [ProtocolTask]
@@ -45,8 +45,8 @@ struct VehicleProtocol {
         }
     }
 }
-
-struct ProtocolTask {
+// cambiar is active
+struct ProtocolTask: Equatable {
     let id: UUID
     var taskName: String
     var description: String?
