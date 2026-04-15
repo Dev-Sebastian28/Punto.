@@ -33,7 +33,7 @@ struct PuntoApp: App {
                                 case .createAccount:    SignInView()
                                 case .form1:            FirstFormView()
                                 case .form2:            SecondFormView().navigationBarBackButtonHidden(true)
-                                case .addVehicle:       AddVehicleView().navigationBarBackButtonHidden(true)
+                                case .addVehicle:       AddVehicleView(user: appState.user).navigationBarBackButtonHidden(true)
                                 case .addDriver:        AddDriverView()
                                 }
                             }
