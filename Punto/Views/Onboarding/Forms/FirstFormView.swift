@@ -16,15 +16,24 @@ struct FirstFormView: View {
                 header
                     .padding(.bottom)
                 
-                FormCardView(title: "Owner-Operator", text: "You own the vehicle and you are the primary driver.", image: "singleDriver") {
+                FormCardView(
+                    title: "Owner-Operator",
+                    text: "You own the vehicle and you are the primary driver.",
+                    image: "singleDriver") {
                     router.navigate(to: .form2)
                 }
 
-                FormCardView(title: "Coordinator", text: "You own or manage multiple vehicles but do not drive them yourself.", image: "manager") {
+                FormCardView(
+                    title: "Coordinator",
+                    text: "You own or manage multiple vehicles but do not drive them yourself.",
+                    image: "manager") {
                     router.navigate(to: .form2)
                 }
 
-                FormCardView(title: "Contracted Driver", text: "You drive a vehicle owned by a fleet owner or a company.", image: "driver") {
+                FormCardView(
+                    title: "Contracted Driver",
+                    text: "You drive a vehicle owned by a fleet owner or a company.",
+                    image: "driver") {
                     router.navigate(to: .form2)
                 }
 
@@ -33,21 +42,22 @@ struct FirstFormView: View {
                     router.navigate(to: .form2)
                 } label: {
                     Text("Other")
-                        .font(.subheadline)
+                        .font(.subheadline).bold()
                         .foregroundStyle(.white)
-                        .bold()
                         .padding(.horizontal, 60)
                         .padding(.vertical, 10)
                         .background(
-                            Color.myBlue
+                            LinearGradient(
+                                colors: [.brandBlue, .brandBlueDark],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
                             .clipShape(.capsule)
                             .shadow(color: .myBlue, radius: 3)
                             
                         )
                         .padding(.top)
                 }
-
-                
                 Spacer()
             }.padding(.horizontal, 10)
         }
@@ -55,7 +65,7 @@ struct FirstFormView: View {
 private var header: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("What type of role are you?")
-                .font(.largeTitle)
+                .font(.title)
                 .bold()
             Text("This choice will not affect your experience")
                 .font(Font.subheadline.italic())
