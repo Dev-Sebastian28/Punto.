@@ -21,22 +21,28 @@ struct HeaderComp: View {
         
     var body: some View {
         
-        if currentTime == 4 {
+        if currentTime == 5 {
            HStack {
-               CommonButton(title: "Go Back", icon: .none,style: .blue) {
+               CommonButton(
+                title: "Go Back",
+                icon: .none,
+                style: .blue) {
                    
                }
                
                Spacer()
     
                CommonButton(
-                title: vm.isCarousellHide ? "Show Vehicles Section" : "Hide Vehicles Section",
-                icon: "chevron.down",style:  vm.isCarousellHide ? .blue : .red
-               ) {
-                   vm.isCarousellHide.toggle()
+                title:
+                    vm.isCarousellHide ? "Show Vehicles Section" : "Hide Vehicles Section",
+                icon: "chevron.down",
+                style:  vm.isCarousellHide ? .blue : .red) {
+                    withAnimation {
+                        vm.isCarousellHide.toggle()
+                    }
                }
            }
-        } else {
+        } else{
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(title)
@@ -83,7 +89,6 @@ struct HeaderComp: View {
     }
 }
 
-
 struct CommonButton: View {
     let title: String
     let icon: String?
@@ -116,6 +121,12 @@ struct CommonButton: View {
 }
 
 #Preview {
-    HeaderComp(title: "", image: "", description: "", color: .red, gradient: .none)
+    HeaderComp(
+        title: "",
+        image: "",
+        description: "",
+        color: .red,
+        gradient: .none
+        )
         .environment(CarouselViewModel(user: .mock))
 }

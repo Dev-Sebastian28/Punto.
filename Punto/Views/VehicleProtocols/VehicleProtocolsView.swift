@@ -37,7 +37,7 @@ struct VehicleProtocolsView: View {
                 // Content
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(vm.protocols,id: \.id ) { protocolData in
-                            ProtocolCardView(vehicleProtocol: protocolData)
+                            ProtocolCardView(protocolM: protocolData)
                             .padding(2)
                         }
                 
@@ -62,7 +62,7 @@ struct VehicleProtocolsView: View {
         VStack(alignment: .leading) {
             
             Text(vm.selectedModelBrand)
-                .font(.title.bold())
+                .font(.title3.bold())
             
             HStack {
                 Text(vm.selectedPlate)
@@ -70,7 +70,9 @@ struct VehicleProtocolsView: View {
                 Spacer()
                 
                 Text("Total: " + "\(vm.protocolsCount)" )
-            }.foregroundStyle(.secondary)
+            }
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
         }
     }
 }

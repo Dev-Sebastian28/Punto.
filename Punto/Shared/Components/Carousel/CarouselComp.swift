@@ -14,7 +14,7 @@ struct CarouselComp: View {
     
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: -6) {
             
             if !vm.isCarousellHide {
                 ScrollViewReader { proxy in
@@ -65,8 +65,8 @@ struct CarouselComp: View {
                             proxy.scrollTo(newValue, anchor: .center)
                         }
                     }
-                }
-                Separator()
+                }.animation(.linear, value: vm.isCarousellHide)
+                Divider()
 
             }
         }
