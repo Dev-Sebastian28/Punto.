@@ -20,13 +20,6 @@ struct TaskView: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(alignment: .leading, spacing: 10) {
-                HeaderComp(
-                    title: "Tasks",
-                    image: "line.3.horizontal",
-                    description: "Gestiona las tareas de tus vehículos y agrega nuevas desde aquí.",
-                    color: .blue,
-                    gradient: .none
-                )
                 if vm.vehicles.isEmpty {
                     ContentUnavailableView(
                         "Sin vehículos",
@@ -34,6 +27,14 @@ struct TaskView: View {
                         description: Text("Agrega un vehículo para ver sus tareas.")
                     )
                 } else {
+                    HeaderComp(
+                        title: "Tasks",
+                        image: "line.3.horizontal",
+                        description: "Gestiona las tareas de tus vehículos y agrega nuevas desde aquí.",
+                        color: .blue,
+                        gradient: .none
+                    )
+                    
                     CarouselComp(
                         strategy: TaskAlgorithm(),
                         color: .blue,
@@ -41,10 +42,9 @@ struct TaskView: View {
                     )
                     vehicleInfoSection
                     taskListSection
+                    addTaskButton
                 }
             }.padding(.horizontal, 7)
-
-            addTaskButton
         }
         .ignoresSafeArea(edges: .bottom)
         .sheet(isPresented: $isPresentingAddTask) {

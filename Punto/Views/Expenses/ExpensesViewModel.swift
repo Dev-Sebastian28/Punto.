@@ -10,16 +10,16 @@ import Observation // Required for @Observable
 
 @Observable
 final class ExpensesViewModel {
-    private var userModel: User
+    private var user: User
     var selectedVehicleIndex: Int = 0
     
     // Safety check for empty vehicle list
-    private var currentVehicle: Vehicle? {
-        guard userModel.vehicles.indices.contains(selectedVehicleIndex) else { return nil }
-        return userModel.vehicles[selectedVehicleIndex]
+    private var currentVehicle: (any Vehicle)? {
+        guard user.vehicles.indices.contains(selectedVehicleIndex) else { return nil }
+        return user.vehicles[selectedVehicleIndex]
     }
 
-    var vehicles: [Vehicle] { userModel.vehicles }
+    var vehicles: [Vehicle] { user.vehicles }
     
     // Computed property ensures UI always gets the latest list for the selected vehicle
     var expenses: [Expense] {
@@ -42,13 +42,13 @@ final class ExpensesViewModel {
     }
 
     init(userModel: User) {
-        self.userModel = userModel
+        self.user = userModel
     }
 
     func addNewExpense(name: String, description: String, amount: Double, date: Date, type: String) {
         let newExpense = Expense(name: name, description: description, amount: amount, date: date, type: type)
-        if userModel.vehicles.indices.contains(selectedVehicleIndex) {
-            userModel.vehicles[selectedVehicleIndex].expenses.append(newExpense)
+        if user.vehicles.indices.contains(selectedVehicleIndex) {
+            user.vehicles[selectedVehicleIndex].expenses.append(newExpense)
         }
     }
 }

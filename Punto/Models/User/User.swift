@@ -18,9 +18,6 @@ enum AvailableCountries: String, Codable {
     case argentina
 }
 
-import Foundation
-import Observation
-
 @Observable
 final class User {
     let id: UUID
