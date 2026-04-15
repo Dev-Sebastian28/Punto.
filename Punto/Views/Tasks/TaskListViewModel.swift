@@ -12,18 +12,12 @@ import Observation
 final class TaskListViewModel {
     private let user: User
     var selectedVehicle: Int
-
     var vehicles: [Vehicle] { user.vehicles }
-
+    
     var totalTasks: Int {
         user.vehicles[selectedVehicle].tasks.count
     }
-    var totalTodoTasks: Int {
-        user.vehicles[selectedVehicle].tasks.filter { $0.status == .pending }.count
-    }
-    var totalDoneTasks: Int {
-        user.vehicles[selectedVehicle].tasks.filter { $0.status == .done }.count
-    }
+   
     var selectedVehicleModel: String {
         user.vehicles[selectedVehicle].vehicleInformation.model
     }
@@ -33,10 +27,19 @@ final class TaskListViewModel {
     var selectedVehiclePlate: String {
         user.vehicles[selectedVehicle].vehicleInformation.plate
     }
-
-    func updateSelectedVehicle(index: Int) {
-        selectedVehicle = index
+    
+    func addTask(_ task: Task) {
+        user.vehicles[selectedVehicle].tasks.append(task)
     }
+
+    func updateTask(_ updatedTask: Task) {
+        guard let taskIndex = user.vehicles[selectedVehicle].tasks.firstIndex(where: { $0.id == updatedTask.id }) else {
+            return
+        }
+
+        user.vehicles[selectedVehicle].tasks[taskIndex] = updatedTask
+    }
+
 
     init(user: User, selectedVehicle: Int = 0) {
         self.user = user

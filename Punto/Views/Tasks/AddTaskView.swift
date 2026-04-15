@@ -8,31 +8,41 @@ struct AddTaskView: View {
     @State private var date: Date = .now
     @State private var isOn: Bool = false
     @State private var location: String = ""
+    let vm: TaskListViewModel
+    
+    
     let colors: [Color] = [.green, .yellow, .red]
-
-    
-    @Binding var tasks: [Task]
-    
     private var isValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
-    
     var body: some View {
-
-        ScrollView {
-            VStack(alignment: .leading, spacing: 30) {
-                    header
-                    .padding(.bottom)
-                    nameandDescription
-                    importanceView
-                    taskDeadline
-                    locationView
-            }.padding(.horizontal)
-        }
-        
-        DButtonComp(text: "Add Task", color: .blue, image: "plus") {
+        VStack(alignment: .leading, spacing: 30) {
+            Spacer()
             
+            header
+                .padding(.bottom)
+            nameandDescription
+            importanceView
+            taskDeadline
+            locationView
+        }.padding(.horizontal)
+        
+        HStack {
+            DButtonComp(text: "Cancell", color: .gray, image: .none, style: .neutral, maxHeight: 10) {
+                dismiss()
+            }
+            
+            DButtonComp(text: "Add Task", color: .blue, image: "plus", maxHeight: 10, isEnabled: isValid) {
+                vm.addTask(
+                    Task(title: title,
+                         description: description,
+                         date: date,
+                         importance: importance
+                        )
+                )
+                dismiss()
+            }
         }
     }
     
@@ -93,11 +103,9 @@ struct AddTaskView: View {
             }
         }.customBackground(color: .gray.opacity(0.2))
     }
-
-}
     
+}
+
 #Preview {
-    AddTaskView(
-            tasks: .constant([])
-    )
+    AddTaskView(vm: .init(user: .mock))
 }

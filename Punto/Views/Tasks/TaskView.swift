@@ -10,6 +10,7 @@ import SwiftUI
 struct TaskView: View {
     @State private var vm: TaskListViewModel
     @State private var isPresentingAddTask = false
+    @State private var selectedTask: Task?
 
 
     init(user: User) {
@@ -26,7 +27,6 @@ struct TaskView: View {
                     color: .blue,
                     gradient: .none
                 )
-
                 if vm.vehicles.isEmpty {
                     ContentUnavailableView(
                         "Sin vehículos",
@@ -39,22 +39,21 @@ struct TaskView: View {
                         color: .blue,
                         selectedIndex: $vm.selectedVehicle
                     )
-
                     vehicleInfoSection
-
                     taskListSection
                 }
-            }
-            .padding(.horizontal, 7)
+            }.padding(.horizontal, 7)
 
             addTaskButton
         }
         .ignoresSafeArea(edges: .bottom)
         .sheet(isPresented: $isPresentingAddTask) {
-            AddTaskView(tasks: .constant([]))
+            AddTaskView(vm: vm)
+                .presentationDetents([.height(550)])
         }
-        .onAppear {
-         //   print(vm.)
+        .sheet(item: $selectedTask) { task in
+            TaskDetailView(task: task, vm: vm)
+                .presentationDetents([.height(620)])
         }
     }
 }
@@ -85,8 +84,13 @@ private extension TaskView {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(spacing: 10) {
                 ForEach(vm.vehicles[vm.selectedVehicle].tasks, id: \.id) { task in
-                    TaskCardView(task: task)
-                        .padding(2)
+                    Button {
+                        selectedTask = task
+                    } label: {
+                        TaskCardView(task: task)
+                            .padding(2)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
         }

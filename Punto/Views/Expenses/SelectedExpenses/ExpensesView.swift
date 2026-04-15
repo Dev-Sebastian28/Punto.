@@ -51,7 +51,8 @@ struct ExpensesView: View {
                 if isPresentedFilter {
                     ExpenseFilterView(
                         isPresented: $isPresentedFilter,
-                        basedCollection: vm.expenses, filterCollection: .constant([]))
+                        basedCollection: vm.expenses, filterCollection: .constant([])
+                    )
                         .transition(.move(edge: .top))
                 }
                 Spacer()

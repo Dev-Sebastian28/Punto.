@@ -15,15 +15,15 @@ enum TaskStatus: String, Codable {
     case pending, inProgress, done
 }
 
-struct Task {
+struct Task: Identifiable {
     let id: UUID
     var title: String
-    var description: String
+    var description: String?
     var date: Date
     var importance: TaskImportance
     var status: TaskStatus
     
-    init(title: String, description: String, date: Date, importance: TaskImportance, status: TaskStatus) {
+    init(title: String, description: String?, date: Date, importance: TaskImportance, status: TaskStatus = .pending) {
         self.id = UUID()
         self.title = title
         self.description = description
@@ -32,7 +32,6 @@ struct Task {
         self.status = status
     }
 }
-
 
 
 
