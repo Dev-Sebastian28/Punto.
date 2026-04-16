@@ -11,36 +11,41 @@ import Foundation
 final class FleetViewModel {
     private(set) var user: User
     var vehicles: [Vehicle] { user.vehicles }
-    
-    var filterCollection: [any Vehicle]
-    
     var enoughVehiclesToQuickInfo: Bool { vehiclesCount >= 3 }
     
     var activeVehiclesCount: Int {
         vehicles.filter({ $0.isActive == true }).count
     }
-
     var inactiveVehiclesCount: Int {
         vehicles.filter({ $0.isActive == false }).count
     }
     
     var manteinicesCount: Int {
-        0
+        var count: Int = 0
+        for vehicle in vehicles {
+            for maintenance in vehicle.maintenance {
+                let state = MaintenanceAnaliser(comp: maintenance).calculateState()
+                if state == .overdue || state == .warning {
+                    count += 1
+                }
+            }
+        }
+        return count
     }
-    
     var vehiclesCount: Int { vehicles.count }
     
-    var totalBalance: Double {
-        var total: Double = 0
+    var totalExpenses: [Expense] {
+        var expenses: [Expense] = []
         for vehicle in vehicles {
-            total += vehicle.expenses.reduce(0) { $0 + $1.amount }
+            expenses.append(contentsOf: vehicle.expenses)
         }
-        return total
+        return expenses
     }
-    
+    var totalBalance: Double {
+        ExpensesCalculator(entries: totalExpenses).calculateTotalBalance()
+    }
     
     init(user: User) {
         self.user = user
-        self.filterCollection = user.vehicles
     }
 }

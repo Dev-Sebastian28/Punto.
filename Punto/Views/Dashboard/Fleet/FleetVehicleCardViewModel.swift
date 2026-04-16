@@ -1,3 +1,11 @@
+//
+//  FleetVehicleCardViewModel.swift
+//  Punto
+//
+//  Created by Sebastian Garcia on 16/04/26.
+//
+import Foundation
+
 @Observable
 final class FleetVehicleCardViewModel {
     private let vehicle: any Vehicle
