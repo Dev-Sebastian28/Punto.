@@ -8,89 +8,177 @@
 import SwiftUI
 
 struct AddDriverView: View {
+    var vm: AddDriverViewModel
+    @State private var selectedVehicleIndex: Int
     @State private var isAddDriverPresented: Bool = false
-    @State var userExample: User = .init(name: "", email: "", access: .admin, country: .argentina)
     @Environment(NavigationRouter.self) var router
-
+    
+    init(user: User) {
+        vm = .init(user: user)
+        self.selectedVehicleIndex = 0
+        self.isAddDriverPresented = false
+    }
+    
     var body: some View {
-        VStack {
-            header
-            
-            ScrollView(.vertical, showsIndicators: false) {
-                
-                ForEach(userExample.vehicles, id: \.vehicleInformation.id) { vehicle in
-                    VehicleInformationView(vehicle: vehicle, isIndriverView: true)
-                        .padding(4)
-                }
-            DriverCardView(driverName: "Sebastian Garcia", driverNumber: "ADW", driverMail: "")
-            }
-            
-            DButtonComp(text: "Add Driver", color: .green, image: "plus") {
-                isAddDriverPresented.toggle()
+        ZStack {
+            VStack {
+                header
+                content
             }.sheet(isPresented: $isAddDriverPresented) {
-                AddDriverForm(index: 0, isPresented: $isAddDriverPresented)
-                    .presentationDetents([.fraction(0.4)])
+                AddDriverForm(vm: vm, index: selectedVehicleIndex)
+                    .presentationBackground(.white)
+                    .presentationDetents([.height(310)])
             }
-            
-        }.padding(.horizontal, 11)
+        }.padding(.horizontal, 10)
     }
     
     private var header: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // Icono con estilo de aplicación moderna
-            HStack {
-                Text("Add Driver")
-                    .font(.system(.largeTitle, design: .rounded))
-                    .bold()
-                
-                
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .top) {
                 Image(systemName: "person.badge.plus")
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.title3)
                     .foregroundColor(.green)
+                    .padding(14)
+                    .background(
+                        Color.green.opacity(0.15)
+                            .clipShape(Circle())
+                    )
                 
+                
+                Text("Invite drivers to your fleet")
+                    .font(.system(.title3, design: .rounded)).bold()
                 Spacer()
                 
                 LaterButton
                 
             }
             
-            // Textos principales
             VStack(alignment: .leading, spacing: 4) {
-                
-                
-                Text("Invite a new driver to your fleet to start managing their tasks and performance.")
+                Text("Invite a new driver to your fleet to start managing their tasks, protocols and more.")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
+                
+                Text("You can also be the driver of your own vehicle")
+                    .underline()
+            }
+        }.padding(.horizontal)
+    }
+    private var content: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            ForEach(vm.vehicles.enumerated(), id: \.element.vehicleInformation.id) { index, vehicle in
+                VStack(alignment: .leading) {
+                    vehicleCard(info: vehicle.vehicleInformation)
+                    HStack(alignment: .center) {
+                        Button {
+                            selectedVehicleIndex = index
+                            isAddDriverPresented.toggle()
+                            print(selectedVehicleIndex, index)
+                            
+                        } label: {
+                            
+                            VStack(spacing: 0) {
+                                Image(systemName: "person.crop.circle.badge.plus")
+                                    .font(.largeTitle)
+                                    .foregroundStyle(Color.green)
+                                Text("Add New")
+                                    .font(.caption.bold())
+                                    .foregroundStyle(.green)
+                                
+                            }
+                            .buttonStyle(.plain)
+                            .padding(12)
+                            .background(
+                                Color.green.opacity(0.15)
+                                    .cornerRadius(10)
+                            )
+                        }
+                        
+                        Divider()
+                            .frame(height: 70)
+                        
+            
+                            if vm.user.vehicles[index].drivers.isEmpty {
+                                VStack {
+                                    Text("This vehicle has no drivers yet")
+                                    Image(systemName: "person.crop.circle")
+                                        .font(.largeTitle)
+                                }.foregroundStyle(Color.secondary)
+                                
+                            } else {
+                                
+                                ScrollView(.horizontal) {
+                                    HStack {
+                                        ForEach(vehicle.drivers, id: \.name) { driver in
+                                            DriverCardView(driver: driver)
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        
+                    }
+                }
+                .padding(15)
+                .background(
+                    RoundedRectangle(cornerRadius: 25)
+                        .stroke(.gray, lineWidth: 1)
+                )
             }
         }
-        .padding(.horizontal)
-        .padding(.top, 20)
-        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    private func vehicleCard(info: VehicleInformation) -> some View {
+        ZStack(alignment: .topLeading) {
+            Image(info.image)
+                .resizable()
+                .scaledToFill()
+                .frame(height: 180)
+                .frame(maxWidth: .infinity)
+                .clipped()
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay(alignment: .bottomLeading) {
+                    LinearGradient(
+                        colors: [.clear, .black.opacity(0.55)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                }
+                .overlay(alignment: .bottomLeading) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("\(info.brand) \(info.model)")
+                            .font(.title2.bold())
+                        Text(info.plate)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.white.opacity(0.9))
+                    }
+                    .foregroundStyle(.white)
+                    .padding(16)
+                }
+        }
+    }
+    private var LaterButton: some View {
+        Button {
+            router.showMainTabs()
+        } label: {
+            VStack {
+                Text("Add Later")
+                    .font(.system(size: 15).weight(.semibold))
+                    .foregroundStyle(.gray)
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 5, style: .continuous)
+                            .fill(Color.gray.opacity(0.15))
+                    )
+            }
+        }
     }
     
-    @ViewBuilder
-    private var LaterButton: some View {
-            Button {
-                router.showMainTabs()
-            } label: {
-                VStack {
-                    Text("Add Later")
-                        .font(.system(size: 15).weight(.semibold))
-                        .foregroundStyle(.gray)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                                .fill(Color.gray.opacity(0.15))
-                        )
-                }
-            }
-    }
 }
 
 #Preview {
-    AddDriverView()
+    AddDriverView(user: .mock)
         .environment(NavigationRouter())
 }

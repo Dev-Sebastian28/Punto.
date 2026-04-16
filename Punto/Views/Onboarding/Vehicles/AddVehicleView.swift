@@ -194,7 +194,11 @@ struct AddVehicleView: View {
     }
     private var laterButton: some View {
         Button {
-            router.showMainTabs()
+            if hasVehicles {
+                router.navigate(to: .addDriver)
+            } else {
+                router.showMainTabs()
+            }
         } label: {
             
             Text(hasVehicles ?  "Add Drivers" : "Add Later")

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct VehicleInformationView: View {
     var vehicle: Vehicle
-    var isIndriverView: Bool = false
     
     private var info: VehicleInformation {
         vehicle.vehicleInformation
@@ -34,10 +33,9 @@ struct VehicleInformationView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             imageHeader
-            if !isIndriverView {
-                titleSection
-                detailsGrid
-            }
+            titleSection
+            detailsGrid
+            
         }
         .padding(14)
         .background(

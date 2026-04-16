@@ -8,20 +8,39 @@
 import SwiftUI
 
 struct AddDriverForm: View {
-    let index: Int
-    @Binding var isPresented: Bool
-    @State private var mail: String = ""
-    @State private var name: String = ""
-    @State private var number: String = ""
+    let selecteVehicleindex: Int
+    var vm: AddDriverViewModel
+    @Environment(\.dismiss) private var dismiss
+    @State private var driver: DriverInvitation
+    private var isvalid: Bool {
+        !driver.name.isEmpty && !driver.email.isEmpty && !driver.phone.isEmpty
+    }
+    
+    init(vm: AddDriverViewModel, index: Int) {
+        self.selecteVehicleindex = index
+        self.vm = vm
+        self.driver = .init(name: "", email: "", phone: "", status: .pending)
+    }
 
     var body: some View {
         VStack(spacing: 6) {
-            TextFieldComp(text: $name, prompt: "Driver Name", image: "person.fill", isRequired: false)
+            TextFieldComp(
+                text: $driver.name,
+                prompt: "Driver Name",
+                image: "person.fill"
+            )
                 .padding(.bottom, 8)
-
-            TextFieldComp(text: $number, prompt: "Driver Phone Number", image: "number", isRequired: true)
-
-            TextFieldComp(text: $mail, prompt: "Driver Mail", image: "at", isRequired: true)
+            
+            TextFieldComp(
+                text: $driver.phone,
+                prompt: "Driver Phone Number",
+                image: "number"
+            )
+            TextFieldComp(
+                text: $driver.email,
+                prompt: "Driver Mail",
+                image: "at"
+            )
 
             HStack {
                 DButtonComp(
@@ -29,27 +48,23 @@ struct AddDriverForm: View {
                     color: .gray,
                     image: "x.circle.fill",
                     style: .neutral,
-                    maxWidth: 120
-                ) {
-                    isPresented.toggle()
+                    maxWidth: 120) {
+                    dismiss()
                 }
-                .padding(.top, 30)
-
                 DButtonComp(
-                    text: "Send Invitation",
+                    text: "Send",
                     color: .blue,
                     image: "paperplane.fill",
                     maxWidth: 200,
-                    isEnabled: !number.isEmpty
-                ) {
+                    isEnabled: isvalid ) {
+                        vm.addDriver(driver, index: selecteVehicleindex)
+                        dismiss()
                 }
-                .padding(.top, 30)
-            }
-        }
-        .padding(.horizontal)
+            }.padding(.top, 30)
+        }.padding(.horizontal)
     }
 }
 
 #Preview {
-    AddDriverForm(index: 1, isPresented: .constant(true))
+    AddDriverForm(vm: .init(user: .mock), index: 0)
 }
