@@ -15,12 +15,16 @@ struct MainTabView: View {
     }
     var body: some View {
             TabView {
+                Tab("Cargos", systemImage: "shippingbox.fill") {
+                  MonthlyExpensesView()
+                }
+                
+                Tab("Expenses", systemImage: "banknote.fill") {
+                   MonthlyExpensesView()
+                }
+                
                 Tab("Fleet", systemImage: "truck.box.fill") {
                     FleetView(user: user)
-                }
-
-                Tab("Expenses", systemImage: "banknote.fill") {
-                    EmptyView()
                 }
 
                 Tab("Driver", systemImage: "person.crop.circle.fill") {

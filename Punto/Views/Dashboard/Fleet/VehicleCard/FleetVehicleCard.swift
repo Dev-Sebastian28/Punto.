@@ -18,6 +18,7 @@ struct FleetVehicleCard: View {
     var body: some View {
         VStack {
             vehicleInformation
+                .padding(.bottom, 6)
             driverSection
             buttonsList
             
@@ -67,6 +68,79 @@ struct FleetVehicleCard: View {
                 .padding(.vertical)
             }
     }
+    private var driverSection: some View {
+        HStack {
+            HStack {
+                if vm.hasDrivers && vm.isWorking {
+                    driverInfo(for: vm.currentDriver)
+                } else if vm.hasDrivers && !vm.isWorking {
+                    ForEach(vm.drivers, id: \.name) { driver in
+                        Text(driver.name)
+                    }
+                } else {
+                    Image(systemName: "person.slash.fill")
+                        .font(.title2)
+                    Text("There are no drivers assigned to this vehicle (only you)")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(10)
+            .background(
+                Color.white
+                    .clipShape(
+                        UnevenRoundedRectangle(
+                                        topLeadingRadius: 28,
+                                        bottomLeadingRadius: 28,
+                                        bottomTrailingRadius: 0,
+                                        topTrailingRadius: 0
+                                    )
+                    )
+                
+                
+            )
+            // Navigation Button
+            NavigationLink {
+                
+            } label: {
+                VStack {
+                    HStack (spacing: 0) {
+                        Image(systemName: "person.3.fill")
+                            .font(.title3)
+                        
+                        Image(systemName: "plus")
+                            .font(.callout)
+                        
+                    }
+                    Text("Add New")
+                        .font(.subheadline)
+                }
+                .foregroundStyle(.white)
+                .bold()
+            }.padding(.horizontal, 13)
+        }.background(
+            Color.blue
+                .clipShape(.capsule)
+        )
+    }
+    private func driverInfo(for driver: DriverInvitation) -> some View {
+        HStack {
+            Text(vm.currentDriverInitials)
+                .foregroundStyle(.white).bold()
+                .frame(width: 41, height: 41)
+                .background(Color.brandBlue)
+                .clipShape(.circle)
+            
+            VStack (alignment: .leading) {
+                Text("Driver")
+                    .foregroundStyle(Color.textMuted)
+                Text(driver.name)
+                    .bold()
+                    .foregroundStyle(Color.brandBlueDark)
+            }
+            Spacer()
+        }
+    }
     private var buttonsList: some View {
         HStack(spacing: 5) {
             QuickInfoButton(
@@ -102,66 +176,7 @@ struct FleetVehicleCard: View {
                 }
         }
     }
-    private var driverSection: some View {
-        HStack {
-            HStack {
-                if vm.hasDrivers && vm.isWorking {
-                    driverInfo(for: vm.currentDriver)
-                } else if vm.hasDrivers && !vm.isWorking {
-                    ForEach(vm.drivers, id: \.name) { driver in
-                        Text(driver.name)
-                    }
-                } else {
-                    Image(systemName: "person.slash.fill")
-                        .font(.title2)
-                    Text("There are no drivers assigned to this vehicle (only you)")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .padding(13)
-            .background(.white)
-            NavigationLink {
-                
-            } label: {
-                VStack {
-                    HStack (spacing: 0) {
-                        Image(systemName: "person.3.fill")
-                            .font(.title3)
-                        
-                        Image(systemName: "plus")
-                            .font(.callout)
-                        
-                    }
-                    Text("Add New")
-                        .font(.subheadline)
-                }
-                .foregroundStyle(.white)
-                .bold()
-            }.padding(.trailing, 13)
-        }.background(
-            Color.blue
-                .clipShape(RoundedRectangle(cornerRadius: 15))
-        )
-    }
-    private func driverInfo(for driver: DriverInvitation) -> some View {
-        HStack {
-            Text(vm.currentDriverInitials)
-                .foregroundStyle(.white).bold()
-                .frame(width: 41, height: 41)
-                .background(Color.brandBlue)
-                .clipShape(.circle)
-            
-            VStack (alignment: .leading) {
-                Text("Driver")
-                    .foregroundStyle(Color.textMuted)
-                Text(driver.name)
-                    .bold()
-                    .foregroundStyle(Color.brandBlueDark)
-            }
-            Spacer()
-        }
-    }
+
 }
 
 private struct QuickInfoButton: View {
