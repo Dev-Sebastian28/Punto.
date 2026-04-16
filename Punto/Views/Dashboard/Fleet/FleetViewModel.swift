@@ -11,7 +11,7 @@ import Foundation
 final class FleetViewModel {
     private(set) var user: User
     var vehicles: [Vehicle] { user.vehicles }
-    var enoughVehiclesToQuickInfo: Bool { vehiclesCount >= 3 }
+    var enoughVehiclesToQuickInfo: Bool { vehicles.count >= 3 }
     
     var activeVehiclesCount: Int {
         vehicles.filter({ $0.isActive == true }).count
@@ -32,7 +32,7 @@ final class FleetViewModel {
         }
         return count
     }
-    var vehiclesCount: Int { vehicles.count }
+    var vehiclesCount: String { vehicles.count.description }
     
     var totalExpenses: [Expense] {
         var expenses: [Expense] = []
@@ -41,8 +41,8 @@ final class FleetViewModel {
         }
         return expenses
     }
-    var totalBalance: Double {
-        ExpensesCalculator(entries: totalExpenses).calculateTotalBalance()
+    var totalBalance: String {
+        ExpensesCalculator(entries: totalExpenses).calculateTotalBalance().formatted(.number.grouping(.automatic)).description
     }
     
     init(user: User) {

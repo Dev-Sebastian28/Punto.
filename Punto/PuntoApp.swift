@@ -40,11 +40,11 @@ struct PuntoApp: App {
                     }
                 case .mainTabs:
                     NavigationStack(path: $router.appPath) {
-                        MainTabView()
+                        MainTabView(user: appState.user)
                             .navigationDestination(for: AppRoute.self) { route in
                                 switch route {
                                 case .tasks:        TaskView(user: appState.user)
-                                case .protocols:    VehicleProtocolsView(user: appState.user)
+                                case .protocols:    ProtocolsView(user: appState.user)
                                 case .manteinances: MaintenanceView(user: appState.user)
                                 case .expenses:     ExpensesView(user: appState.user)
                                 }
