@@ -8,27 +8,21 @@
 import SwiftUI
 
 struct FleetView: View {
-    @State private var searchText = ""
-    @State private var hideHeader: Bool = false
-    @State private var vm = FleetViewModel(user: .init(name: "", email: "", access: .admin, country: .argentina))
-
+    @State private var searchText: String
+    @State private var hideHeader: Bool
+    @State private var vm: FleetViewModel
+    
+    init(user: User) {
+        self.searchText = ""
+        self.hideHeader = false
+        self.vm = .init(user: user)
+    }
+    
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView(.vertical, showsIndicators: false) {
-                ForEach(vm.vehicles, id: \.vehicleInformation.id) { vehicle in
-                    FleetVehicleCard(vehicle: vehicle, isActive: true)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 4)
-                }
-            }
-            .padding(.top, 100)
-
-            VStack {
-                headerSection
-                Spacer()
-            }
-        }
-        .ignoresSafeArea(edges: .top)
+        ZStack(alignment: .top) {
+            vehiclesList
+            headerSection
+        }.ignoresSafeArea(edges: .top)
     }
     
     private var headerSection: some View {
@@ -48,7 +42,7 @@ struct FleetView: View {
                 }.font(.largeTitle.bold())
                 
                 Spacer()
-
+                
                 VStack(alignment: .leading, spacing: 0) {
                     Text("\(vm.vehiclesCount)" + " vehicles")
                     Text("under control")
@@ -58,9 +52,9 @@ struct FleetView: View {
             }
             
             if hideHeader {
-                
+                EmptyView()
             } else {
-                quickInf
+                headerQuickInformation
                 balanceCard
                 searchBar
             }
@@ -87,22 +81,38 @@ struct FleetView: View {
         )
         .shadow(color: Color.brandBlueDark.opacity(0.2), radius: 12, x: 0, y: 8)
     }
-    
+    private var vehiclesList: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            ForEach(vm.vehicles, id: \.vehicleInformation.id) { vehicle in
+                FleetVehicleCard(vehicle: vehicle)
+                    .padding(.horizontal, 9)
+            }
+        }.padding(.top, 100)
+    }
     @ViewBuilder
-    private var quickInf: some View {
+    private var headerQuickInformation: some View {
         if vm.enoughVehiclesToQuickInfo {
             HStack {
-                summaryCard(.init(title: "Actives", value: "\(vm.activeVehiclesCount)", icon: ""))
-                summaryCard(.init(title: "Inactives", value: "\(vm.inactiveVehiclesCount)", icon: ""))
-                summaryCard(.init(title: "Maintena.", value: "\(vm.manteinicesCount)", icon: ""))
-
-                
+                summaryCard(.init(
+                    title: "Actives",
+                    value: "\(vm.activeVehiclesCount)",
+                    icon: "")
+                )
+                summaryCard(.init(
+                    title: "Inactives",
+                    value: "\(vm.inactiveVehiclesCount)",
+                    icon: "")
+                )
+                summaryCard(.init(
+                    title: "Maintena.",
+                    value: "\(vm.manteinicesCount)",
+                    icon: "")
+                )
             }
         } else {
-            summaryCard(.init(title: "Maintena.", value: "\(vm.manteinicesCount)", icon: ""))
+            EmptyView()
         }
     }
-    
     private var balanceCard: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
@@ -117,15 +127,9 @@ struct FleetView: View {
             
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.title2.bold())
-                .padding(12)
-                .background(Color.white.opacity(0.16))
-                .clipShape(.circle)
-        }
-        .padding(10)
-        .background(Color.white.opacity(0.14))
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        }.customBackground(color: .white.opacity(0.14))
     }
-
+    
     @ViewBuilder
     private var searchBar: some View {
         if  vm.enoughVehiclesToQuickInfo {
@@ -157,7 +161,6 @@ struct FleetView: View {
             .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 4)
         } else { EmptyView() }
     }
-    
     private func summaryCard(_ item: FleetSummaryItem) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack(alignment: .center, spacing: 12) {
@@ -175,10 +178,7 @@ struct FleetView: View {
                 .font(.title2.bold())
         }
         .frame(alignment: .leading)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .background(Color.white.opacity(0.14))
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .customBackground(color: .white.opacity(0.14))
     }
 }
 
@@ -189,6 +189,6 @@ private struct FleetSummaryItem {
 }
 
 #Preview {
-    FleetView()
+    FleetView(user: .mock)
         .environment(NavigationRouter())
 }

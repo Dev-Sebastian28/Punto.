@@ -12,7 +12,7 @@ struct MainTabView: View {
     var body: some View {
             TabView {
                 Tab("Fleet", systemImage: "truck.box.fill") {
-                    FleetView()
+                    FleetView(user: .mock)
                 }
 
                 Tab("Expenses", systemImage: "banknote.fill") {
