@@ -10,6 +10,9 @@ import Foundation
 final class FleetVehicleCardViewModel {
     private let vehicle: any Vehicle
     // Card Vehicle Information
+    var vehicleImage: String {
+        vehicle.vehicleInformation.image
+    }
     var isWorking: Bool {
         vehicle.isActive
     }

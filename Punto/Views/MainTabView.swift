@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct MainTabView: View {
+    let user: User
     @Environment(NavigationRouter.self) var router
+    init(user: User) {
+        self.user = user
+    }
     var body: some View {
             TabView {
                 Tab("Fleet", systemImage: "truck.box.fill") {
-                    FleetView(user: .mock)
+                    FleetView(user: user)
                 }
 
                 Tab("Expenses", systemImage: "banknote.fill") {
@@ -29,6 +33,6 @@ struct MainTabView: View {
 
 
 #Preview {
-    MainTabView()
+    MainTabView(user: .mock)
         .environment(NavigationRouter())
 }

@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct FleetVehicleCard: View {
-    let vehicle: Vehicle
-    let vm: FleetVehicleCardViewModel = .init(vehicle: User.mock.vehicles.first!)
+    let vm: FleetVehicleCardViewModel
     @Environment(NavigationRouter.self) var router
+    
+    init(vehicle: Vehicle) {
+        self.vm = .init(vehicle: vehicle)
+    }
+    
     var body: some View {
         VStack {
             vehicleInformation
@@ -31,7 +35,7 @@ struct FleetVehicleCard: View {
     }
     
     private var vehicleInformation: some View {
-        Image(vehicle.vehicleInformation.image)
+        Image(vm.vehicleImage)
             .resizable()
             .scaledToFit()
             .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -41,10 +45,10 @@ struct FleetVehicleCard: View {
                         Spacer()
                         Text(vm.isWorking ? "Active" : "Inactive")
                             .font(.title3)
-                            .foregroundStyle(vehicle.isActive ? Color.white : Color.black).bold()
+                            .foregroundStyle(vm.isWorking ? Color.white : Color.black).bold()
                             .padding(.horizontal, 13)
                             .padding(.vertical, 5)
-                            .background(vehicle.isActive ? Color.brandGreen : Color.platformGray6)
+                            .background(vm.isWorking ? Color.brandGreen : Color.platformGray6)
                             .clipShape(.capsule)
                     }
                     

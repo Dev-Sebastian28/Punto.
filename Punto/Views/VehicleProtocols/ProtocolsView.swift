@@ -7,12 +7,14 @@
 
 import SwiftUI
 
-struct VehicleProtocolsView: View {
+struct ProtocolsView: View {
     @State private var vm : ProtocoslListViewModel
     var user: User
     init(user: User) {
         _vm = State(wrappedValue: ProtocoslListViewModel(user: user))
         self.user = user
+        print(user.id)
+
     }
     
     var body: some View {
@@ -101,7 +103,7 @@ struct VehicleProtocolsView: View {
 }
 
 #Preview {
-    VehicleProtocolsView(user: .mock)
+    ProtocolsView(user: .mock)
         .environment(NavigationRouter())
         .environment(CarouselViewModel(user: .mock))
     
