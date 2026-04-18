@@ -28,7 +28,7 @@ struct VehiclePartDTO: Codable {
 }
 
 
-struct VehiclePartWrapper {
+struct VehiclePartWrapper: Identifiable {
     let vehiclePart: VehiclePartDTO
     let id: UUID
     

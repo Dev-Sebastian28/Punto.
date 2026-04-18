@@ -21,7 +21,7 @@ enum ProtocolTime: String, CaseIterable {
 
 }
 
-struct VehicleProtocol: Equatable {
+struct VehicleProtocol: Equatable, Identifiable {
     var id: UUID
     var name: String
     var description: String?

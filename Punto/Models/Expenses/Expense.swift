@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct Expense: Codable, Equatable {
+struct Expense: Codable, Identifiable {
     let id: UUID
     let name: String
     let description: String?
