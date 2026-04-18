@@ -28,7 +28,7 @@ struct MainTabView: View {
                 }
 
                 Tab("Driver", systemImage: "person.crop.circle.fill") {
-                    DriverControlPanel()
+                    DriverControlPanel(vehicle: User.mock.vehicles.first!)
                 }
             }
         

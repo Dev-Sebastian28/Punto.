@@ -1,3 +1,11 @@
+//
+//  ExpenseFactory.swift
+//  Punto
+//
+//  Created by Sebastian Garcia on 16/04/26.
+//
+
+
 import SwiftUI
 
 struct ExpenseFactory: FactoryQuickInfoCard {
@@ -35,9 +43,9 @@ private struct ExpenseRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(expense.title)
+                Text(expense.name)
                     .font(.body.bold())
-                Text(expense.category ?? "General")
+                Text(expense.type)
                     .foregroundStyle(.secondary)
             }
             Spacer()

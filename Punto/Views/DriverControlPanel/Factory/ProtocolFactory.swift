@@ -1,17 +1,18 @@
+//
+//  ProtocolFactory.swift
+//  Punto
+//
+//  Created by Sebastian Garcia on 16/04/26.
+//
+
+
 import SwiftUI
 
 struct ProtocolFactory: FactoryQuickInfoCard {
     let vehicle: any Vehicle
 
     private var sortedProtocols: [VehicleProtocol] {
-        vehicle.protocols.sorted { $0.dueDate < $1.dueDate }
-    }
-
-    private var quickInfo: [QuickSummary] {
-        let expired = vehicle.protocols.filter { $0.dueDate < Date() }.count
-        return [
-            QuickSummary(title: "Expired", value: expired, color: .red)
-        ]
+        vehicle.protocols
     }
 
     func make() -> some View {
@@ -20,7 +21,7 @@ struct ProtocolFactory: FactoryQuickInfoCard {
             icon: "doc.badge.checkmark",
             iconColor: .purple,
             items: sortedProtocols,
-            quickInfo: quickInfo
+            quickInfo: []
         ) { proto in
             AnyView(ProtocolRow(proto: proto))
         }
@@ -32,12 +33,12 @@ struct ProtocolFactory: FactoryQuickInfoCard {
 private struct ProtocolRow: View {
     let proto: VehicleProtocol
 
-    private var isExpired: Bool { proto.dueDate < Date() }
+    private var isExpired: Bool { false }
 
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(proto.title)
+                Text(proto.name)
                     .font(.body.bold())
                 Text(proto.description ?? "No description")
                     .foregroundStyle(.secondary)
@@ -48,7 +49,7 @@ private struct ProtocolRow: View {
                     text: isExpired ? "Expired" : "Active",
                     color: isExpired ? .red : .green
                 )
-                DateBadge(date: proto.dueDate)
+                DateBadge(date: .now)
             }
         }
         .frame(maxHeight: 60)

@@ -45,8 +45,7 @@ struct TaskView: View {
                     addTaskButton
                 }
             }.padding(.horizontal, 7)
-        }
-        .ignoresSafeArea(edges: .bottom)
+        }.ignoresSafeArea(edges: .bottom)
         .sheet(isPresented: $isPresentingAddTask) {
             AddTaskView(vm: vm)
                 .presentationDetents([.height(550)])
@@ -79,7 +78,7 @@ private extension TaskView {
             }
         }
     }
-
+    
     var taskListSection: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(spacing: 10) {

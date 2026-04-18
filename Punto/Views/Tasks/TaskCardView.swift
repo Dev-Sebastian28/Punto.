@@ -82,20 +82,7 @@ struct TaskCardView: View {
         }
     }
 }
-private struct StatusBadge: View {
-    let text: String
-    let color: Color
 
-    var body: some View {
-        Text(text.capitalized)
-            .font(.system(size: 10, weight: .bold))
-            .foregroundStyle(color)
-            .padding(.horizontal, 5)
-            .padding(.vertical, 2)
-            .background(color.opacity(0.15))
-            .clipShape(Capsule())
-    }
-}
 
 #Preview {
     TaskCardView(task: (.init(

@@ -10,9 +10,7 @@ import Foundation
 class CarouselViewModel {
     private(set) var user: User
     var vehicles: [Vehicle] { user.vehicles }
-    var isCarousellHide: Bool
-    private var summaryCache: [UUID: [QuickSummary]] = [:]
-    
+    var isCarousellHide: Bool    
     func summaries(for vehicle: any Vehicle, algorithm: CarouselStrategy) -> [QuickSummary] {
            algorithm.perform(vehicle: vehicle)
        }

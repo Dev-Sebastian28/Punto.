@@ -1,3 +1,11 @@
+//
+//  TaskFactory.swift
+//  Punto
+//
+//  Created by Sebastian Garcia on 16/04/26.
+//
+
+
 import SwiftUI
 
 struct TaskFactory: FactoryQuickInfoCard {

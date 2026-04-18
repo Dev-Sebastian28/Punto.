@@ -13,11 +13,6 @@ protocol FactoryQuickInfoCard {
     func make() -> Content
 }
 
-struct QuickSummary {
-    let title: String
-    let value: Int
-    let color: Color
-}
 
 // MARK: - Generic Card View
 
