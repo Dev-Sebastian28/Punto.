@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TaskDetailView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var editedTask: Task
+    @State private var editedTask: VTask
     let vm: TaskListViewModel
 
     private let importanceColors: [Color] = [.green, .yellow, .red]
@@ -11,7 +11,7 @@ struct TaskDetailView: View {
         !editedTask.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    init(task: Task, vm: TaskListViewModel) {
+    init(task: VTask, vm: TaskListViewModel) {
         _editedTask = State(initialValue: task)
         self.vm = vm
     }
@@ -120,7 +120,7 @@ private extension TaskDetailView {
 
 #Preview {
     TaskDetailView(
-        task: Task(
+        task: VTask(
             title: "Wash the car",
             description: "Interior and exterior cleaning",
             date: .now,

@@ -15,7 +15,7 @@ enum TaskStatus: String, Codable {
     case pending, inProgress, done
 }
 
-struct Task: Identifiable {
+struct VTask: Identifiable {
     let id: UUID
     var title: String
     var description: String?

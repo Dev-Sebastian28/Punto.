@@ -13,7 +13,7 @@ import Foundation
 // Product Interface
 protocol Vehicle {
     var maintenance: [VehiclePartWrapper] { get set }
-    var tasks: [Task] { get set }
+    var tasks: [VTask] { get set }
     var protocols: [VehicleProtocol] { get set }
     var expenses: [Expense] { get set }
     var drivers: [DriverInvitation] { get set }
@@ -29,7 +29,7 @@ class TransportationVehicle: Vehicle {
     var maintenance: [VehiclePartWrapper]
     var expenses: [Expense]
     var drivers: [DriverInvitation]
-    var tasks: [Task]
+    var tasks: [VTask]
     var protocols: [VehicleProtocol]
     var vehicleInformation: VehicleInformation
     var cargoInfo: CargoInformation?
@@ -39,7 +39,7 @@ class TransportationVehicle: Vehicle {
         id: UUID = UUID(),
         maintenance: [VehiclePartWrapper] = [],
         expenses: [Expense] = [],
-        tasks: [Task] = [],
+        tasks: [VTask] = [],
         protocols: [VehicleProtocol] = [],
         drivers : [DriverInvitation] = [],
         vehicleInformation: VehicleInformation,
@@ -51,7 +51,7 @@ class TransportationVehicle: Vehicle {
         
         self.maintenance = Array([VehiclePartWrapper].dummyData().shuffled().prefix(Int.random(in: 2...5)))
         self.expenses = Array([Expense].dummyData().shuffled().prefix(Int.random(in: 3...6)))
-        self.tasks = Array([Task].dummyData().shuffled().prefix(Int.random(in: 3...6)))
+        self.tasks = Array([VTask].dummyData().shuffled().prefix(Int.random(in: 3...6)))
         self.protocols = Array([VehicleProtocol].dummyData().shuffled().prefix(2))
         self.drivers = drivers
     }
@@ -63,7 +63,7 @@ class PrivateVehicle: Vehicle {
     var maintenance: [VehiclePartWrapper]
     var expenses: [Expense]
     var drivers: [DriverInvitation] 
-    var tasks: [Task]
+    var tasks: [VTask]
     var protocols: [VehicleProtocol]
     var vehicleInformation: VehicleInformation
     var isActive: Bool = false
@@ -72,7 +72,7 @@ class PrivateVehicle: Vehicle {
         id: UUID = UUID(),
         maintenance: [VehiclePartWrapper] = [],
         expenses: [Expense] = [],
-        tasks: [Task] = [],
+        tasks: [VTask] = [],
         drivers : [DriverInvitation] = [],
         protocols: [VehicleProtocol] = [],
         vehicleInformation: VehicleInformation,
@@ -85,7 +85,7 @@ class PrivateVehicle: Vehicle {
         // Llamadas aleatorias usando las extensiones corregidas
         self.maintenance = Array([VehiclePartWrapper].dummyData().shuffled().prefix(Int.random(in: 3...6)))
         self.expenses = Array([Expense].dummyData().shuffled().prefix(Int.random(in: 3...6)))
-        self.tasks = Array([Task].dummyData().shuffled().prefix(3))
+        self.tasks = Array([VTask].dummyData().shuffled().prefix(3))
         self.protocols = Array([VehicleProtocol].dummyData().shuffled().prefix(2))
         self.drivers = drivers
 

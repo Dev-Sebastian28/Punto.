@@ -11,7 +11,7 @@ import SwiftUI
 struct TaskFactory: FactoryQuickInfoCard {
     let vehicle: any Vehicle
 
-    private var sortedTasks: [Task] {
+    private var sortedTasks: [VTask] {
         vehicle.tasks.sorted {
             $0.importance == .high && $0.status == .pending ? true :
             $1.importance == .high ? false :
@@ -44,7 +44,7 @@ struct TaskFactory: FactoryQuickInfoCard {
 // MARK: - Task Row
 
 private struct TaskRow: View {
-    let task: Task
+    let task: VTask
 
     private var importanceColor: Color {
         switch task.importance {

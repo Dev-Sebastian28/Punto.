@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TaskCardView: View {
-    let task: Task
+    let task: VTask
 
     var body: some View {
         HStack(spacing: 16) {

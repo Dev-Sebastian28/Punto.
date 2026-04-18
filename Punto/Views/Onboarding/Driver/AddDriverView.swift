@@ -74,7 +74,6 @@ struct AddDriverView: View {
                         Button {
                             selectedVehicleIndex = index
                             isAddDriverPresented.toggle()
-                            print(selectedVehicleIndex, index)
                             
                         } label: {
                             
@@ -126,36 +125,6 @@ struct AddDriverView: View {
                         .stroke(.gray, lineWidth: 1)
                 )
             }
-        }
-    }
-    private func vehicleCard(info: VehicleInformation) -> some View {
-        ZStack(alignment: .topLeading) {
-            Image(info.image)
-                .resizable()
-                .scaledToFill()
-                .frame(height: 180)
-                .frame(maxWidth: .infinity)
-                .clipped()
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                .overlay(alignment: .bottomLeading) {
-                    LinearGradient(
-                        colors: [.clear, .black.opacity(0.55)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                }
-                .overlay(alignment: .bottomLeading) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("\(info.brand) \(info.model)")
-                            .font(.title2.bold())
-                        Text(info.plate)
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.white.opacity(0.9))
-                    }
-                    .foregroundStyle(.white)
-                    .padding(16)
-                }
         }
     }
     private var LaterButton: some View {

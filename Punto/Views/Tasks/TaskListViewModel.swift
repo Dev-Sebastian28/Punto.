@@ -28,11 +28,11 @@ final class TaskListViewModel {
         user.vehicles[selectedVehicle].vehicleInformation.plate
     }
     
-    func addTask(_ task: Task) {
+    func addTask(_ task: VTask) {
         user.vehicles[selectedVehicle].tasks.append(task)
     }
 
-    func updateTask(_ updatedTask: Task) {
+    func updateTask(_ updatedTask: VTask) {
         guard let taskIndex = user.vehicles[selectedVehicle].tasks.firstIndex(where: { $0.id == updatedTask.id }) else {
             return
         }

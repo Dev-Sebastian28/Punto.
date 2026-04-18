@@ -3,16 +3,16 @@ import SwiftUI
 struct DriverControlPanel: View {
     let vehicle: any Vehicle
     @State private var isHeaderExpanded = false
-
+    
     private var factories: [any FactoryQuickInfoCard] {
         [
+            MaintenanceFactory(vehicle: vehicle),
             TaskFactory(vehicle: vehicle),
-            ExpenseFactory(vehicle: vehicle),
             ProtocolFactory(vehicle: vehicle),
-            MaintenanceFactory(vehicle: vehicle)
+            ExpenseFactory(vehicle: vehicle)
         ]
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             
@@ -34,48 +34,39 @@ struct DriverControlPanel: View {
     }
 }
 
-
 struct VehicleHeader: View {
     let vehicle: any Vehicle
     @Binding var isExpanded: Bool
-
+    
     var body: some View {
-        VStack(spacing: 0) {
-            // Contenido del header (colapsado o expandido)
-            VStack(alignment: .leading, spacing: 8) {
-                // Siempre visible: nombre + ruta
+        VStack(alignment: .center, spacing: 2) {
+           
+            if isExpanded {
+                vehicleCard(info: vehicle.vehicleInformation)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            } else {
                 HStack(alignment: .bottom) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(vehicle.vehicleInformation.model + " " + vehicle.vehicleInformation.brand)
-                            .font(.title.bold())
-                        Text(vehicle.vehicleInformation.plate)
-                            .foregroundStyle(.secondary)
-                    }
+                    Text(vehicle.vehicleInformation.model + " " + vehicle.vehicleInformation.brand)
+                        .font(.title2.bold())
+                    
                     Spacer()
-                    routeButton
-                }
-
-                // Solo visible cuando está expandido
-                if isExpanded {
-                    vehicleImage
-                        .transition(.move(edge: .top).combined(with: .opacity))
+                    
+                    Text(vehicle.vehicleInformation.plate)
+                        .foregroundStyle(.secondary)
+                    
                 }
             }
-            .padding(.horizontal)
-            .padding(.top, 54)
-            .padding(.bottom, 12)
-
-            // Divider + toggle
-            Divider()
             chevronToggle
+            
         }
+        .padding(.horizontal)
+        .padding(.top, 54)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: .blue.opacity(0.3), radius: 4, y: 2)
+        .shadow(color: .blue.opacity(0.3), radius: 2, y: 1)
     }
-
+    
     // MARK: Subvistas
-
     private var routeButton: some View {
         Button {
             // action
@@ -85,16 +76,9 @@ struct VehicleHeader: View {
                 .foregroundStyle(.blue)
         }
     }
-
-    private var vehicleImage: some View {
-        Image("volvo")
-            .resizable()
-            .scaledToFill()
-            .frame(maxWidth: .infinity)
-            .frame(height: 150)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-    }
-
+    
+    
+    
     private var chevronToggle: some View {
         Button {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
@@ -109,11 +93,9 @@ struct VehicleHeader: View {
         }
     }
 }
-
-
 enum QuickAction: CaseIterable {
     case fuel, phone, alert, scanner, hotel, chat
-
+    
     var label: String {
         switch self {
         case .fuel:    return "Combustible"
@@ -124,7 +106,7 @@ enum QuickAction: CaseIterable {
         case .chat:    return "Chat"
         }
     }
-
+    
     var icon: String {
         switch self {
         case .fuel:    return "fuelpump.fill"
@@ -136,17 +118,16 @@ enum QuickAction: CaseIterable {
         }
     }
 }
-
 struct QuickActionsGrid: View {
     let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 3)
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Acciones rápidas")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .padding(.horizontal)
-
+            
             LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(QuickAction.allCases, id: \.self) { action in
                     QuickActionButton(action: action)
@@ -157,19 +138,19 @@ struct QuickActionsGrid: View {
         .padding(.vertical, 12)
     }
 }
-
 private struct QuickActionButton: View {
     let action: QuickAction
-
+    let color: Color = .red
     var body: some View {
         Button { } label: {
             VStack(spacing: 8) {
                 Image(systemName: action.icon)
+                    .foregroundStyle(color)
                     .font(.title3)
                     .padding(10)
                     .background(Color(.systemGray6))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-
+                
                 Text(action.label)
                     .font(.caption.bold())
                     .foregroundStyle(.primary)
@@ -185,5 +166,5 @@ private struct QuickActionButton: View {
 }
 
 #Preview {
-DriverControlPanel(vehicle: User.mock.vehicles.first!)
+    DriverControlPanel(vehicle: User.mock.vehicles.first!)
 }

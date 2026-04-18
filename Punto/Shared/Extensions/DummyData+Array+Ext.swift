@@ -8,38 +8,38 @@
 import Foundation
 
 // MARK: - Task Extensions
-extension Array where Element == Task {
-    static func dummyData() -> [Task] {
+extension Array where Element == VTask {
+    static func dummyData() -> [VTask] {
         return [
-            Task(
+            VTask(
                 title: "Revisión de Inventario",
                 description: "Contar las existencias en el almacén central y reportar faltantes.",
                 date: Date(),
                 importance: .high,
                 status: .inProgress
             ),
-            Task(
+            VTask(
                 title: "Mantenimiento Vehículo 04",
                 description: "Cambio de aceite y revisión de frenos de la unidad de reparto.",
                 date: Date().addingTimeInterval(86400),
                 importance: .medium,
                 status: .pending
             ),
-            Task(
+            VTask(
                 title: "Actualizar Ruta Norte",
                 description: "Optimizar los puntos de entrega basados en el nuevo tráfico.",
                 date: Date().addingTimeInterval(-86400),
                 importance: .low,
                 status: .done
             ),
-            Task(
+            VTask(
                 title: "Firma de Contratos",
                 description: "Reunión con los nuevos proveedores logísticos.",
                 date: Date().addingTimeInterval(172800),
                 importance: .high,
                 status: .pending
             ),
-            Task(
+            VTask(
                 title: "Limpieza de Terminales",
                 description: "Desinfectar y organizar las estaciones de escaneo.",
                 date: Date(),

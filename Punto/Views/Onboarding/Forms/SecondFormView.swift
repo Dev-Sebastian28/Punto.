@@ -6,10 +6,28 @@
 //
 
 import SwiftUI
-import Observation
+
+
+private enum SecondFormAnswer {
+    case heavyLogistics
+    case privateVehicles
+    case other
+    
+    var response: String {
+        switch self {
+        case .heavyLogistics:
+            return "heavy_logistics"
+        case .privateVehicles:
+            return "private_vehicles"
+        case .other:
+            return "other"
+        }
+    }
+}
 
 struct SecondFormView: View {
     @Environment(NavigationRouter.self) var router
+    let vm = OnboardingFormsViewModel(path: .form2)
     
     var body: some View {
         ZStack {
@@ -22,19 +40,25 @@ struct SecondFormView: View {
                     title: "Gig / Rental Driver",
                     text: "Personal or rented vehicles used for apps and delivery services.",
                     image: "transportation") {
-                    router.navigate(to: .addVehicle)
-                }
+                        let answer: String = SecondFormAnswer.heavyLogistics.response
+                        vm.sendAnswer(answer)
+                        router.navigate(to: .addVehicle)
+                    }
                 
                 
                 FormCardView(
                     title: "Heavy Logistics",
                     text: "Large vehicles dedicated to heavy cargo and long-haul freight.",
                     image: "privateCar") {
-                    router.navigate(to: .addVehicle)
-                }
+                        let answer: String = SecondFormAnswer.privateVehicles.response
+                        vm.sendAnswer(answer)
+                        router.navigate(to: .addVehicle)
+                    }
                 
                 
                 Button {
+                    let answer: String = SecondFormAnswer.other.response
+                    vm.sendAnswer(answer)
                     router.navigate(to: .addVehicle)
                 } label: {
                     Text("Other")
@@ -54,7 +78,7 @@ struct SecondFormView: View {
                             
                         )
                 }
-                                
+                
                 Spacer()
             }.padding(.horizontal, 10)
         }

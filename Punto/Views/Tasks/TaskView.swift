@@ -10,7 +10,7 @@ import SwiftUI
 struct TaskView: View {
     @State private var vm: TaskListViewModel
     @State private var isPresentingAddTask = false
-    @State private var selectedTask: Task?
+    @State private var selectedTask: VTask?
 
 
     init(user: User) {

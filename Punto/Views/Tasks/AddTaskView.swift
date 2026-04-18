@@ -35,7 +35,7 @@ struct AddTaskView: View {
             
             DButtonComp(text: "Add Task", color: .blue, image: "plus", maxHeight: 10, isEnabled: isValid) {
                 vm.addTask(
-                    Task(title: title,
+                    VTask(title: title,
                          description: description,
                          date: date,
                          importance: importance
