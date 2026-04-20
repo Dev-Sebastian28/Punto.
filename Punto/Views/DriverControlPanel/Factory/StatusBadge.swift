@@ -14,11 +14,15 @@ struct StatusBadge: View {
 
     var body: some View {
         Text(text)
-            .font(.subheadline.bold())
+            .font(.caption.bold())
             .foregroundStyle(.white)
             .padding(.vertical, 2)
             .padding(.horizontal, 12)
-            .background(color.clipShape(.capsule))
+            .background(
+                Capsule()
+                    .fill(color.opacity(0.5))
+                    .stroke(color)
+            )
     }
 }
 

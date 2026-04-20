@@ -19,7 +19,7 @@ struct SignInCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 Text("Sign In")
                     .font(.system(.title2, design: .default , weight: .bold))
-                    .foregroundStyle(Color(red: 0.08, green: 0.16, blue: 0.24))
+                    .foregroundStyle(.primary)
                 
                 Text("Use your credentials to access the next onboarding screen.")
                     .font(.system(.subheadline, design: .rounded, weight: .medium))

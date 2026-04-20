@@ -157,7 +157,6 @@ private func vehicleRowCard(image: String, title: String, description: String, t
     VehicleInformationView(
         vehicle: TransportationVehicle(
             vehicleInformation: .init(
-                id: .init(),
                 image: "volvo",
                 plate: "DMW-243",
                 brand: "Volvo",

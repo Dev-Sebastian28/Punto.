@@ -19,7 +19,7 @@ struct SignUpCard: View {
         VStack(alignment: .leading, spacing: 5) {
             Text("Sign Up")
                 .font(.system(.title2, design: .default , weight: .bold))
-                .foregroundStyle(Color(red: 0.08, green: 0.16, blue: 0.24))
+                .foregroundStyle(.primary)
             
             TextFieldComp(text: $email, prompt: "Email", image: "plus", color: .myBlue)
             SecureInputField(title: "Password", binding: $password, prompt: "Make it strong")

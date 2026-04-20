@@ -33,7 +33,11 @@ struct ProtocolsView: View {
                         color: .yellow,
                         selectedIndex: $vm.selectedVehicleIndex
                     )
-                    selectedVehicleInfo
+                    SelectedInfoComp(
+                        model: vm.selectedModelBrand,
+                        plate: vm.selectedPlate,
+                        total: vm.protocolsCount
+                    )
                     
                     if vm.areProtocols {
                         // Content
@@ -82,23 +86,6 @@ struct ProtocolsView: View {
                     )
                 }
             }.padding(.horizontal, 8)
-    }
-    private var selectedVehicleInfo: some View {
-        VStack(alignment: .leading) {
-            
-            Text(vm.selectedModelBrand)
-                .font(.title3.bold())
-            
-            HStack {
-                Text(vm.selectedPlate)
-                
-                Spacer()
-                
-                Text("Total: " + "\(vm.protocolsCount)" )
-            }
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-        }
     }
 }
 

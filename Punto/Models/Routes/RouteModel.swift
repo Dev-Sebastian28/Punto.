@@ -12,3 +12,11 @@ struct RouteModel: Codable {
     var distance: Double
     var duration: Double
 }
+
+let myRoute = RouteModel(startPointDirection: "", endPointDirection: "", distance: 0, duration: 0)
+
+private struct SecretFormula {
+    let key: String
+}
+
+

@@ -7,28 +7,21 @@
 
 import SwiftUI
 
-
-private enum AuthMode {
-    case signUp
-    case signIn
-}
-
 struct AuthView: View {
     @State private var showingAlert = false
     @State private var alertMessage = ""
-    @State private var authMode: AuthMode = .signUp
-    
+    @State private var vm = AuthViewModel(mode: .signUp)
     @Environment(NavigationRouter.self) var router
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.myBlue, .myBlue, .white], startPoint: .top, endPoint: .bottom)
+            LinearGradient(colors: [.myBlue, .white, .myBlue], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
             
             VStack(spacing: 25) {
                 selectedWay
                 
-                if authMode == .signUp {
+                if vm.mode == .signUp {
                     SignUpCard(showAlert: $showingAlert, alertMessage: $alertMessage)
                     
                 } else {
@@ -36,7 +29,7 @@ struct AuthView: View {
                 }
                 socialSection
             }
-            .animation(.snappy, value: authMode)
+            .animation(.snappy, value: vm.mode)
             .padding(.horizontal, 15)
             .padding(.vertical, 28)
 
@@ -49,37 +42,40 @@ struct AuthView: View {
     private var selectedWay: some View {
         HStack(spacing: 50) {
             Button {
-                authMode = .signUp
+                vm.setMode(.signUp)
+                print(vm.mode)
             } label: {
                 Text("Sign Up")
-                    .foregroundStyle(authMode == .signUp ? .myBlue : .gray)
-                    .bold(authMode == .signUp)
+                    .foregroundStyle(vm.mode == .signUp ? .myBlue : .gray)
+                    .bold(vm.mode == .signUp)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 44)
                     .background(
-                        authMode == .signUp ? .white : .white.opacity(0.8)
+                        vm.mode == .signUp ? .white : .white.opacity(0.8)
                     ).clipShape(RoundedRectangle(cornerRadius: 10))
-                    .scaleEffect(authMode == .signUp ? 1.2 : 1)
+                    .scaleEffect(vm.mode == .signUp ? 1.2 : 1)
             }
             
             
             Button {
-                authMode = .signIn
+                vm.setMode(.signIn)
+                print(vm.mode)
+
             } label: {
                 Text("Sign In")
-                    .foregroundStyle(authMode == .signIn ? .myBlue : .gray)
-                    .bold(authMode == .signIn)
+                    .foregroundStyle(vm.mode == .signIn ? .myBlue : .gray)
+                    .bold(vm.mode == .signIn)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 44)
                     .background(
-                        authMode == .signIn ? .white : .white.opacity(0.8)
+                        vm.mode == .signIn ? .white : .white.opacity(0.8)
                         
                     ).clipShape(
                         RoundedRectangle(cornerRadius: 10)
                         
                     )
                 
-                    .scaleEffect(authMode == .signIn ? 1.2 : 1)
+                    .scaleEffect(vm.mode == .signIn ? 1.2 : 1)
                 
             }
         }

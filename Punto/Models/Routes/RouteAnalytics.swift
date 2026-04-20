@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 class RouteAnalytics: Codable {
     var routes: [RouteModel]
     
@@ -22,3 +20,5 @@ class RouteAnalytics: Codable {
         
     }
 }
+
+let mydRoute = RouteModel(startPointDirection: "", endPointDirection: "", distance: 0, duration: 0)

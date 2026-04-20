@@ -6,31 +6,27 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct AddVehicleForm: View {
     @Environment(\.dismiss) private var dimiss
     @State private var isPrivateSelected = false
     @State private var isTransportSelected = true
 
-    @State private var brand = ""
-    @State private var plate = ""
-    @State private var model = ""
-    @State private var year = ""
-    @State private var mileage = ""
-    @State private var engine = ""
-    @State private var transmission: TransmissionType = .automatic
-    @State private var fuel: FuelType = .gasoline
-    @State private var userExample = User(name: "", email: "", access: .admin, country: .argentina)
-
+    @State private var vehicleInf: VehicleInformation = .init(image: "", plate: "", brand: "", model: "", year: 0, mileage: 0, engine: "", transmission: .automatic, fuel: .diesel)
+    
     private var isFormIncomplete: Bool {
-        brand.isEmpty || plate.isEmpty || model.isEmpty || year.isEmpty || mileage.isEmpty || engine.isEmpty
+        vehicleInf.brand.isEmpty || vehicleInf.plate.isEmpty || vehicleInf.model.isEmpty || vehicleInf.year != 0 || vehicleInf.mileage != 0 || vehicleInf.engine.isEmpty
     }
 
     var body: some View {
         VStack(spacing: 16) {
-            vehicleTypeSelector
-            formFields
-            actionButtons
+            Spacer()
+            ScrollView {
+                vehicleTypeSelector
+                formFields
+                actionButtons
+            }
         }.padding(.horizontal)
     }
 
@@ -41,68 +37,66 @@ struct AddVehicleForm: View {
                 systemImage: "box.truck.fill",
                 tint: .orange,
                 isSelected: isTransportSelected,
-                action: selectTransport
+                action: { isTransportSelected = true; isPrivateSelected = false}
             )
-
-            Spacer()
 
             VehicleCategoryButton(
                 title: "Private",
                 systemImage: "car.fill",
                 tint: .blue,
                 isSelected: isPrivateSelected,
-                action: selectPrivate
+                action: { isTransportSelected = false; isPrivateSelected = true}
             )
         }
-        .padding(.horizontal)
     }
 
     private var formFields: some View {
         VStack {
             TextFieldComp(
-                text: $brand,
+                text: $vehicleInf.brand,
                 prompt: "Vehicle Brand, Ex: Toyota, Ford, Volvo",
-                image: "",
+                image: "line.horizontal.3",
                 isRequired: false
             )
 
             TextFieldComp(
-                text: $model,
+                text: $vehicleInf.model,
                 prompt: "Vehicle Model, Ex: Corolla, Mustang, XC90",
                 image: "car.rear.fill",
                 isRequired: false
             )
             
             TextFieldComp(
-                text: $engine,
+                text: $vehicleInf.engine,
                 prompt: "Engine Size, Ex: 1.5L, 2.0L",
                 image: "engine.combustion.fill",
                 isRequired: false
             )
 
-            TextFieldComp(
-                text: $year,
-                prompt: "Year, Ex: 2020",
-                image: "calendar",
-                isRequired: false
-            )
-            
-            TextFieldComp(
-                text: $plate,
-                prompt: "Plate, Ex: ABC-1234",
-                image: "rectangle.and.pencil.and.ellipsis",
-                isRequired: false
-            )
+            HStack {
+                TextFieldComp(
+                    text: $vehicleInf.engine,
+                    prompt: "Year, Ex: 2020",
+                    image: "calendar",
+                    isRequired: false
+                )
+                
+                TextFieldComp(
+                    text: $vehicleInf.plate,
+                    prompt: "Plate, Ex: ABC-123",
+                    image: "rectangle.and.pencil.and.ellipsis",
+                    isRequired: false
+                )
+            }
 
             vehicleSpecsSection
 
             TextFieldComp(
-                text: $mileage,
+                text: $vehicleInf.engine,
                 prompt: "Vehicle Mileage",
                 image: "gauge.with.dots.needle.50percent",
                 isRequired: false
-            )
-            .numberKeyboardIfAvailable()
+            ).numberKeyboardIfAvailable()
         }
     }
 
@@ -110,7 +104,7 @@ struct AddVehicleForm: View {
         VStack(spacing: 12) {
             LabeledSegmentedPicker(
                 title: "Transmission Type",
-                selection: $transmission
+                selection: $vehicleInf.transmission
             ) {
                 Text("Manual").tag(TransmissionType.manual)
                 Text("Automatic").tag(TransmissionType.automatic)
@@ -118,7 +112,7 @@ struct AddVehicleForm: View {
 
             LabeledSegmentedPicker(
                 title: "Fuel Type",
-                selection: $fuel
+                selection: $vehicleInf.fuel
             ) {
                 Text("Gasoline").tag(FuelType.gasoline)
                 Text("Diesel").tag(FuelType.diesel)
@@ -126,8 +120,8 @@ struct AddVehicleForm: View {
             }
         }
         .padding(9)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 5))
+        .background(Color.gray.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 
     private var actionButtons: some View {
@@ -147,43 +141,13 @@ struct AddVehicleForm: View {
                 color: .blue,
                 image: "car.fill",
                 maxWidth: 150,
-                isEnabled: !isFormIncomplete,
-                action: addVehicle
-            )
+                isEnabled: !isFormIncomplete) {
+                    
+                }
         }
         .padding(.top)
     }
 
-    private func selectTransport() {
-        isTransportSelected.toggle()
-        isPrivateSelected = false
-    }
-
-    private func selectPrivate() {
-        isPrivateSelected.toggle()
-        isTransportSelected = false
-    }
-
-    private func addVehicle() {
-        let info = VehicleInformation(
-            id: .init(),
-            image: "volvo",
-            plate: plate,
-            brand: brand,
-            model: model,
-            year: Int(year) ?? 0,
-            mileage: Int(mileage) ?? 0,
-            engine: engine,
-            transmission: transmission,
-            fuel: fuel
-        )
-
-        if isTransportSelected {
-            userExample.vehicles.append(TransportationVehicle(vehicleInformation: info))
-        } else {
-            userExample.vehicles.append(PrivateVehicle(vehicleInformation: info))
-        }
-    }
 }
 
 private struct VehicleCategoryButton: View {
@@ -215,8 +179,6 @@ private struct VehicleCategoryButton: View {
         }
     }
 }
-
-
 
 #Preview {
     AddVehicleForm()

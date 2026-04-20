@@ -40,7 +40,13 @@ struct TaskView: View {
                         color: .blue,
                         selectedIndex: $vm.selectedVehicle
                     )
-                    vehicleInfoSection
+                    
+                    SelectedInfoComp(
+                        model: vm.selectedVehicleModel,
+                        plate: vm.selectedVehiclePlate,
+                        total: vm.totalTasks.description
+                    )
+                    
                     taskListSection
                     addTaskButton
                 }
@@ -60,25 +66,6 @@ struct TaskView: View {
 // MARK: - Subviews
 private extension TaskView {
 
-    var vehicleInfoSection: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(vm.selectedVehicleModel)
-                .font(.title2.bold())
-
-            HStack {
-                Text(vm.selectedVehiclePlate)
-                    .font(.callout)
-                    .foregroundStyle(.gray)
-
-                Spacer()
-
-                Text("\(vm.totalTasks) Total")
-                    .font(.callout).bold()
-                    .foregroundStyle(.gray)
-            }
-        }
-    }
-    
     var taskListSection: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(spacing: 10) {

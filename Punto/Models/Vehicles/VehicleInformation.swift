@@ -18,17 +18,17 @@ enum FuelType: String {
 }
 
 struct VehicleInformation: Identifiable {
-    var id: UUID = UUID()
-    let image: String
-    let plate: String
+    let id: UUID = UUID()
+    var image: String
+    var plate: String
     
-    let brand: String
-    let model: String
-    let year: Int
-    let mileage: Int
-    let engine: String
-    let transmission: TransmissionType
-    let fuel: FuelType
+    var brand: String
+    var model: String
+    var year: Int
+    var mileage: Int
+    var engine: String
+    var transmission: TransmissionType
+    var fuel: FuelType
     
     static var mock: Self {
         .init(image: "ford", plate: "DLK-1234", brand: "Ford", model: "F150", year: 2020, mileage: 100_000, engine: "V8", transmission: .automatic, fuel: .diesel)
