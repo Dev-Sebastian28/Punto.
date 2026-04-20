@@ -37,7 +37,7 @@ struct DriverCardView: View {
                 
                 HStack {
                     Image(systemName: "at")
-                    Text(driver.phone)
+                    Text(driver.phone.description)
                 }
             }
             .font(.caption2)
@@ -55,7 +55,7 @@ struct DriverCardView: View {
                 .stroke(Color.cardStroke, lineWidth: 1)
         }
     }
-
+    
     private var header: some View {
         HStack(alignment: .top, spacing: 12) {
             ZStack {
@@ -90,34 +90,13 @@ struct DriverCardView: View {
             Spacer()
         }
     }
-
-    
-//    private func contactBlock(systemImage: String, label: String, value: String) -> some View {
-//        HStack(alignment: .top, spacing: 10) {
-//            Image(systemName: systemImage)
-//                .font(.subheadline.weight(.bold))
-//                .foregroundStyle(Color.brandBlue)
-//                .frame(width: 32, height: 32)
-//                .background(Color.brandBlue.opacity(0.10))
-//                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-//
-//            VStack(alignment: .leading, spacing: 2) {
-//                Text(label.uppercased())
-//                    .font(.caption2.weight(.bold))
-//                    .foregroundStyle(.secondary)
-//
-//                Text(value)
-//                    .font(.subheadline.weight(.medium))
-//                    .foregroundStyle(.primary)
-//                    .multilineTextAlignment(.leading)
-//                    .lineLimit(2)
-//            }
-//
-//            Spacer()
-//        }
-//    }
 }
 
 #Preview {
-    DriverCardView(driver: .init(name: "Sebastian Garcia", email: "123456789", phone: "sebastian.garcia@example.com", status: .accepted))
+    DriverCardView(driver: .init(
+        name: "Sebastian Garcia",
+        email: "sebastian.garcia@example.com",
+        phone: 1234124512,
+        status: .accepted
+    ))
 }

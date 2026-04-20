@@ -95,10 +95,6 @@ struct VehicleInformationView: View {
                 Text(yearText)
                     .font(.headline.weight(.bold))
                     .foregroundStyle(.primary)
-                
-                Text("Vehiculo listo para agregar tareas, mantenimiento y control operativo.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
             }
             
             Spacer()
@@ -108,7 +104,7 @@ struct VehicleInformationView: View {
     }
     
     private var plateBadge: some View {
-        VStack(alignment: .trailing, spacing: 4) {
+        HStack(spacing: 19) {
             Text("PLACA")
                 .font(.caption2.weight(.bold))
                 .foregroundStyle(.secondary)

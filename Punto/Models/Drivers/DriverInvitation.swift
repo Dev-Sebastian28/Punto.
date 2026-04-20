@@ -16,6 +16,6 @@ enum invitationStatus: String, Codable {
 struct DriverInvitation: Codable {
     var name: String
     var email: String
-    var phone: String
+    var phone: Int
     var status: invitationStatus
 }

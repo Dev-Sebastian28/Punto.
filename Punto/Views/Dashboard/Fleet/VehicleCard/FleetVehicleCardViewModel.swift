@@ -31,9 +31,10 @@ final class FleetVehicleCardViewModel {
     var drivers: [DriverInvitation] {
         vehicle.drivers
     }
-    var currentDriver: DriverInvitation {
+    
+    var currentDriver: DriverInvitation? {
         guard hasDrivers else {
-            return .init(name: "", email: "", phone: "", status: .accepted)
+            return nil
         }
         return vehicle.drivers.first!
     }

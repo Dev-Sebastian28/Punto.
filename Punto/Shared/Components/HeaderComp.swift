@@ -42,7 +42,7 @@ struct HeaderComp: View {
                     }
                }
            }
-        } else{
+        } else {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(title)

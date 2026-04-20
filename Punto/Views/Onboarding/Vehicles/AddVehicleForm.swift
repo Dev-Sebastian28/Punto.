@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct AddVehicleForm: View {
+    @Environment(\.dismiss) private var dimiss
     @State private var isPrivateSelected = false
     @State private var isTransportSelected = true
-    @Binding var isAddVehiclePresented: Bool
 
     @State private var brand = ""
     @State private var plate = ""
@@ -139,7 +139,7 @@ struct AddVehicleForm: View {
                 style: .neutral,
                 maxWidth: 100
             ) {
-                isAddVehiclePresented.toggle()
+                dimiss()
             }
 
             DButtonComp(
@@ -183,8 +183,6 @@ struct AddVehicleForm: View {
         } else {
             userExample.vehicles.append(PrivateVehicle(vehicleInformation: info))
         }
-
-        isAddVehiclePresented = false
     }
 }
 
@@ -221,5 +219,5 @@ private struct VehicleCategoryButton: View {
 
 
 #Preview {
-    AddVehicleForm(isAddVehiclePresented: .constant(true))
+    AddVehicleForm()
 }

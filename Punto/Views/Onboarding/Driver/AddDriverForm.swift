@@ -9,30 +9,32 @@ import SwiftUI
 
 struct AddDriverForm: View {
     let selecteVehicleindex: Int
-    var vm: AddDriverViewModel
+    
     @Environment(\.dismiss) private var dismiss
     @State private var driver: DriverInvitation
-    private var isvalid: Bool {
-        !driver.name.isEmpty && !driver.email.isEmpty && !driver.phone.isEmpty
-    }
+    @State private var phone: String = ""
+    var vm: AddDriverViewModel
+
     
+    private var isvalid: Bool {
+        !driver.name.isEmpty && !driver.email.isEmpty && driver.phone != 0
+    }
     init(vm: AddDriverViewModel, index: Int) {
         self.selecteVehicleindex = index
         self.vm = vm
-        self.driver = .init(name: "", email: "", phone: "", status: .pending)
+        self.driver = .init(name: "", email: "", phone: 0, status: .pending)
     }
-
+    
     var body: some View {
         VStack(spacing: 6) {
             TextFieldComp(
                 text: $driver.name,
                 prompt: "Driver Name",
                 image: "person.fill"
-            )
-                .padding(.bottom, 8)
+            ).padding(.bottom, 8)
             
             TextFieldComp(
-                text: $driver.phone,
+                text: $phone,
                 prompt: "Driver Phone Number",
                 image: "number"
             )
@@ -41,7 +43,7 @@ struct AddDriverForm: View {
                 prompt: "Driver Mail",
                 image: "at"
             )
-
+            
             HStack {
                 DButtonComp(
                     text: "Cancel",
@@ -49,17 +51,21 @@ struct AddDriverForm: View {
                     image: "x.circle.fill",
                     style: .neutral,
                     maxWidth: 120) {
-                    dismiss()
-                }
+                        dismiss()
+                    }
                 DButtonComp(
                     text: "Send",
                     color: .blue,
                     image: "paperplane.fill",
                     maxWidth: 200,
                     isEnabled: isvalid ) {
-                        vm.addDriver(driver, index: selecteVehicleindex)
+                        self.driver.phone = Int(phone) ?? 0
+                        vm.sendInvitation(
+                            driver,
+                            forVehicle: selecteVehicleindex
+                        )
                         dismiss()
-                }
+                    }
             }.padding(.top, 30)
         }.padding(.horizontal)
     }

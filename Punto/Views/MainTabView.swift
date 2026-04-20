@@ -16,7 +16,7 @@ struct MainTabView: View {
     var body: some View {
             TabView {
                 Tab("Cargos", systemImage: "shippingbox.fill") {
-                  MonthlyExpensesView()
+                  CargoView()
                 }
                 
                 Tab("Expenses", systemImage: "banknote.fill") {

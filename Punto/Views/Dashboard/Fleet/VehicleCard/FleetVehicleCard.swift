@@ -72,7 +72,7 @@ struct FleetVehicleCard: View {
         HStack {
             HStack {
                 if vm.hasDrivers && vm.isWorking {
-                    driverInfo(for: vm.currentDriver)
+                    driverInfo(for: vm.currentDriver ?? .init(name: "", email: "", phone: 0, status: .pending))
                 } else if vm.hasDrivers && !vm.isWorking {
                     ForEach(vm.drivers, id: \.name) { driver in
                         Text(driver.name)
