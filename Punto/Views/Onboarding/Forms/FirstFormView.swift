@@ -10,7 +10,6 @@ private enum FirstFormAnswer {
     case ownerOperator
     case cordinator
     case contractedDriver
-    case other
     
     var response: String {
         switch self {
@@ -20,8 +19,6 @@ private enum FirstFormAnswer {
             return "cordinator"
         case .contractedDriver:
             return "contracted_driver"
-        case .other:
-            return "other"
         }
     }
 }
@@ -63,9 +60,7 @@ struct FirstFormView: View {
                         vm.sendAnswer(answer)
                         router.navigate(to: .form2)
                     }
-                
-                otherButton
-                
+                            
                 Spacer()
             }.padding(.horizontal, 10)
         }
@@ -82,33 +77,7 @@ struct FirstFormView: View {
                 .underline()
         }
     }
-    private var otherButton: some View {
-        Button {
-            let answer: String = FirstFormAnswer.other.response
-            vm.sendAnswer(answer)
-            router.navigate(to: .form2)
-        } label: {
-            Text("Other")
-                .font(.subheadline).bold()
-                .foregroundStyle(.white)
-                .padding(.horizontal, 60)
-                .padding(.vertical, 10)
-                .background(
-                    LinearGradient(
-                        colors: [.brandBlue, .brandBlueDark],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                    .clipShape(.capsule)
-                    .shadow(color: .myBlue, radius: 3)
-                    
-                )
-                .padding(.top)
-        }
-    }
 }
-
-
 
 
 #Preview {

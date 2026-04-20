@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct VehicleInformationView: View {
-    var vehicle: Vehicle
+    let vehicle: Vehicle
     
     private var info: VehicleInformation {
         vehicle.vehicleInformation
     }
     
     private var vehicleTypeLabel: String {
-        vehicle is TransportationVehicle ? "Transporte" : "Privado"
+        vehicle is TransportationVehicle ? "Trasportation" : "Private"
     }
     
     private var vehicleTypeColor: Color {
@@ -88,7 +88,6 @@ struct VehicleInformationView: View {
                 .padding(14)
         }
     }
-    
     private var titleSection: some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 6) {
@@ -99,36 +98,27 @@ struct VehicleInformationView: View {
             
             Spacer()
             
-            plateBadge
+            HStack(spacing: 19) {
+                Text("Plate")
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(.secondary)
+                
+                Text(info.plate)
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(.primary)
+            }
         }
     }
-    
-    private var plateBadge: some View {
-        HStack(spacing: 19) {
-            Text("PLACA")
-                .font(.caption2.weight(.bold))
-                .foregroundStyle(.secondary)
-            
-            Text(info.plate)
-                .font(.headline.weight(.bold))
-                .foregroundStyle(.primary)
-        }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .background(Color.platformGray6)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-    }
-    
     private var detailsGrid: some View {
         VStack(spacing: 10) {
             HStack(spacing: 10) {
                 vehicleRowCard(image: "gearshape.2.fill", title: "Transmision", description: info.transmission.rawValue, tint: .orange)
-                vehicleRowCard(image: "fuelpump.fill", title: "Combustible", description: info.fuel.rawValue, tint: .green)
+                vehicleRowCard(image: "fuelpump.fill", title: "Fuel type", description: info.fuel.rawValue, tint: .green)
             }
             
             HStack(spacing: 10) {
-                vehicleRowCard(image: "engine.combustion.fill", title: "Motor", description: info.engine, tint: .red)
-                vehicleRowCard(image: "gauge.with.dots.needle.50percent", title: "Kilometraje", description: mileageText, tint: .blue)
+                vehicleRowCard(image: "engine.combustion.fill", title: "Engine", description: info.engine, tint: .red)
+                vehicleRowCard(image: "gauge.with.dots.needle.50percent", title: "Millage", description: mileageText, tint: .blue)
             }
         }
     }
@@ -172,7 +162,7 @@ private func vehicleRowCard(image: String, title: String, description: String, t
                 plate: "DMW-243",
                 brand: "Volvo",
                 model: "X700x",
-                year: 2000020,
+                year: 2020,
                 mileage: 100000,
                 engine: "V8",
                 transmission: .automatic,

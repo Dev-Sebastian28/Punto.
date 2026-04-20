@@ -22,29 +22,24 @@ struct AddVehicleView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 24) {
                     header
-                    
                     if vm.hasVehicle {
                         vehicleListSection
+                        DButtonComp(
+                            text: "Add New Vehicle",
+                            color: .blue,
+                            image: "plus"
+                            ) {
+                                isAddVehiclePresented.toggle()
+                            }
                     } else {
                         EmptyStateVehicleCard(isPresented: $isAddVehiclePresented)
                     }
                 }.padding(.horizontal, 16)
-            }.background(Color.platformGroupedBackground)
-                .sheet(isPresented: $isAddVehiclePresented) {
-                    AddVehicleForm()
-                    
-                }
-            
-            VStack {
-                Spacer()
-                DButtonComp(
-                    text: "Add New Vehicle",
-                    color: .blue,
-                    image: "plus",
-                    maxWidth: 190,
-                    maxHeight: 26) {
-                        isAddVehiclePresented.toggle()
-                    }
+            }
+            .background(Color.platformGroupedBackground)
+            .sheet(isPresented: $isAddVehiclePresented) {
+                AddVehicleForm()
+                
             }
         }
     }

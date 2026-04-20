@@ -39,7 +39,7 @@ struct SecondFormView: View {
                 FormCardView(
                     title: "Gig / Rental Driver",
                     text: "Personal or rented vehicles used for apps and delivery services.",
-                    image: "transportation") {
+                    image: "privateCar") {
                         let answer: String = SecondFormAnswer.heavyLogistics.response
                         vm.sendAnswer(answer)
                         router.navigate(to: .addVehicle)
@@ -49,7 +49,7 @@ struct SecondFormView: View {
                 FormCardView(
                     title: "Heavy Logistics",
                     text: "Large vehicles dedicated to heavy cargo and long-haul freight.",
-                    image: "privateCar") {
+                    image: "transportation") {
                         let answer: String = SecondFormAnswer.privateVehicles.response
                         vm.sendAnswer(answer)
                         router.navigate(to: .addVehicle)

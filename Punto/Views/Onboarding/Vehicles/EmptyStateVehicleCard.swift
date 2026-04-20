@@ -111,3 +111,7 @@ private func emptyStateInfo(title: String, description: String) -> some View {
     .background(Color.platformGray6)
     .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
 }
+
+#Preview {
+    EmptyStateVehicleCard(isPresented: .constant(true))
+}

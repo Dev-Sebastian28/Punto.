@@ -14,11 +14,11 @@ struct PuntoApp: App {
     @State private var appState: AppState
     
     init() {
-            let state = AppState()
-            _appState = State(initialValue: state)
-            _carouselVM = State(initialValue: CarouselViewModel(user: state.user))
-            _router = State(initialValue: NavigationRouter())
-        }
+        let state = AppState()
+        _appState = State(initialValue: state)
+        _carouselVM = State(initialValue: CarouselViewModel(user: state.user))
+        _router = State(initialValue: NavigationRouter())
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -26,12 +26,12 @@ struct PuntoApp: App {
                 switch router.root {
                 case .onboarding:
                     NavigationStack(path: $router.onboardingPath) {
-                        SignInView()
+                        AuthView()
                             .navigationDestination(for: OnboardingRoute.self) { route in
                                 switch route {
                                 case .appIntroduction:  IntroductionAppView()
-                                case .createAccount:    SignInView()
-                                case .form1:            FirstFormView()
+                                case .createAccount:    AuthView()
+                                case .form1:            FirstFormView().navigationBarBackButtonHidden(true)
                                 case .form2:            SecondFormView().navigationBarBackButtonHidden(true)
                                 case .addVehicle:       AddVehicleView(user: appState.user).navigationBarBackButtonHidden(true)
                                 case .addDriver:        AddDriverView(user: appState.user)
@@ -48,12 +48,11 @@ struct PuntoApp: App {
                                 case .manteinances: MaintenanceView(user: appState.user)
                                 case .expenses:     ExpensesView(user: appState.user)
                                 }
-                            }
-                            .navigationBarBackButtonHidden(true)
+                            }.navigationBarBackButtonHidden(true)
                     }
                 }
             }
-
+            
             .environment(carouselVM)
             .environment(router)
             .environment(appState)
