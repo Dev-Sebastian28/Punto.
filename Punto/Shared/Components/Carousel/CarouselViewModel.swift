@@ -8,7 +8,7 @@ import Foundation
 
 @Observable
 class CarouselViewModel {
-    private(set) var user: User
+    private var user: User
     var vehicles: [Vehicle] { user.vehicles }
     var isCarousellHide: Bool    
     func summaries(for vehicle: any Vehicle, algorithm: CarouselStrategy) -> [QuickSummary] {

@@ -58,7 +58,7 @@ struct TaskView: View {
         }
         .sheet(item: $selectedTask) { task in
             TaskDetailView(task: task, vm: vm)
-                .presentationDetents([.height(620)])
+                .presentationDetents([.height(500)])
         }
     }
 }

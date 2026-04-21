@@ -15,11 +15,11 @@ enum TaskStatus: String, Codable {
     case pending, inProgress, done
 }
 
-struct VTask: Identifiable {
+struct VTask: Identifiable, Hashable {
     let id: UUID
     var title: String
     var description: String?
-    var date: Date
+    var deadLine: Date
     var importance: TaskImportance
     var status: TaskStatus
     
@@ -27,7 +27,7 @@ struct VTask: Identifiable {
         self.id = UUID()
         self.title = title
         self.description = description
-        self.date = date
+        self.deadLine = date
         self.importance = importance
         self.status = status
     }

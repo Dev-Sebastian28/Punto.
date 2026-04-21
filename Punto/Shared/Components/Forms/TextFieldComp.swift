@@ -11,31 +11,31 @@ struct TextFieldComp: View {
     var prompt: String
     var image: String
     var color: Color = .secondary
-    var isRequired: Bool = false
+    var isAdaptative: Bool = true
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            if isRequired {
-                Text("Required *")
-                    .foregroundStyle(.red)
-                    .bold()
-            }
+        HStack(spacing: 10) {
+            Image(systemName: image)
+                .imageScale(.medium) // Se adapta al tamaño de la fuente
             
-            HStack(spacing: 10) {
-                Image(systemName: image)
-                    .padding(.leading)
-                TextField("", text: $text, prompt: Text(prompt))
-            }
-            .frame(height: 48)
-            .background {
-                color.opacity(0.2)
-                .clipShape(RoundedRectangle(cornerRadius: 15))
-                .shadow(radius: 10)
-            }
+            TextField("", text: $text, prompt: Text(prompt))
+                // Permite que el texto crezca verticalmente si es necesario
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .padding(.vertical, isAdaptative ? 12 : 8) // Ajuste dinámico de padding
+        .padding(.horizontal)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(color.opacity(0.2))
+        )
+        // El secreto: No declarar .frame() para que sea adaptativo
     }
 }
-
 #Preview {
-    TextFieldComp(text: .constant("Volvo"), prompt: "Vehicle Brand", image: "plus", isRequired: true)
+    TextFieldComp(
+        text: .constant("Vehicle BrandVehicle BrandVehicle BrandVehicle BrandVehicle BrandVehicle BrandVehicle BrandVehicle Brand"),
+        prompt: "Vehicle Brand",
+        image: "plus",
+        isAdaptative: true
+    )
 }

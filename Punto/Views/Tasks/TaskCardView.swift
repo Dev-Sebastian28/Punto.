@@ -41,7 +41,7 @@ struct TaskCardView: View {
                     Image(systemName: "arrow.right")
                         .font(.caption)
                     
-                    Text(task.date.formatted(.dateTime.day().month()))
+                    Text(task.deadLine.formatted(.dateTime.day().month()))
                         .font(.caption.bold())
                         .foregroundStyle(.black.opacity(0.7))
                 }

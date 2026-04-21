@@ -65,7 +65,7 @@ private struct TaskRow: View {
                     Text(task.title)
                     Spacer()
                     StatusBadge(text: task.importance.rawValue, color: importanceColor)
-                    DateBadge(date: task.date)
+                    DateBadge(date: task.deadLine)
                 }
                 Text(task.description ?? "No description")
                     .foregroundStyle(.secondary)

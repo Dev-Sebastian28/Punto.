@@ -40,9 +40,16 @@ struct SortByAmount: ExpenseStrategy {
         expenses.sorted { descending ? $0.amount > $1.amount : $0.amount < $1.amount }
     }
 }
+
 struct SortByDate: ExpenseStrategy {
     let latestFirst: Bool
     func apply(to expenses: [Expense]) -> [Expense] {
         expenses.sorted { latestFirst ? $0.date > $1.date : $0.date < $1.date }
+    }
+}
+
+struct DefaultStrategy: ExpenseStrategy {
+    func apply(to expenses: [Expense]) -> [Expense] {
+        expenses
     }
 }

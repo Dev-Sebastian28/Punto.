@@ -29,6 +29,7 @@ final class TaskListViewModel {
     }
     
     func addTask(_ task: VTask) {
+        
         user.vehicles[selectedVehicle].tasks.append(task)
     }
 

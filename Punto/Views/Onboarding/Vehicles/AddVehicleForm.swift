@@ -56,21 +56,21 @@ struct AddVehicleForm: View {
                 text: $vehicleInf.brand,
                 prompt: "Vehicle Brand, Ex: Toyota, Ford, Volvo",
                 image: "line.horizontal.3",
-                isRequired: false
+                isAdaptative: false
             )
 
             TextFieldComp(
                 text: $vehicleInf.model,
                 prompt: "Vehicle Model, Ex: Corolla, Mustang, XC90",
                 image: "car.rear.fill",
-                isRequired: false
+                isAdaptative: false
             )
             
             TextFieldComp(
                 text: $vehicleInf.engine,
                 prompt: "Engine Size, Ex: 1.5L, 2.0L",
                 image: "engine.combustion.fill",
-                isRequired: false
+                isAdaptative: false
             )
 
             HStack {
@@ -78,14 +78,14 @@ struct AddVehicleForm: View {
                     text: $vehicleInf.engine,
                     prompt: "Year, Ex: 2020",
                     image: "calendar",
-                    isRequired: false
+                    isAdaptative: false
                 )
                 
                 TextFieldComp(
                     text: $vehicleInf.plate,
                     prompt: "Plate, Ex: ABC-123",
                     image: "rectangle.and.pencil.and.ellipsis",
-                    isRequired: false
+                    isAdaptative: false
                 )
             }
 
@@ -95,7 +95,7 @@ struct AddVehicleForm: View {
                 text: $vehicleInf.engine,
                 prompt: "Vehicle Mileage",
                 image: "gauge.with.dots.needle.50percent",
-                isRequired: false
+                isAdaptative: false
             ).numberKeyboardIfAvailable()
         }
     }

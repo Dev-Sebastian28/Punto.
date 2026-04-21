@@ -10,74 +10,76 @@ import SwiftUI
 struct ExpensesView: View {
     @State private var isPresentedAddExpe: Bool = false
     @State private var isPresentedFilter: Bool = false
+    @State private var isInfoPresented: Bool = false
     
-    @State private var search: String = ""
+    @State private var state: ExpensesState
     @State private var vm : ExpensesViewModel
+    @State private var listVM: ExpenseListViewModel
     
     init(user: User) {
-        _vm = State(wrappedValue: ExpensesViewModel(userModel: user))
+        let state = ExpensesState()
+        _state = State(wrappedValue: state)
+        _vm = State(wrappedValue: ExpensesViewModel(user: user, state: state))
+        _listVM = State(wrappedValue: ExpenseListViewModel(user: user, state: state))
     }
     
     var body: some View {
-        ZStack {
-            VStack (alignment: .leading, spacing: 10) {
+        ZStack(alignment: .topTrailing) {
+            VStack (alignment: .leading, spacing: 15) {
                 HeaderComp(
-                    title: "title",
+                    title: "Expenses",
                     image: "dollarsign.circle",
-                    description: "description",
+                    description: "Welcome to your expenses, track your vehicles expenses and see your balance",
                     color: .green,
-                    gradient: viewStyle)
-                
-                controlView
+                    gradient: viewStyle
+                )
                 
                 CarouselComp(
                     strategy: ExpenseAlgorithm(),
                     color: .green,
-                    selectedIndex: $vm.selectedVehicleIndex
+                    selectedIndex: $state.selectedIndex,
                 )
                 
-                information
-                                
-                ScrollView(.vertical, showsIndicators: true) {
-                    ForEach(vm.expenses, id: \.id) { expense in
-                        ExpenseCardView(expense: expense)
-                            .padding(.horizontal, 2)
-                            .animation(.easeOut, value: isPresentedFilter)
-                    }
-                }
-            }.padding(.horizontal, 8)
-            
-            VStack(alignment: .trailing) {
-                if isPresentedFilter {
-                    ExpenseFilterView(
-                        isPresented: $isPresentedFilter,
-                        basedCollection: vm.expenses, filterCollection: .constant([])
-                    )
-                        .transition(.move(edge: .top))
-                }
-                Spacer()
+                controlView
                 
-                HStack {
-                    Spacer()
-                    ControlButton(iconName: "plus", isCircular: true) {
-                        
-                    }
+                if isInfoPresented {
+                    information
                 }
-                .padding()
-                .sheet(isPresented: $isPresentedAddExpe) {
-                    AddExpenseView(collection: .constant([]), isPresented: $isPresentedAddExpe)
-                        .presentationDetents([.height(390)])
-                        .onDisappear {
-                            
-                        }
+                
+                entriesList
+                
+            }
+            .padding(.horizontal, 8)
+            .onChange(of: state.selectedIndex) { _, _ in
+                listVM.reset()
+            }
+            
+            if isPresentedFilter {
+                ExpenseFilterView(
+                    isPresented: $isPresentedFilter,
+                    strategy: $listVM.strategy
+                ).transition(.move(edge: .top))
+            }
+            VStack {
+                Spacer()
+                ControlButton(iconName: "plus", isCircular: true) {
+                    isPresentedAddExpe.toggle()
                 }
-            }.ignoresSafeArea(edges: .bottom)
-        }
+            }
+            .padding()
+            .sheet(isPresented: $isPresentedAddExpe) {
+                AddExpenseView(
+                    collection: .constant([]),
+                    isPresented: $isPresentedAddExpe
+                ).presentationDetents([.height(390)])
+            }
+        }.ignoresSafeArea(edges: .bottom)
     }
     
-    var controlView: some View {
+    private var controlView: some View {
         HStack {
-            TextFieldComp(text: $search, prompt: "Search for", image: "magnifyingglass")
+            
+            TextFieldComp(text: $state.search, prompt: "Search for", image: "magnifyingglass")
             
             // Filter Button
             ControlButton(iconName: "slider.vertical.3") {
@@ -86,13 +88,11 @@ struct ExpensesView: View {
             
             // Over view button
             ControlButton(iconName: "square.split.2x2.fill") {
-                
+                isInfoPresented.toggle()
             }
-            
         }.bold()
     }
-    
-    var information: some View {
+    private var information: some View {
         VStack(alignment: .leading, spacing: 10) {
             
             // Balance
@@ -107,16 +107,15 @@ struct ExpensesView: View {
                     .font(.title3.bold())
                     .foregroundStyle(.green)
                 
-            }
-            .customBackground(color: .white)
-                        
+            }.customBackground(color: .white)
+            
             HStack {
                 // Incomes
                 HStack(spacing: 6) {
-                        Image(systemName: "arrow.down.circle.fill")
-                            .foregroundStyle(.blue)
-                            .font(.title2)
-
+                    Image(systemName: "arrow.down.circle.fill")
+                        .foregroundStyle(.blue)
+                        .font(.title2)
+                    
                     Text(vm.losses)
                         .font(.headline.bold())
                         .foregroundStyle(.blue)
@@ -127,9 +126,9 @@ struct ExpensesView: View {
                 
                 // Losses
                 HStack(spacing: 6) {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .foregroundStyle(.red)
-                            .font(.title2)
+                    Image(systemName: "arrow.up.circle.fill")
+                        .foregroundStyle(.red)
+                        .font(.title2)
                     Text(vm.profit)
                         .font(.headline.bold())
                         .foregroundStyle(.red)
@@ -145,7 +144,15 @@ struct ExpensesView: View {
                 .foregroundStyle(viewStyle).opacity(0.2)
         }
     }
-    
+    private var entriesList: some View {
+        ScrollView(.vertical, showsIndicators: true) {
+            ForEach(listVM.filteredExpenses, id: \.id) { expense in
+                ExpenseCardView(expense: expense)
+                    .padding(.horizontal, 2)
+                    .animation(.easeOut, value: isPresentedFilter)
+            }
+        }
+    }
     private var viewStyle: LinearGradient {
         LinearGradient(colors: [
             .green.opacity(0.8),
@@ -154,7 +161,6 @@ struct ExpensesView: View {
         ], startPoint: .topLeading, endPoint: .bottomTrailing)
     }
 }
-
 private struct ControlButton: View {
     let viewStyle =  LinearGradient(colors: [
         .green.opacity(0.8),
@@ -182,8 +188,10 @@ private struct ControlButton: View {
 }
 
 
-#Preview {
-    ExpensesView(user: .mock)
-        .environment(CarouselViewModel(user: .mock))
 
+#Preview {
+    let user = User.mock
+    ExpensesView(user: user)
+        .environment(CarouselViewModel(user: user))
+    
 }

@@ -15,8 +15,8 @@ struct ExpenseCardView: View {
             return .red
         }
     }
+    
     var body: some View {
-        
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "fuelpump.fill")
@@ -25,7 +25,7 @@ struct ExpenseCardView: View {
                         .frame(width: 50, height: 50)
                         .background(color.opacity(0.2))
                         .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .padding()
+                        .padding(10)
 
                     VStack (alignment: .leading,spacing: 5) {
                         Text("\(expense.name)")
