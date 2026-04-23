@@ -24,3 +24,29 @@ extension Array where Element == VehicleProtocol {
         self[index].id = oldId
     }
 }
+
+extension Array where Element == VTask {
+    
+    
+    
+    mutating func removeTask(at index: Int) {
+        guard self.indices.contains(index) else { return }
+        self.remove(at: index)
+    }
+    
+    mutating func updateTask(_ newValue: VTask, at index: Int) {
+        guard self.indices.contains(index) else { return }
+
+        let vehicleWithCorrectId = VTask(
+            id: newValue.id,
+            title: newValue.title,
+            description: newValue.description,
+            deadLine: newValue.deadLine,
+            importance: newValue.importance,
+            status: newValue.status,
+            
+        )
+        
+        self[index] = vehicleWithCorrectId
+    }
+}

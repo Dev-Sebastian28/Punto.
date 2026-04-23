@@ -15,12 +15,14 @@ struct ExpensesView: View {
     @State private var state: ExpensesState
     @State private var vm : ExpensesViewModel
     @State private var listVM: ExpenseListViewModel
+    @State private var expenseVM: ExpenseViewModel
     
     init(user: User) {
         let state = ExpensesState()
         _state = State(wrappedValue: state)
         _vm = State(wrappedValue: ExpensesViewModel(user: user, state: state))
         _listVM = State(wrappedValue: ExpenseListViewModel(user: user, state: state))
+        _expenseVM = State(wrappedValue: ExpenseViewModel(user: user, index: state.selectedIndex))
     }
     
     var body: some View {
@@ -57,7 +59,7 @@ struct ExpensesView: View {
             if isPresentedFilter {
                 ExpenseFilterView(
                     isPresented: $isPresentedFilter,
-                    strategy: $listVM.strategy
+                    strategy: $listVM.strategy,
                 ).transition(.move(edge: .top))
             }
             VStack {
@@ -69,11 +71,10 @@ struct ExpensesView: View {
             .padding()
             .sheet(isPresented: $isPresentedAddExpe) {
                 AddExpenseView(
-                    collection: .constant([]),
-                    isPresented: $isPresentedAddExpe
-                ).presentationDetents([.height(390)])
+                    vm: expenseVM
+                ).presentationDetents([.height(330)])
             }
-        }.ignoresSafeArea(edges: .bottom)
+        }
     }
     
     private var controlView: some View {
@@ -186,8 +187,6 @@ private struct ControlButton: View {
         }
     }
 }
-
-
 
 #Preview {
     let user = User.mock

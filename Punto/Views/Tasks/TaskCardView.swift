@@ -80,9 +80,10 @@ struct TaskCardView: View {
 #Preview {
     TaskCardView(task: (
         .init(
+            id: UUID(),
         title: "Wash the car",
         description: "Go to “Carwash” in nort, choose the big pay and also the inside",
-        date: .distantFuture,
+        deadLine: .distantFuture,
         importance: .low,
         status: .inProgress
         )

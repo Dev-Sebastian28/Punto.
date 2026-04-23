@@ -10,7 +10,7 @@ import Foundation
 final class ExpenseListViewModel {
     private var user: User
     private let state: ExpensesState
-    var strategy: ExpenseStrategy = DefaultStrategy()
+    var strategy: ExpenseStrategies = .defaultStrategy
     
     private var expenses: [Expense] {
         user.vehicles[state.selectedIndex].expenses
@@ -18,11 +18,11 @@ final class ExpenseListViewModel {
     }
     
     var filteredExpenses: [Expense] {
-        strategy.apply(to: expenses)
+        ExpenseStrategies.perform(strategy: strategy, on: expenses)
     }
     
     func reset() {
-       strategy = DefaultStrategy()
+        strategy = .defaultStrategy
     }
     
     init(user: User, state: ExpensesState) {

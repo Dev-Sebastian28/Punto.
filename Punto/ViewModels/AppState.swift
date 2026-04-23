@@ -8,5 +8,5 @@ import Foundation
 
 @Observable
 final class AppState {
-    var user: User = .mock
+    let user: User = .mock
 }

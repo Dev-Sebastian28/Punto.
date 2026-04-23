@@ -2,110 +2,221 @@ import SwiftUI
 
 struct AddTaskView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var title: String = ""
-    @State private var description: String = ""
-    @State private var importance: TaskImportance = .medium
-    @State private var date: Date = .now
-    @State private var isOn: Bool = false
+    @State private var task: VTask = .init(
+        id: .init(), title: "", description: "",
+        deadLine: .now, importance: .medium, status: .pending
+    )
     @State private var location: String = ""
-    let vm: TaskListViewModel
-    
-    
-    let colors: [Color] = [.green, .yellow, .red]
-    private var isValid: Bool {
-        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-    
+    @State private var description: String = ""
+    @State private var useLocation: Bool = false
+
+    let vm: TaskViewModel
+
+    private var isValid: Bool { !task.title.isEmpty }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 30) {
-            Spacer()
-            
-            header
-                .padding(.bottom)
-            nameandDescription
-            importanceView
-            taskDeadline
-            locationView
-        }.padding(.horizontal)
-        
-        HStack {
-            DButtonComp(text: "Cancell", color: .gray, image: .none, style: .neutral, maxHeight: 10) {
-                dismiss()
+        VStack(spacing: 0) {
+            // Drag handle
+            Capsule()
+                .fill(Color(.systemGray4))
+                .frame(width: 36, height: 4)
+                .padding(.top, 12)
+                .padding(.bottom, 20)
+
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 24) {
+                    header
+                    fieldsSection
+                    importanceSection
+                    deadlineSection
+                    locationSection
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 24)
             }
-            
-            DButtonComp(text: "Add Task", color: .blue, image: "plus", maxHeight: 10, isEnabled: isValid) {
-                vm.addTask(
-                    VTask(title: title,
-                         description: description,
-                         date: date,
-                         importance: importance
-                        )
-                )
-                dismiss()
-            }
+
+            actionButtons
+                .padding(.horizontal, 20)
+                .padding(.bottom, 32)
+                .padding(.top, 12)
+                .background(.ultraThinMaterial)
         }
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 24))
     }
-    
+
+    // MARK: - Header
+
     private var header: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Image(systemName: "plus")
-                Text("Add New task")
+        HStack(alignment: .center) {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 8) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(.blue)
+                        .frame(width: 28, height: 28)
+                        .background(Color.blue.opacity(0.12))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                    Text("New task")
+                        .font(.title3.weight(.semibold))
+                }
+
+                Text("Fill in the details below to get started")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
             }
-            .font(.title.bold())
-            .foregroundColor(.blue)
-            
-            
-            Text("Add title, description and even location")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+
+            Spacer()
+
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 30, height: 30)
+                    .background(Color(.systemGray6))
+                    .clipShape(Circle())
+            }
         }
     }
-    private var nameandDescription: some View {
-        VStack(spacing: 4) {
-            TextFieldComp(text: $title, prompt: "Task Name", image: "pencil", color: .blue)
-            
-            TextFieldComp(text: $description, prompt: "Task Description", image: "list.dash")
+
+    // MARK: - Fields
+
+    private var fieldsSection: some View {
+        VStack(spacing: 10) {
+            labeledField("Task name") {
+                TextFieldComp(text: $task.title, prompt: "Task name...", image: "pencil", color: .blue)
+            }
+            labeledField("Description") {
+                TextFieldComp(text: $description, prompt: "Add a short description...", image: "list.dash")
+            }
         }
     }
-    private var importanceView: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            
-            Text("Select the protocol's importance")
-                .foregroundStyle(.secondary)
-            
-            Picker("Importance", selection: $importance) {
-                ForEach(TaskImportance.allCases, id: \.self) { item in
-                    Text(item.rawValue).tag(item)
+
+    // MARK: - Importance
+
+    private var importanceSection: some View {
+        labeledField("Importance") {
+            HStack(spacing: 8) {
+                ForEach(TaskImportance.allCases, id: \.self) { level in
+                    importanceButton(for: level)
                 }
-            }.pickerStyle(.segmented)
-            
-            HStack {
-                ForEach(colors, id: \.self) { color in
-                    Capsule()
-                        .foregroundStyle(color)
-                }
-            }.frame(maxHeight: 10)
+            }
         }
     }
-    private var taskDeadline: some View {
-        VStack {
-            DatePicker("Select date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+
+    private func importanceButton(for level: TaskImportance) -> some View {
+        let isSelected = task.importance == level
+        let color = level.color
+
+        return Button {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                task.importance = level
+            }
+        } label: {
+            VStack(spacing: 6) {
+                Circle()
+                    .fill(color)
+                    .frame(width: 8, height: 8)
+                Text(level.rawValue)
+                    .font(.caption)
+                    .fontWeight(isSelected ? .semibold : .regular)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10)
+            .background(isSelected ? color.opacity(0.12) : Color(.systemGray6))
+            .foregroundStyle(isSelected ? color : .secondary)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(isSelected ? color : Color.clear, lineWidth: 1.5)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Deadline
+
+    private var deadlineSection: some View {
+        labeledField("Deadline") {
+            DatePicker("", selection: $task.deadLine, displayedComponents: [.date, .hourAndMinute])
                 .datePickerStyle(.compact)
-        }.customBackground(color: .gray.opacity(0.2))
+                .labelsHidden()
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(.systemGray6))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
     }
-    private var locationView: some View {
-        VStack {
-            Toggle("Use location (Google Maps)", isOn: $isOn)
-                .tint(.blue)
-            if isOn {
-                TextFieldComp(text: $location, prompt: "Location", image: "location", color: .blue)
+
+    // MARK: - Location
+
+    private var locationSection: some View {
+        labeledField("Location") {
+            VStack(spacing: 10) {
+                Toggle("Use location", isOn: $useLocation.animation())
+                    .tint(.blue)
+
+                if useLocation {
+                    TextFieldComp(text: $location, prompt: "Search location...", image: "location", color: .blue)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                }
             }
-        }.customBackground(color: .gray.opacity(0.2))
+            .padding(12)
+            .background(Color(.systemGray6))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
     }
-    
+
+    // MARK: - Buttons
+
+    private var actionButtons: some View {
+        HStack(spacing: 12) {
+            Button("Cancel") {
+                dismiss()
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(Color(.systemGray6))
+            .foregroundStyle(.secondary)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+
+            Button {
+                vm.addTask(task)
+                dismiss()
+            } label: {
+                Label("Add task", systemImage: "plus")
+                    .font(.body.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+            }
+            .background(isValid ? Color.blue : Color.blue.opacity(0.4))
+            .foregroundStyle(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .disabled(!isValid)
+            .animation(.easeInOut(duration: 0.2), value: isValid)
+        }
+    }
+
+    // MARK: - Helper
+
+    @ViewBuilder
+    private func labeledField<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title.uppercased())
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .tracking(0.6)
+            content()
+        }
+    }
 }
 
+
+
+
 #Preview {
-    AddTaskView(vm: .init(user: .mock))
+    AddTaskView(vm: .init(user: .mock, selectedVehicle: 0))
 }

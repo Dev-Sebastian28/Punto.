@@ -8,7 +8,6 @@
 import SwiftUI
 
 
-// MARK: - Filter Model
 enum CargoFilter: String, CaseIterable {
     case all      = "Todos"
     case weight   = "Peso"
@@ -25,12 +24,10 @@ enum CargoFilter: String, CaseIterable {
     }
 }
 
-// MARK: - CargoView
 struct CargoView: View {
     @State private var selectedFilter: CargoFilter = .all
     @State private var searchText: String = ""
     
-    // Preview data
     private let cargos: [Cargo] = [
         Cargo(id: 1, origine: "Bogotá, Calle 2, Catedral",    destination: "Bogotá, Calle 12, 10 de Julio", weight: 22, type: "Máquina Industrial", distance: 12),
         Cargo(id: 2, origine: "Medellín, El Poblado",          destination: "Cali, Granada",                 weight: 5,  type: "Electrodomésticos",   distance: 45),
@@ -60,49 +57,48 @@ struct CargoView: View {
             }
         }
     }
-    
-    // MARK: - Header
     private var header: some View {
-        ZStack(alignment: .bottom) {
-            // Background
-            LinearGradient(
-                colors: [.blue, .blue],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ).ignoresSafeArea(edges: .top)
+    ZStack(alignment: .topLeading) {
+        // Background
+        LinearGradient(
+            colors: [.myBlue, .blue, .blue, .white],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        ).ignoresSafeArea(edges: .top)
 
-            HStack(spacing: 14) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.white.opacity(0.15))
-                        .frame(width: 48, height: 48)
-                    Image(systemName: "shippingbox.fill")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundStyle(.white)
-                }
+        HStack {
+            ZStack {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(.white.opacity(0.15))
+                    .frame(width: 48, height: 48)
                 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Cargas disponibles")
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                    HStack(spacing: 4) {
-                        Image(systemName: "mappin.circle.fill")
-                            .font(.caption)
-                            .foregroundStyle(.white.opacity(0.7))
-                        Text("Colombia, Bogotá")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .foregroundStyle(.white.opacity(0.85))
-                    }
+                Image(systemName: "shippingbox.fill")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Cargas disponibles")
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                
+                HStack(spacing: 4) {
+                    Image(systemName: "mappin.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.7))
+                    Text("Colombia, Bogotá")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.white.opacity(0.85))
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.bottom, 16)
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 60)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 16)
     }
-    
+    .frame(maxWidth: .infinity)
+    .frame(height: 60)
+}
     private var searchBar: some View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
@@ -121,8 +117,6 @@ struct CargoView: View {
                 .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 2)
         )
     }
-    
-    // MARK: - Filters
     private var filterSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
@@ -139,8 +133,6 @@ struct CargoView: View {
             }
         }
     }
-    
-    
     private var cargoList: some View {
         LazyVStack(spacing: 12) {
             ForEach(cargos) { cargo in
@@ -177,7 +169,6 @@ private struct FilterChip: View {
         .buttonStyle(.plain)
     }
 }
-
 
 #Preview {
     CargoView()

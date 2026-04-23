@@ -7,20 +7,31 @@
 
 import SwiftUI
 
+@Observable
+final class TaskState {
+    var selectedVehicleIndex: Int = 0
+}
+
 struct TaskView: View {
-    @State private var vm: TaskListViewModel
     @State private var isPresentingAddTask = false
+    @State private var tasksListVM: TaskListViewModel
+    @State private var taskVM: TaskViewModel
+    @State private var indexState: TaskState
     @State private var selectedTask: VTask?
+    @State private var taskIndex: Int = 0
 
 
     init(user: User) {
-        _vm = State(wrappedValue: TaskListViewModel(user: user, selectedVehicle: 0))
+        let state = TaskState()
+        _indexState = State(initialValue: state)
+        _tasksListVM = State(wrappedValue: TaskListViewModel(user: user, selectedVehicle: state.selectedVehicleIndex))
+        _taskVM = State(wrappedValue: TaskViewModel(user: user, selectedVehicle: state.selectedVehicleIndex))
     }
- 
+    
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(alignment: .leading, spacing: 10) {
-                if vm.vehicles.isEmpty {
+                if !tasksListVM.hasVehicles {
                     ContentUnavailableView(
                         "Sin vehículos",
                         systemImage: "car.fill",
@@ -38,40 +49,37 @@ struct TaskView: View {
                     CarouselComp(
                         strategy: TaskAlgorithm(),
                         color: .blue,
-                        selectedIndex: $vm.selectedVehicle
+                        selectedIndex: $tasksListVM.selectedVehicle,
                     )
                     
                     SelectedInfoComp(
-                        model: vm.selectedVehicleModel,
-                        plate: vm.selectedVehiclePlate,
-                        total: vm.totalTasks.description
+                        model: tasksListVM.selectedVehicleBrandModel,
+                        plate: tasksListVM.selectedVehiclePlate,
+                        total: tasksListVM.selectedtotalTasks
                     )
-                    
                     taskListSection
-                    addTaskButton
                 }
             }.padding(.horizontal, 7)
-        }.ignoresSafeArea(edges: .bottom)
+            addTaskButton
+            
+        }
+        .ignoresSafeArea(edges: .bottom)
         .sheet(isPresented: $isPresentingAddTask) {
-            AddTaskView(vm: vm)
+            AddTaskView(vm: taskVM)
                 .presentationDetents([.height(550)])
         }
         .sheet(item: $selectedTask) { task in
-            TaskDetailView(task: task, vm: vm)
+            TaskDetailView(task: task, vm: taskVM, index: taskIndex)
                 .presentationDetents([.height(500)])
         }
     }
-}
-
-// MARK: - Subviews
-private extension TaskView {
-
-    var taskListSection: some View {
+    private var taskListSection: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(spacing: 10) {
-                ForEach(vm.vehicles[vm.selectedVehicle].tasks, id: \.id) { task in
+                ForEach(tasksListVM.Tasks.enumerated(), id: \.element.id) { index, task in
                     Button {
                         selectedTask = task
+                        self.taskIndex = index
                     } label: {
                         TaskCardView(task: task)
                             .padding(2)
@@ -81,8 +89,7 @@ private extension TaskView {
             }
         }
     }
-
-    var addTaskButton: some View {
+    private var addTaskButton: some View {
         Button {
             isPresentingAddTask.toggle()
         } label: {
@@ -106,7 +113,6 @@ private extension TaskView {
     }
 }
 
-// MARK: - Preview
 #Preview {
     let user = User.mock
     TaskView(user: user)

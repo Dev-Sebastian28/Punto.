@@ -6,36 +6,46 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum TaskImportance: String, CaseIterable {
     case low, medium, high
 }
 
-enum TaskStatus: String, Codable {
+enum TaskStatus: String, CaseIterable {
     case pending, inProgress, done
 }
 
 struct VTask: Identifiable, Hashable {
-    let id: UUID
+    var id: UUID
     var title: String
     var description: String?
     var deadLine: Date
     var importance: TaskImportance
     var status: TaskStatus
-    
-    init(title: String, description: String?, date: Date, importance: TaskImportance, status: TaskStatus = .pending) {
-        self.id = UUID()
-        self.title = title
-        self.description = description
-        self.deadLine = date
-        self.importance = importance
-        self.status = status
+
+}
+
+
+extension TaskImportance {
+    var color: Color {
+        switch self {
+        case .low:    return .green
+        case .medium: return .blue
+        case .high:   return .red
+        }
     }
 }
 
 
-
-
-
+extension TaskStatus {
+    var color: Color {
+        switch self {
+        case .pending:    return .green
+        case .inProgress: return .orange
+        case .done:       return .blue
+        }
+    }
+}
 
 

@@ -12,37 +12,42 @@ extension Array where Element == VTask {
     static func dummyData() -> [VTask] {
         return [
             VTask(
+                id: .init(),
                 title: "Revisión de Inventario",
                 description: "Contar las existencias en el almacén central y reportar faltantes.",
-                date: Date(),
+                deadLine: Date(),
                 importance: .high,
                 status: .inProgress
             ),
             VTask(
+                id: .init(),
                 title: "Mantenimiento Vehículo 04",
                 description: "Cambio de aceite y revisión de frenos de la unidad de reparto.",
-                date: Date().addingTimeInterval(86400),
+                deadLine: Date().addingTimeInterval(86400),
                 importance: .medium,
                 status: .pending
             ),
             VTask(
+                id: .init(),
                 title: "Actualizar Ruta Norte",
                 description: "Optimizar los puntos de entrega basados en el nuevo tráfico.",
-                date: Date().addingTimeInterval(-86400),
+                deadLine: Date().addingTimeInterval(-86400),
                 importance: .low,
                 status: .done
             ),
             VTask(
+                id: .init(),
                 title: "Firma de Contratos",
                 description: "Reunión con los nuevos proveedores logísticos.",
-                date: Date().addingTimeInterval(172800),
+                deadLine: Date().addingTimeInterval(172800),
                 importance: .high,
                 status: .pending
             ),
             VTask(
+                id: .init(),
                 title: "Limpieza de Terminales",
                 description: "Desinfectar y organizar las estaciones de escaneo.",
-                date: Date(),
+                deadLine: Date(),
                 importance: .low,
                 status: .inProgress
             )

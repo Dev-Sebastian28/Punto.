@@ -10,11 +10,11 @@ import Foundation
 
 struct Expense: Codable, Identifiable {
     let id: UUID
-    let name: String
-    let description: String?
-    let amount: Double
-    let date: Date
-    let type: String
+    var name: String
+    var description: String?
+    var amount: Double
+    var date: Date
+    var type: String
     
     init(id: UUID = UUID(), name: String, description: String?, amount: Double, date: Date, type: String) {
         self.id = id

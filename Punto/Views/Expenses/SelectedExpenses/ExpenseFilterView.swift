@@ -9,7 +9,11 @@ import SwiftUI
 
 struct ExpenseFilterView: View {
     @Binding var isPresented: Bool
-    @Binding var strategy: ExpenseStrategy
+    @Binding var strategy: ExpenseStrategies
+    let columns: [GridItem] = [
+        GridItem(.flexible(), spacing: nil, alignment: nil),
+        GridItem(.flexible(), spacing: nil, alignment: nil)
+    ]
     
     var body: some View {
         ZStack {
@@ -26,28 +30,30 @@ struct ExpenseFilterView: View {
                     FilterChip(
                         title: "Profit",
                         systemImage: "arrow.up.right",
-                        tint: .green
+                        tint: .green,
+                        isSelected: strategy == .filterIncomes
                     ) {
-                        strategy = FilterIncomes()
-                        
+                        strategy = .filterIncomes
                         isPresented.toggle()
                     }
                     
                     FilterChip(
                         title: "Latest"
                         , systemImage: "clock.arrow.circlepath",
-                        tint: .green
+                        tint: .green,
+                        isSelected: strategy == .sortByDateLatestFirst
                     ) {
-                        strategy = SortByAmount(descending: false)
+                        strategy = .sortByDateLatestFirst
                         isPresented.toggle()
                     }
                     
                     FilterChip(
                         title: "Ascending",
                         systemImage: "arrow.up",
-                        tint: .green
+                        tint: .green,
+                        isSelected: strategy == .sortByAmountPostive
                     ) {
-                        strategy = SortByAmount(descending: true)
+                        strategy = .sortByAmountPostive
                         isPresented.toggle()
                     }
                     
@@ -58,40 +64,41 @@ struct ExpenseFilterView: View {
                     FilterChip(
                         title: "Losses",
                         systemImage: "arrow.down.right",
-                        tint: .red) {
-                            
-                            strategy = LossesFilter()
+                        tint: .red,
+                        isSelected: strategy == .lossesFilter
+                    ) {
+                            strategy = .lossesFilter
                             isPresented.toggle()
                         }
                     
                     FilterChip(
                         title: "Oldest",
                         systemImage: "clock",
-                        tint: .red
+                        tint: .red,
+                        isSelected: strategy == .sortByDateOldestFirst
                     ) {
-                        strategy = SortByDate(latestFirst: true)
+                        strategy = .sortByDateOldestFirst
                         isPresented.toggle()
                     }
                     
                     FilterChip(
                         title: "Descending",
                         systemImage: "arrow.down",
-                        tint: .red
+                        tint: .red,
+                        isSelected: strategy == .sortByAmountNegative
                     ) {
-                        strategy = SortByAmount(descending: false)
+                        strategy = .sortByAmountNegative
                         isPresented.toggle()
                     }
                     
                 }
                 Button {
-                    strategy = DefaultStrategy()
+                    strategy = .defaultStrategy
                     isPresented.toggle()
                     
                 }
                 label: {
-                    
                     Text("Clear Filters")
-                    
                 }.buttonStyle(.glassProminent)
                 
             }
@@ -107,6 +114,7 @@ private struct FilterChip: View {
     var title: String
     var systemImage: String
     var tint: Color
+    var isSelected: Bool
     var action: () -> Void
     
     var body: some View {
@@ -125,7 +133,7 @@ private struct FilterChip: View {
                 .padding(.horizontal, 12)
                 .background(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color.white)
+                        .fill(isSelected ? tint.opacity(0.18) : .white )
                         .shadow(color: tint.opacity(0.18), radius: 6, x: 0, y: 3)
                 )
                 .overlay(
@@ -141,5 +149,8 @@ private struct FilterChip: View {
 }
 
 #Preview {
-    ExpenseFilterView(isPresented: .constant(true), strategy: .constant(DefaultStrategy()))
+    ExpenseFilterView(
+        isPresented: .constant(true),
+        strategy: .constant(.sortByAmountNegative)
+    )
 }
