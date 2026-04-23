@@ -26,12 +26,9 @@ struct FleetVehicleCard: View {
         .padding(.horizontal, 7)
         .padding(.vertical, 7)
         .background {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color.accentColor.opacity(0.2))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .stroke(.blue, lineWidth: 1)
-                }
+            RoundedRectangle(cornerRadius: 5)
+                .fill(vm.isWorking ? Color.blue.opacity(0.4) : Color.gray.opacity(0.2))
+                .stroke(vm.isWorking ? Color.blue : Color.gray, lineWidth: 1)
         }
     }
     
@@ -42,10 +39,41 @@ struct FleetVehicleCard: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .overlay(alignment: .bottomLeading) {
                 VStack (alignment: .leading) {
-                    HStack {
+                    
+                    // Start Working, button to DriverControlPanel
+                    if !vm.isWorking {
+                        NavigationLink {
+                            DriverControlPanel(vehicle: vm.vehicle)
+                        } label: {
+                            Text("Start working")
+                                .font(.title2).bold()
+
+                            Image(systemName: "road.lanes")
+                                .font(.title2).bold()
+                                .padding(6)
+                                .background(Color.brandGreen)
+                                .cornerRadius(10)
+                        }
+                        .padding(6)
+                        .background(Color.myBlue.opacity(0.8))
+                        .cornerRadius(10)
+                    }
+                    
+                    
+                    Spacer()
+                    
+                    HStack(alignment: .bottom) {
+                        VStack(alignment: .leading) {
+                            Text(vm.brandModel)
+                                .font(.title2.bold())
+                            Text(vm.licensePlate)
+                            
+                            
+                        }
                         Spacer()
+                        
                         Text(vm.isWorking ? "Active" : "Inactive")
-                            .font(.title3)
+                            .font(.subheadline)
                             .foregroundStyle(vm.isWorking ? Color.white : Color.black).bold()
                             .padding(.horizontal, 13)
                             .padding(.vertical, 5)
@@ -53,26 +81,19 @@ struct FleetVehicleCard: View {
                             .clipShape(.capsule)
                     }
                     
-                    Spacer()
-                    
-                    Text(vm.brandModel)
-                        .font(.title2.bold())
-                    HStack {
-                        Text("La blanca")
-                        Text("-")
-                        Text(vm.licensePlate)
-                    }
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal)
                 .padding(.vertical)
             }
     }
+    
     private var driverSection: some View {
         HStack {
             HStack {
                 if vm.hasDrivers && vm.isWorking {
                     driverInfo(for: vm.currentDriver ?? .init(name: "", email: "", phone: 0, status: .pending))
+                    
                 } else if vm.hasDrivers && !vm.isWorking {
                     ForEach(vm.drivers, id: \.name) { driver in
                         Text(driver.name)
@@ -87,18 +108,10 @@ struct FleetVehicleCard: View {
             }
             .padding(10)
             .background(
-                Color.white
-                    .clipShape(
-                        UnevenRoundedRectangle(
-                                        topLeadingRadius: 28,
-                                        bottomLeadingRadius: 28,
-                                        bottomTrailingRadius: 0,
-                                        topTrailingRadius: 0
-                                    )
-                    )
-                
-                
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.white)
             )
+            
             // Navigation Button
             NavigationLink {
                 
@@ -119,10 +132,11 @@ struct FleetVehicleCard: View {
                 .bold()
             }.padding(.horizontal, 13)
         }.background(
-            Color.blue
-                .clipShape(.capsule)
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.blue.opacity(0.6))
         )
     }
+    
     private func driverInfo(for driver: DriverInvitation) -> some View {
         HStack {
             Text(vm.currentDriverInitials)
@@ -141,8 +155,9 @@ struct FleetVehicleCard: View {
             Spacer()
         }
     }
+    
     private var buttonsList: some View {
-        HStack(spacing: 5) {
+        HStack(spacing: 6) {
             QuickInfoButton(
                 title: "Tasks",
                 value: vm.pendingTask,
@@ -176,7 +191,7 @@ struct FleetVehicleCard: View {
                 }
         }
     }
-
+    
 }
 
 private struct QuickInfoButton: View {
@@ -197,7 +212,7 @@ private struct QuickInfoButton: View {
                         .foregroundStyle(color)
                     
                     Text("\(value)")
-                        .font(.title3)
+                        .font(.subheadline)
                         .bold()
                 }
                 

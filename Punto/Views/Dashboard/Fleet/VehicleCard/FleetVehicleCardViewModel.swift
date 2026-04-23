@@ -8,26 +8,29 @@ import Foundation
 
 @Observable
 final class FleetVehicleCardViewModel {
-    private let vehicle: any Vehicle
-    // Card Vehicle Information
-    var vehicleImage: String {
-        vehicle.vehicleInformation.image
+    var vehicle: any Vehicle
+    private var vehicleInfo: VehicleInformation {
+        vehicle.vehicleInformation
     }
+    
+    // Card Vehicle Information
     var isWorking: Bool {
-        vehicle.isActive
+    vehicle.isActive
+}
+    var vehicleImage: String {
+        vehicleInfo.image
     }
     var brandModel: String {
-        vehicle.vehicleInformation.brand.localizedCapitalized + " " + vehicle.vehicleInformation.model.localizedCapitalized
+        vehicleInfo.brand.localizedCapitalized + " " + vehicleInfo.model.localizedCapitalized
     }
     var licensePlate: String {
-        vehicle.vehicleInformation.plate
+        vehicleInfo.plate
     }
     
     // Drivers Information
     var hasDrivers: Bool {
         !vehicle.drivers.isEmpty
     }
-    
     var drivers: [DriverInvitation] {
         vehicle.drivers
     }

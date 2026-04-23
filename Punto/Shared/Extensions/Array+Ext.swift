@@ -8,10 +8,7 @@
 import Foundation
 
 extension Array where Element == VehicleProtocol {
-    mutating func addProtocol(_ element: VehicleProtocol) {
-        self.append(element)
-    }
-    
+
     mutating func removeProtocol(index: Int) {
         guard self.indices.contains(index) else { return }
         self.remove(at: index)

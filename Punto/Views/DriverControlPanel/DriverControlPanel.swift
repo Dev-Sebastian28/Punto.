@@ -22,10 +22,10 @@ struct DriverControlPanel: View {
             
             ScrollView(.vertical) {
                 VStack(spacing: 12) {
+                    MaintenanceFactory(vehicle: vehicle).make()
+                    ProtocolFactory(vehicle: vehicle).make()
                     TaskFactory(vehicle: vehicle).make()
                     ExpenseFactory(vehicle: vehicle).make()
-                    ProtocolFactory(vehicle: vehicle).make()
-                    MaintenanceFactory(vehicle: vehicle).make()
                 }
                 .padding()
             }

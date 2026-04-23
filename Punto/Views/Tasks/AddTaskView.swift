@@ -16,7 +16,6 @@ struct AddTaskView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Drag handle
             Capsule()
                 .fill(Color(.systemGray4))
                 .frame(width: 36, height: 4)
@@ -174,28 +173,15 @@ struct AddTaskView: View {
 
     private var actionButtons: some View {
         HStack(spacing: 12) {
-            Button("Cancel") {
+            DButtonComp(text: "cancel", color: .gray, image: .none, style: .neutral) {
                 dismiss()
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .background(Color(.systemGray6))
-            .foregroundStyle(.secondary)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
 
-            Button {
+            }
+            
+            DButtonComp(text: "Add Task", color: .blue, image: "plus", style: .dominant, isEnabled: isValid) {
                 vm.addTask(task)
                 dismiss()
-            } label: {
-                Label("Add task", systemImage: "plus")
-                    .font(.body.weight(.semibold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
             }
-            .background(isValid ? Color.blue : Color.blue.opacity(0.4))
-            .foregroundStyle(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .disabled(!isValid)
             .animation(.easeInOut(duration: 0.2), value: isValid)
         }
     }

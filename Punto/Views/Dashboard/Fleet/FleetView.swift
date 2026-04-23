@@ -22,7 +22,7 @@ struct FleetView: View {
         ZStack(alignment: .top) {
             vehiclesList
             FleetControlPanel(vm: vm)
-        }.ignoresSafeArea(edges: .top)
+        }.ignoresSafeArea(edges: [.top, .bottom])
     }
     
     private var vehiclesList: some View {
@@ -34,7 +34,6 @@ struct FleetView: View {
         }.padding(.top, 100)
     }
 }
-
 
 
 #Preview {

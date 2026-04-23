@@ -66,11 +66,9 @@ struct TaskView: View {
         .ignoresSafeArea(edges: .bottom)
         .sheet(isPresented: $isPresentingAddTask) {
             AddTaskView(vm: taskVM)
-                .presentationDetents([.height(550)])
         }
         .sheet(item: $selectedTask) { task in
             TaskDetailView(task: task, vm: taskVM, index: taskIndex)
-                .presentationDetents([.height(500)])
         }
     }
     private var taskListSection: some View {

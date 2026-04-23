@@ -11,48 +11,27 @@ import Foundation
 final class ProtocoslListViewModel {
     private(set) var user: User
     var selectedVehicleIndex: Int = 0
-    var seletedVehicle: Vehicle? {
-        guard areVehicles else { return nil }
-        guard user.vehicles.indices.contains(selectedVehicleIndex) else { return nil }
-        return user.vehicles[selectedVehicleIndex]
-    }
-    
-    var areVehicles: Bool {
-        !user.vehicles.isEmpty
-    }
-    var areProtocols: Bool {
-        guard areVehicles else { return false }
-        return !(seletedVehicle?.protocols.isEmpty ?? false)
+    private var seletedVehicleInfo: VehicleInformation {
+        user.vehicles[selectedVehicleIndex].vehicleInformation
     }
     
     var protocols: [VehicleProtocol] {
-        guard areVehicles else { return [] }
-        return user.vehicles[selectedVehicleIndex].protocols
+        user.vehicles[selectedVehicleIndex].protocols
+    }
+    var areProtocols: Bool {
+        return !protocols.isEmpty
     }
     var protocolsCount: String {
-        guard areProtocols else { return "" }
-        return (seletedVehicle?.protocols.count.description) ?? ""
+        protocols.count.description
     }
     
     var selectedModelBrand: String {
-        guard areVehicles else { return "" }
-        if let seletedVehicle {
-            return (seletedVehicle.vehicleInformation.model + " " + seletedVehicle.vehicleInformation.brand).capitalized
-        } else {
-            return ""
-        }
+        seletedVehicleInfo.brand + " " + seletedVehicleInfo.model
     }
     var selectedPlate: String {
-        if let seletedVehicle {
-            return (seletedVehicle.vehicleInformation.model + " " + seletedVehicle.vehicleInformation.plate).uppercased()
-        } else {
-            return ""
-        }
+        seletedVehicleInfo.plate.uppercased()
     }
     
-    
-    
-
     init(user: User) {
         self.user = user
     }

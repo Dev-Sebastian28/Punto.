@@ -1,3 +1,11 @@
+//
+//  Cargo.swift
+//  Punto
+//
+//  Created by Sebastian Garcia on 22/04/26.
+//
+
+
 struct Cargo: Identifiable, Decodable {
     var id: Int
     var origine: String
