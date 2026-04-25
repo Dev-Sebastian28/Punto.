@@ -1,123 +1,139 @@
 //
-//  ContentView.swift
-//  RouteManager
-//
-//  Created by Sebastian Garcia on 11/02/26.
+//  AuthView.swift
+//  Punto
 //
 
 import SwiftUI
 
 struct AuthView: View {
-    @State private var showingAlert = false
-    @State private var alertMessage = ""
-    @State private var vm = AuthViewModel(mode: .signUp)
+    @State private var vm = AuthViewModel(mode: .signUp, service: .init())
     @Environment(NavigationRouter.self) var router
-    
+
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.myBlue, .white, .myBlue], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-            
+            LinearGradient(
+                colors: [.myBlue, .white, .myBlue],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+
             VStack(spacing: 25) {
-                selectedWay
-                
-                if vm.mode == .signUp {
-                    SignUpCard(showAlert: $showingAlert, alertMessage: $alertMessage)
-                    
-                } else {
-                    SignInCard(showAlert: $showingAlert, alertMessage: $alertMessage)
-                }
+                modeSelector
+
+                Group {
+                    if vm.mode == .signUp {
+                        SignUpCard(vm: vm)
+                    } else {
+                        SignInCard(vm: vm)
+                    }
+                }.transition(.push(from: .leading))
+
                 socialSection
             }
             .animation(.snappy, value: vm.mode)
             .padding(.horizontal, 15)
             .padding(.vertical, 28)
+        }
+        .onChange(of: vm.authStatus) { _, newStatus in
+            // If the user had a succefuel operation and its his first time go to onboaerding
+            if newStatus == .authenticated && vm.mode == .signUp {
+                router.navigate(to: .form1)
+            }
+            
+            // If the user had a succefuel operation and its not his first time go to maintabs
 
-        }.alert("Check Fields Please", isPresented: $showingAlert) {
-        } message: {
-            Text(alertMessage)
+            else if newStatus == .authenticated && vm.mode == .signIn {
+                router.showMainTabs()
+            }
         }
     }
-        
-    private var selectedWay: some View {
-        HStack(spacing: 50) {
-            Button {
+
+    // MARK: - Mode Selector
+
+    private var modeSelector: some View {
+        HStack(spacing: 8) {
+            ModeButton(title: "Sign Up", isSelected: vm.mode == .signUp) {
                 vm.setMode(.signUp)
-                print(vm.mode)
-            } label: {
-                Text("Sign Up")
-                    .foregroundStyle(vm.mode == .signUp ? .myBlue : .gray)
-                    .bold(vm.mode == .signUp)
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 44)
-                    .background(
-                        vm.mode == .signUp ? .white : .white.opacity(0.8)
-                    ).clipShape(RoundedRectangle(cornerRadius: 10))
-                    .scaleEffect(vm.mode == .signUp ? 1.2 : 1)
             }
-            
-            
-            Button {
+            ModeButton(title: "Sign In", isSelected: vm.mode == .signIn) {
                 vm.setMode(.signIn)
-                print(vm.mode)
-
-            } label: {
-                Text("Sign In")
-                    .foregroundStyle(vm.mode == .signIn ? .myBlue : .gray)
-                    .bold(vm.mode == .signIn)
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 44)
-                    .background(
-                        vm.mode == .signIn ? .white : .white.opacity(0.8)
-                        
-                    ).clipShape(
-                        RoundedRectangle(cornerRadius: 10)
-                        
-                    )
-                
-                    .scaleEffect(vm.mode == .signIn ? 1.2 : 1)
-                
             }
         }
     }
-  
+
+    // MARK: - Social
+
     private var socialSection: some View {
         VStack(spacing: 14) {
             Text("Or continue with:")
                 .font(.title2.weight(.semibold))
                 .foregroundStyle(.white.opacity(0.88))
-            
-            VStack(spacing: 18) {
-                socialButton(assetName: "appleIcon", background: .black, iconSize: 48, description: "Continue with Apple")
+
+            SocialButton(
+                assetName: "appleIcon",
+                description: "Continue with Apple",
+                background: .black,
+                iconSize: 22
+            ) {
+                // Apple Sign In
             }
         }
     }
-    private func socialButton(assetName: String, background: Color, iconSize: CGFloat, description: String) -> some View {
-        HStack {
-            Button {
-                // Social Auth logic
-            } label: {
+}
+
+// MARK: - Mode Button
+
+private struct ModeButton: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .foregroundStyle(isSelected ? .myBlue : .gray)
+                .fontWeight(isSelected ? .bold : .regular)
+                .padding(.vertical, 8)
+                .frame(maxWidth: .infinity)
+                .background(isSelected ? .white : .white.opacity(0.65))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .scaleEffect(isSelected ? 1.08 : 0.9)
+                .animation(.snappy, value: isSelected)
+        }
+    }
+}
+
+// MARK: - Social Button
+private struct SocialButton: View {
+    let assetName: String
+    let description: String
+    let background: Color
+    let iconSize: CGFloat
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 16) {
+                Image(systemName: "applelogo")
+                    .font(.title)
+                    .foregroundStyle(.white)
+
                 Text(description)
                     .font(.title3.bold())
-                    .foregroundStyle(background == .black ?  .white : .gray)
-                Circle()
-                    .fill(background)
-                    .frame(width: 68, height: 68)
-                    .overlay {
-                        Image(assetName)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: iconSize, height: iconSize)
-                    }
+                    .foregroundStyle(.white)
+
+                Spacer()
+
+                Image(systemName: "arrow.right")
+                    .foregroundStyle(.white.opacity(0.6))
             }
-            .padding(.horizontal, 30)
-            .background {
-                background
-                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 14)
+            .background(background)
+            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
     }
-    
 }
 
 #Preview {

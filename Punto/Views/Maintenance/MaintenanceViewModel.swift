@@ -10,21 +10,21 @@ import Foundation
 @Observable
 final class MaintenanceViewModel {
     private let user: User
-    var selectedVehicle: Int = 0
-    var vehicles: [Vehicle] {
+    var selectedVehicleIndex: Int = 0
+    private var vehicles: [Vehicle] {
         user.vehicles
     }
     
     var components: [VehiclePartWrapper] {
-        user.vehicles[selectedVehicle].maintenance
+        user.vehicles[selectedVehicleIndex].maintenance
     }
     
-    var totalMaintenances: String {
+    var totalVehicleMaintenances: String {
         components.count.description
     }
     
-    var currentRange: String {
-        vehicles[self.selectedVehicle].vehicleInformation.mileage.description
+    var currentVehicleRange: String {
+        vehicles[self.selectedVehicleIndex].vehicleInformation.mileage.description
     }
     
     init(user: User) {

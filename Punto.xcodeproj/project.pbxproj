@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9E8DA0792F9BB177001CA420 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9E8DA0782F9BB177001CA420 /* Supabase */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		9EB3B10A2F427E2000A2364E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E8DA0792F9BB177001CA420 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,12 +90,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E8DA0772F9BB177001CA420 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9EB3B0F32F427E1F00A2364E = {
 			isa = PBXGroup;
 			children = (
 				9EB3B0FE2F427E1F00A2364E /* Punto */,
 				9EB3B10C2F427E2000A2364E /* PuntoTests */,
 				9EB3B1162F427E2000A2364E /* PuntoUITests */,
+				9E8DA0772F9BB177001CA420 /* Frameworks */,
 				9EB3B0FD2F427E1F00A2364E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -125,6 +138,7 @@
 			);
 			name = Punto;
 			packageProductDependencies = (
+				9E8DA0782F9BB177001CA420 /* Supabase */,
 			);
 			productName = Punto;
 			productReference = 9EB3B0FC2F427E1F00A2364E /* Punto.app */;
@@ -662,6 +676,14 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9E8DA0782F9BB177001CA420 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9EAB20CB2F96AE6700B504F1 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9EB3B0F42F427E1F00A2364E /* Project object */;
 }
