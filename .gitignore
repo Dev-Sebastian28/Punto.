@@ -1,5 +1,16 @@
+# --- Seguridad de la App (¡IMPORTANTE!) ---
+Secrets.swift
+Secrets.xcconfig
+AppConstants+Secrets.swift
+
+# --- Archivos de Xcode ---
 .DS_Store
 DerivedData/
 xcuserdata/
 *.xcuserstate
 *.xcworkspace
+*.xcscmblueprint
+
+# --- Swift Package Manager ---
+.build/
+.swiftpm/
