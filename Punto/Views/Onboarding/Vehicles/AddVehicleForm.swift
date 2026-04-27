@@ -12,13 +12,19 @@ struct AddVehicleForm: View {
     @Environment(\.dismiss) private var dimiss
     @State private var isPrivateSelected = false
     @State private var isTransportSelected = true
-
-    @State private var vehicleInf: VehicleInformation = .init(image: "", plate: "", brand: "", model: "", year: 0, mileage: 0, engine: "", transmission: .automatic, fuel: .diesel)
+    @State private var vehicleInf: VehicleInformation = .init(
+        image: "",
+        plate: "",
+        brand: "",
+        model: "",
+        year: 0,
+        mileage: 0,
+        engine: "",
+        transmission: .automatic,
+        fuel: .diesel
+    )
+    let vm: AddVehicleViewModel
     
-    private var isFormIncomplete: Bool {
-        vehicleInf.brand.isEmpty || vehicleInf.plate.isEmpty || vehicleInf.model.isEmpty || vehicleInf.year != 0 || vehicleInf.mileage != 0 || vehicleInf.engine.isEmpty
-    }
-
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
@@ -52,51 +58,53 @@ struct AddVehicleForm: View {
 
     private var formFields: some View {
         VStack {
-            TextFieldComp(
-                text: $vehicleInf.brand,
-                prompt: "Vehicle Brand, Ex: Toyota, Ford, Volvo",
-                image: "line.horizontal.3",
-                isAdaptative: false
-            )
-
+            
             TextFieldComp(
                 text: $vehicleInf.model,
+                prompt: "Vehicle Brand, Ex: Kenworth, Volvo",
+                leadingIcon: "line.horizontal.3",
+                color: .gray,
+                autocapitalization: .words
+            )
+            
+            TextFieldComp(
+                text: $vehicleInf.brand,
                 prompt: "Vehicle Model, Ex: Corolla, Mustang, XC90",
-                image: "car.rear.fill",
-                isAdaptative: false
+                leadingIcon: "car.rear.fill",
+                color: .gray,
+                autocapitalization: .words
             )
             
             TextFieldComp(
                 text: $vehicleInf.engine,
                 prompt: "Engine Size, Ex: 1.5L, 2.0L",
-                image: "engine.combustion.fill",
-                isAdaptative: false
+                leadingIcon: "engine.combustion.fill",
+                color: .gray,
+                autocapitalization: .words
             )
 
             HStack {
                 TextFieldComp(
-                    text: $vehicleInf.engine,
+                    intValue: $vehicleInf.year,
                     prompt: "Year, Ex: 2020",
-                    image: "calendar",
-                    isAdaptative: false
+                    leadingIcon: "calendar"
                 )
                 
                 TextFieldComp(
                     text: $vehicleInf.plate,
                     prompt: "Plate, Ex: ABC-123",
-                    image: "rectangle.and.pencil.and.ellipsis",
-                    isAdaptative: false
+                    leadingIcon: "rectangle.and.pencil.and.ellipsis"
                 )
             }
 
             vehicleSpecsSection
-
+            
+            
             TextFieldComp(
-                text: $vehicleInf.engine,
+                intValue: $vehicleInf.mileage,
                 prompt: "Vehicle Mileage",
-                image: "gauge.with.dots.needle.50percent",
-                isAdaptative: false
-            ).numberKeyboardIfAvailable()
+                leadingIcon: "gauge.with.dots.needle.50percent"
+            )
         }
     }
 
@@ -140,15 +148,18 @@ struct AddVehicleForm: View {
                 text: "Add Vehicle",
                 color: .blue,
                 image: "car.fill",
-                maxWidth: 150,
-                isEnabled: !isFormIncomplete) {
-                    
+                maxWidth: 150) {
+                    if isTransportSelected {
+                        vm.addVehicle(TransportationVehicle(vehicleInformation: vehicleInf))
+                    } else {
+                        vm.addVehicle(PrivateVehicle(vehicleInformation: vehicleInf))
+                    }
+                    dimiss()
                 }
         }
         .padding(.top)
     }
-
-}
+ }
 
 private struct VehicleCategoryButton: View {
     let title: String
@@ -181,5 +192,5 @@ private struct VehicleCategoryButton: View {
 }
 
 #Preview {
-    AddVehicleForm()
+    AddVehicleForm(vm: AddVehicleViewModel(user: .mock))
 }

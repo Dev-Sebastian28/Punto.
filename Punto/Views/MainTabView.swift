@@ -13,6 +13,7 @@ struct MainTabView: View {
     init(user: User) {
         self.user = user
     }
+    
     var body: some View {
             TabView {
                 Tab("Cargos", systemImage: "shippingbox.fill") {
@@ -27,11 +28,10 @@ struct MainTabView: View {
                     FleetView(user: user)
                 }
 
-                Tab("Driver", systemImage: "person.crop.circle.fill") {
-                    DriverControlPanel(vehicle: User.mock.vehicles.first!)
+                Tab("Account", systemImage: "person.crop.circle.fill") {
+                    EmptyView()
                 }
             }
-        
     }
 }
 

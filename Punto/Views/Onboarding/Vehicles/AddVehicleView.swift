@@ -13,7 +13,6 @@ struct AddVehicleView: View {
     @State private var vm: AddVehicleViewModel
     
     init(user: User) {
-        self.isAddVehiclePresented = false
         _vm = State(wrappedValue: AddVehicleViewModel(user: user))
     }
     
@@ -31,6 +30,7 @@ struct AddVehicleView: View {
                             ) {
                                 isAddVehiclePresented.toggle()
                             }
+                        
                     } else {
                         EmptyStateVehicleCard(isPresented: $isAddVehiclePresented)
                     }
@@ -38,8 +38,7 @@ struct AddVehicleView: View {
             }
             .background(Color.platformGroupedBackground)
             .sheet(isPresented: $isAddVehiclePresented) {
-                AddVehicleForm()
-                
+                AddVehicleForm(vm: self.vm)
             }
         }
     }
