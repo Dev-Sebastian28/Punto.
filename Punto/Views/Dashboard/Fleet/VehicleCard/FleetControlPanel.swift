@@ -21,6 +21,7 @@ struct FleetControlPanel: View {
         VStack(alignment: .leading, spacing: 10) {
             if hideHeader {
                 header
+                
             } else {
                 header
                 infScroll
@@ -66,33 +67,29 @@ struct FleetControlPanel: View {
             }.font(.subheadline.weight(.regular))
         }.font(.largeTitle.bold())
     }
+    
     private var infScroll: some View  {
         ScrollView(.horizontal) {
             HStack {
-                if vm.enoughVehiclesToQuickInfo {
-                
-                        summaryCard(.init(
-                            title: "Actives",
-                            value: "\(vm.activeVehiclesCount)",
-                            icon: "")
-                        )
-                        summaryCard(.init(
-                            title: "Inactives",
-                            value: "\(vm.inactiveVehiclesCount)",
-                            icon: "")
-                        )
-                        summaryCard(.init(
-                            title: "Maintena.",
-                            value: "\(vm.manteinicesCount)",
-                            icon: "")
-                        )
-                    
-                } else {
-                    EmptyView()
-                }
+                summaryCard(.init(
+                    title: "Actives",
+                    value: "\(vm.activeVehiclesCount)",
+                    icon: "")
+                )
+                summaryCard(.init(
+                    title: "Inactives",
+                    value: "\(vm.inactiveVehiclesCount)",
+                    icon: "")
+                )
+                summaryCard(.init(
+                    title: "Maintena.",
+                    value: "\(vm.manteinicesCount)",
+                    icon: "")
+                )
             }
         }
     }
+    
     private var balanceSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
@@ -108,36 +105,35 @@ struct FleetControlPanel: View {
                 .font(.title2.bold())
         }.customBackground(color: .white.opacity(0.14))
     }
+    
     @ViewBuilder
     private var searchBarSection: some View {
-        if  vm.enoughVehiclesToQuickInfo {
-            HStack(spacing: 12) {
-                Image(systemName: "magnifyingglass")
-                    .foregroundStyle(Color.brandBlue)
-                
-                TextField(
-                    "Search vehicle, plate or driver",
-                    text: $searchText
-                ).textFieldStyle(.plain)
-                
-                if !searchText.isEmpty {
-                    Button {
-                        searchText = ""
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(Color.textMuted)
-                    }.buttonStyle(.plain)
-                }
+        HStack(spacing: 12) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(Color.brandBlue)
+            
+            TextField(
+                "Search vehicle, plate or driver",
+                text: $searchText
+            ).textFieldStyle(.plain)
+            
+            if !searchText.isEmpty {
+                Button {
+                    searchText = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(Color.textMuted)
+                }.buttonStyle(.plain)
             }
-            .padding(.horizontal, 16)
-            .frame(height: 44)
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 4)
-        } else {
-            EmptyView()
         }
+        .padding(.horizontal, 16)
+        .frame(height: 44)
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 4)
+        
     }
+    
     private func summaryCard(_ item: FleetSummaryItem) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack(alignment: .center, spacing: 12) {

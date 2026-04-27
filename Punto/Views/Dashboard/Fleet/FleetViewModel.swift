@@ -9,13 +9,15 @@ import Foundation
 
 @Observable
 final class FleetViewModel {
-    private(set) var user: User
+    private var user: User
     var vehicles: [Vehicle] { user.vehicles }
+    var hasVehicles: Bool { !vehicles.isEmpty }
     var enoughVehiclesToQuickInfo: Bool { vehicles.count >= 3 }
     
     var activeVehiclesCount: Int {
         vehicles.filter({ $0.isActive == true }).count
     }
+    
     var inactiveVehiclesCount: Int {
         vehicles.filter({ $0.isActive == false }).count
     }
@@ -34,7 +36,7 @@ final class FleetViewModel {
     }
     var vehiclesCount: String { vehicles.count.description }
     
-    var totalExpenses: [Expense] {
+    private var totalExpenses: [Expense] {
         var expenses: [Expense] = []
         for vehicle in vehicles {
             expenses.append(contentsOf: vehicle.expenses)
