@@ -80,7 +80,7 @@ struct ExpensesView: View {
     private var controlView: some View {
         HStack {
             
-            TextFieldComp(text: $state.search, prompt: "Search for", image: "magnifyingglass")
+            TextFieldComp(text: $state.search, prompt: "Search for", leadingIcon: "magnifyingglass")
             
             // Filter Button
             ControlButton(iconName: "slider.vertical.3") {

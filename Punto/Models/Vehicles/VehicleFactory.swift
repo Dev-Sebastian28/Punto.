@@ -24,7 +24,6 @@ protocol Vehicle {
 
 // First Concrete Product: mulas - camiones - pickUps
 class TransportationVehicle: Vehicle {
-    
     var id: UUID = UUID()
     var maintenance: [VehiclePartWrapper]
     var expenses: [Expense]
@@ -48,11 +47,10 @@ class TransportationVehicle: Vehicle {
         self.id = id
         self.vehicleInformation = vehicleInformation
         self.isActive = isActive
-        
-        self.maintenance = Array([VehiclePartWrapper].dummyData().shuffled().prefix(Int.random(in: 2...5)))
-        self.expenses = Array([Expense].dummyData().shuffled().prefix(Int.random(in: 3...6)))
-        self.tasks = Array([VTask].dummyData().shuffled().prefix(Int.random(in: 3...6)))
-        self.protocols = Array([VehicleProtocol].dummyData().shuffled().prefix(2))
+        self.maintenance = maintenance
+        self.expenses = expenses
+        self.tasks = tasks
+        self.protocols = protocols
         self.drivers = drivers
     }
 }
@@ -81,12 +79,10 @@ class PrivateVehicle: Vehicle {
         self.id = id
         self.vehicleInformation = vehicleInformation
         self.isActive = isActive
-        
-        // Llamadas aleatorias usando las extensiones corregidas
-        self.maintenance = Array([VehiclePartWrapper].dummyData().shuffled().prefix(Int.random(in: 3...6)))
-        self.expenses = Array([Expense].dummyData().shuffled().prefix(Int.random(in: 3...6)))
-        self.tasks = Array([VTask].dummyData().shuffled().prefix(3))
-        self.protocols = Array([VehicleProtocol].dummyData().shuffled().prefix(2))
+        self.maintenance = maintenance
+        self.expenses = expenses
+        self.tasks = tasks
+        self.protocols = protocols
         self.drivers = drivers
 
     }
