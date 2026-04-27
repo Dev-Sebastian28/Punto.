@@ -89,9 +89,8 @@ private extension TaskDetailView {
                 TextFieldComp(
                     text: $editedTask.title,
                     prompt: "Task name...",
-                    image: "pencil",
+                    leadingIcon: "pencil",
                     color: .blue,
-                    isAdaptative: true
                 )
             }
 

@@ -27,7 +27,7 @@ struct AddExpenseView: View {
             TextFieldComp(
                 text: $expense.name,
                 prompt: "Ex: re-fill gasoline",
-                image: "circle",
+                leadingIcon: "circle",
                 color: .gray.opacity(0.4)
             )
             
@@ -36,7 +36,7 @@ struct AddExpenseView: View {
             TextFieldComp(
                 text: $expense.name,
                 prompt: "Ex: I received 500 $",
-                image: "text.alignleft",
+                leadingIcon: "text.alignleft",
                 color: .gray.opacity(0.4)
             )
             

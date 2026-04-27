@@ -30,18 +30,18 @@ struct AddDriverForm: View {
             TextFieldComp(
                 text: $driver.name,
                 prompt: "Driver Name",
-                image: "person.fill"
+                leadingIcon: "person.fill"
             ).padding(.bottom, 8)
             
             TextFieldComp(
                 text: $phone,
                 prompt: "Driver Phone Number",
-                image: "number"
+                leadingIcon: "number"
             )
             TextFieldComp(
                 text: $driver.email,
                 prompt: "Driver Mail",
-                image: "at"
+                leadingIcon: "at"
             )
             
             HStack {

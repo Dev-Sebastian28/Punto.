@@ -86,10 +86,11 @@ struct AddTaskView: View {
     private var fieldsSection: some View {
         VStack(spacing: 10) {
             labeledField("Task name") {
-                TextFieldComp(text: $task.title, prompt: "Task name...", image: "pencil", color: .blue)
+                TextFieldComp(text: $task.title, prompt: "Task name...", leadingIcon: "pencil", color: .blue)
             }
+            
             labeledField("Description") {
-                TextFieldComp(text: $description, prompt: "Add a short description...", image: "list.dash")
+                TextFieldComp(text: $description, prompt: "Add a short description...", leadingIcon: "list.dash")
             }
         }
     }
@@ -159,7 +160,7 @@ struct AddTaskView: View {
                     .tint(.blue)
 
                 if useLocation {
-                    TextFieldComp(text: $location, prompt: "Search location...", image: "location", color: .blue)
+                    TextFieldComp(text: $location, prompt: "Search location...", leadingIcon: "location")
                         .transition(.move(edge: .top).combined(with: .opacity))
                 }
             }

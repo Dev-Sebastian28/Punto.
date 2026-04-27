@@ -126,14 +126,14 @@ private extension ProtocolDetailView {
             VStack(spacing: 8) {
                 TextFieldComp(text: $element.name,
                               prompt: "Protocol name...",
-                              image: "pencil", color: .orange)
+                              leadingIcon: "pencil", color: .orange)
                 TextFieldComp(
                     text: Binding(
                         get: { element.description ?? "" },
                         set: { element.description = $0.isEmpty ? nil : $0 }
                     ),
                     prompt: "Optional description...",
-                    image: "list.dash"
+                    leadingIcon: "list.dash"
                 )
             }
         }
@@ -392,8 +392,8 @@ private struct AddTaskSheet: View {
             }
             .padding(.top, 4)
 
-            TextFieldComp(text: $name, prompt: "Task name...", image: "pencil", color: .orange)
-            TextFieldComp(text: $description, prompt: "Description (optional)", image: "list.dash")
+            TextFieldComp(text: $name, prompt: "Task name...", leadingIcon: "pencil", color: .orange)
+            TextFieldComp(text: $description, prompt: "Description (optional)", leadingIcon: "list.dash")
 
             HStack(spacing: 10) {
                 Button("Cancel") { dismiss() }
