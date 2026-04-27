@@ -5,4 +5,9 @@
 //  Created by Sebastian Garcia on 27/04/26.
 //
 
-import Foundation
+import Testing
+
+extension Tag {
+    @Tag static var critical: Self
+    @Tag static var auth: Self
+}
