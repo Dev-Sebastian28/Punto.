@@ -32,7 +32,7 @@ struct SignInCard: View {
             TextFieldComp(
                 text: $email,
                 prompt: "Email",
-                image: "envelope",
+                leadingIcon: "envelope",
                 color: .myBlue
             )
 

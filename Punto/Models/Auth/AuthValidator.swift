@@ -33,23 +33,27 @@ struct AuthValidator {
     private static let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
     private let emailPredicate = NSPredicate(format: "SELF MATCHES %@", AuthValidator.emailRegex)
     
-    func signUpValidation(email: String?, password: String?) throws {
-        guard let email, !email.isEmpty else { throw ValidatorError.emptyFields }
+    func emailValidation(email: String?) throws -> Bool {
+        guard let email, !email.isEmpty else {
+            throw ValidatorError.emptyFields
+        }
+        guard emailPredicate.evaluate(with: email) else {
+            throw ValidatorError.invalidEmail
+        }
+        
+        return true
+    }
+    
+    func passwordValidation(password: String?) throws  -> Bool {
         guard let password, !password.isEmpty else { throw ValidatorError.emptyFields }
-        guard emailPredicate.evaluate(with: email) else { throw ValidatorError.invalidEmail }
 
         if password.count < 8 { throw ValidatorError.passwordTooShort }
         if !password.contains(where: { $0.isNumber }) { throw ValidatorError.passwordMissingNumber }
         if !password.contains(where: { $0.isSymbol }) { throw ValidatorError.passwordMissingSymbol }
         if !password.contains(where: { $0.isLowercase }) { throw ValidatorError.passwordMissingLowercase }
         if !password.contains(where: { $0.isUppercase }) { throw ValidatorError.passwordMissingUppercase }
-    }
-    
-    func loginValidation(email: String, password: String) throws {
-        guard !email.isEmpty else { throw ValidatorError.emptyFields }
-        guard !password.isEmpty else { throw ValidatorError.emptyFields }
         
-        guard emailPredicate.evaluate(with: email) else { throw ValidatorError.invalidEmail }
+        return true
     }
 }
 

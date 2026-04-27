@@ -102,8 +102,8 @@ final class AuthViewModel {
         switch mode {
         case .signIn:
             do {
-                try validator.loginValidation(email: email, password: password)
-                return true
+                let isEmailValid = try validator.emailValidation(email: email)
+                return isEmailValid
             } catch let error as ValidatorError {
                 operationState = .failure(.validation(error.suggestion))
                 return false
@@ -113,8 +113,11 @@ final class AuthViewModel {
             }
         case .signUp:
             do {
-                try validator.signUpValidation(email: email, password: password)
-                return true
+                let isEmailValid = try validator.emailValidation(email: email)
+                let isPasswordSecure = try validator.passwordValidation(password: password)
+
+                return isEmailValid && isPasswordSecure
+                
             } catch let error as ValidatorError {
                 operationState = .failure(.validation(error.suggestion))
                 return false
