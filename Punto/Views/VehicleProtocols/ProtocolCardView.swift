@@ -88,9 +88,6 @@ struct ProtocolCardView: View {
                             Label(isHide ? "Show" : "Hide", systemImage: isHide ? "chevron.up" : "chevron.down")
                                 .foregroundStyle(style).bold()
                                 .padding(8)
-                                .background(
-                                    Color.white                               .clipShape(.circle)
-                                )
                         }.animation(.spring, value: isHide)
                     }
                     

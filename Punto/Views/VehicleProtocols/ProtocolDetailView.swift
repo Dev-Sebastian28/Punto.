@@ -15,34 +15,41 @@ enum Mode {
 struct ProtocolDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isPresented = false
-    @State private var element: VehicleProtocol
-    let oldElement: VehicleProtocol
+    @State private var Vprotocol: VehicleProtocol
+    @State private var vm: ProtocolViewModel
+
+    let oldProtocol: VehicleProtocol
     let mode: Mode
     let index: Int?
-    var vm: ProtocolViewModel
     
     private var isValid: Bool {
         switch mode {
-        case .add:  return !element.name.isEmpty && !element.tasks.isEmpty
-        case .edit: return oldElement != element
+        case .add:  return !Vprotocol.name.isEmpty && !Vprotocol.tasks.isEmpty
+        case .edit: return oldProtocol != Vprotocol
         }
     }
     
     // MARK: - Inits (sin cambios)
     
     init(user: User, index: Int) {
-        let empty = VehicleProtocol(id: .init(), name: "", description: nil,
-                                    tasks: [], importance: .medium, time: .daily)
-        _element = State(initialValue: empty)
-        self.oldElement = empty
+        let empty = VehicleProtocol(
+            id: .init(),
+            name: "",
+            description: nil,
+            tasks: [],
+            importance: .medium,
+            time: .daily
+        )
+        _Vprotocol = State(initialValue: empty)
+        self.oldProtocol = empty
         self.vm = .init(user: user, selectedVehicleIndex: index)
         self.index = index
         self.mode = .add
     }
     
     init(user: User, element: VehicleProtocol, index: Int) {
-        _element = State(initialValue: element)
-        self.oldElement = element
+        _Vprotocol = State(initialValue: element)
+        self.oldProtocol = element
         self.vm = .init(user: user, selectedVehicleIndex: index)
         self.index = index
         self.mode = .edit
@@ -52,12 +59,6 @@ struct ProtocolDetailView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Capsule()
-                .fill(Color(.systemGray4))
-                .frame(width: 36, height: 4)
-                .padding(.top, 12)
-                .padding(.bottom, 20)
-            
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 24) {
                     header
@@ -78,7 +79,7 @@ struct ProtocolDetailView: View {
         .background(Color(.systemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 24))
         .sheet(isPresented: $isPresented) {
-            AddTaskSheet(collection: $element.tasks)
+            AddTaskSheet(collection: $Vprotocol.tasks)
                 .presentationDetents([.height(220)])
                 .presentationDragIndicator(.visible)
         }
@@ -95,9 +96,9 @@ private extension ProtocolDetailView {
                 HStack(spacing: 8) {
                     Image(systemName: "shield.lefthalf.filled")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(.yellow)
                         .frame(width: 28, height: 28)
-                        .background(Color.orange.opacity(0.12))
+                        .background(Color.yellow.opacity(0.12))
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                     
                     Text(mode == .add ? "Add protocol" : "Edit protocol")
@@ -113,7 +114,7 @@ private extension ProtocolDetailView {
             Button { dismiss() } label: {
                 Image(systemName: "xmark")
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.yellow)
                     .frame(width: 30, height: 30)
                     .background(Color(.systemGray6))
                     .clipShape(Circle())
@@ -124,13 +125,13 @@ private extension ProtocolDetailView {
     var infoSection: some View {
         labeledField("Protocol info") {
             VStack(spacing: 8) {
-                TextFieldComp(text: $element.name,
+                TextFieldComp(text: $Vprotocol.name,
                               prompt: "Protocol name...",
-                              leadingIcon: "pencil", color: .orange)
+                              leadingIcon: "pencil", color: .yellow)
                 TextFieldComp(
                     text: Binding(
-                        get: { element.description ?? "" },
-                        set: { element.description = $0.isEmpty ? nil : $0 }
+                        get: { Vprotocol.description ?? "" },
+                        set: { Vprotocol.description = $0.isEmpty ? nil : $0 }
                     ),
                     prompt: "Optional description...",
                     leadingIcon: "list.dash"
@@ -150,11 +151,11 @@ private extension ProtocolDetailView {
     }
     
     func importanceButton(for level: ProtocolImportance) -> some View {
-        let isSelected = element.importance == level
+        let isSelected = Vprotocol.importance == level
         let color = level.color   // ver extensión abajo
         
         return Button {
-            withAnimation(.easeInOut(duration: 0.2)) { element.importance = level }
+            withAnimation(.easeInOut(duration: 0.2)) { Vprotocol.importance = level }
         } label: {
             VStack(spacing: 6) {
                 Circle().fill(color).frame(width: 8, height: 8)
@@ -180,7 +181,7 @@ private extension ProtocolDetailView {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Picker("", selection: $element.time) {
+                Picker("", selection: $Vprotocol.time) {
                     ForEach(ProtocolTime.allCases, id: \.self) { t in
                         Text(t.rawValue).tag(t)
                     }
@@ -197,7 +198,7 @@ private extension ProtocolDetailView {
     var tasksSection: some View {
         labeledField("Tasks") {
             VStack(spacing: 0) {
-                if element.tasks.isEmpty {
+                if Vprotocol.tasks.isEmpty {
                     // Empty state
                     VStack(spacing: 8) {
                         Image(systemName: "checklist")
@@ -217,8 +218,8 @@ private extension ProtocolDetailView {
                 } else {
                     // Task list
                     VStack(spacing: 0) {
-                        ForEach(Array(element.tasks.enumerated()), id: \.element.id) { i, task in
-                            taskRow(task, isLast: i == element.tasks.count - 1)
+                        ForEach(Array(Vprotocol.tasks.enumerated()), id: \.element.id) { i, task in
+                            taskRow(task, isLast: i == Vprotocol.tasks.count - 1)
                         }
                     }
                     .background(Color(.systemGray6))
@@ -264,7 +265,7 @@ private extension ProtocolDetailView {
             // Swipe-to-delete would be ideal, but a small X works in sheets
             Button {
                 withAnimation {
-                    element.tasks.removeAll { $0.id == task.id }
+                    Vprotocol.tasks.removeAll { $0.id == task.id }
                 }
             } label: {
                 Image(systemName: "xmark")
@@ -290,52 +291,23 @@ private extension ProtocolDetailView {
     @ViewBuilder
     var actionButtons: some View {
         if mode == .add {
-            Button {
-                vm.addProtocol(element)
+            DButtonComp(text: "Create protocol", color: .yellow, image: "shield") {
+                vm.addProtocol(Vprotocol)
                 dismiss()
-            } label: {
-                Label("Create protocol", systemImage: "plus")
-                    .font(.body.weight(.semibold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 15)
-                    .background(isValid ? Color.orange : Color.orange.opacity(0.4))
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-            }
-            .disabled(!isValid)
-            .animation(.easeInOut(duration: 0.2), value: isValid)
-            
+            }.animation(.easeInOut(duration: 0.2), value: isValid)
         } else {
             HStack(spacing: 10) {
                 // Delete
-                Button {
-                    if let index { vm.eliminateProtocol(at: index); dismiss() }
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.red)
-                        .padding(.vertical, 15)
-                        .frame(maxWidth: 110)
-                        .background(Color.red.opacity(0.08))
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                        .overlay(RoundedRectangle(cornerRadius: 14)
-                            .stroke(Color.red.opacity(0.25), lineWidth: 0.5))
-                }
+                DButtonComp(text: "Delete", color: .red, image: "trash") {
+                    vm.addProtocol(Vprotocol)
+                    dismiss()
+                }.animation(.easeInOut(duration: 0.2), value: isValid)
                 
                 // Save
-                Button {
-                    if let index { vm.updateProtocol(element, at: index); dismiss() }
-                } label: {
-                    Label("Save changes", systemImage: "checkmark")
-                        .font(.body.weight(.semibold))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 15)
-                        .background(isValid ? Color.orange : Color.orange.opacity(0.4))
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                }
-                .disabled(!isValid)
-                .animation(.easeInOut(duration: 0.2), value: isValid)
+                DButtonComp(text: "Save changes", color: (isValid ? Color.orange : Color.orange.opacity(0.4)), image: "checkmark") {
+                    vm.addProtocol(Vprotocol)
+                    dismiss()
+                }.animation(.easeInOut(duration: 0.2), value: isValid)
             }
         }
     }
@@ -343,7 +315,7 @@ private extension ProtocolDetailView {
     // MARK: - Helper
     
     @ViewBuilder
-    func labeledField<C: View>(_ title: String, @ViewBuilder content: () -> C) -> some View {
+    private func labeledField<C: View>(_ title: String, @ViewBuilder content: () -> C) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 6) {
                 Text(title.uppercased())
@@ -351,8 +323,8 @@ private extension ProtocolDetailView {
                     .foregroundStyle(.secondary)
                     .tracking(0.6)
                 // Badge de conteo solo en tasks
-                if title == "Tasks" && !element.tasks.isEmpty {
-                    Text("\(element.tasks.count)")
+                if title == "Tasks" && !Vprotocol.tasks.isEmpty {
+                    Text("\(Vprotocol.tasks.count)")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.orange)
                         .padding(.horizontal, 6)

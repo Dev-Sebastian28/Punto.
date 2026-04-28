@@ -13,8 +13,6 @@ struct ProtocolsView: View {
     init(user: User) {
         _vm = State(wrappedValue: ProtocoslListViewModel(user: user))
         self.user = user
-        print(user.id)
-        
     }
     
     var body: some View {
@@ -42,11 +40,8 @@ struct ProtocolsView: View {
                 )
                 
                 if vm.areProtocols {
-                    
                     protcolsList
-                    
-                }
-                else {
+                } else {
                     ContentUnavailableView(
                         "There are no Protocols",
                         systemImage: "Shield",
@@ -59,8 +54,7 @@ struct ProtocolsView: View {
                     user: user,
                     index: vm.selectedVehicleIndex
                 )
-            } label:
-            {
+            } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "shield")
                         .font(.headline.weight(.bold))
@@ -76,7 +70,6 @@ struct ProtocolsView: View {
                 .clipShape(Capsule())
                 .shadow(color: .blue.opacity(0.3), radius: 10, x: 0, y: 6)
             }.padding()
-
         }
     }
     
@@ -93,7 +86,6 @@ struct ProtocolsView: View {
                 }.buttonStyle(.automatic)
             }
         }
-        
     }
 }
 
