@@ -1,11 +1,7 @@
 import SwiftUI
 
 struct AddExpenseView: View {
-    @State private var showScanner = false
-    @State private var scannedImages: [UIImage] = []
-    @State private var errorMessage: String?
     @Environment(\.dismiss) var dismiss
-    
     @State private var expense: Expense = .init(
         name: "",
         description: "",
@@ -13,8 +9,7 @@ struct AddExpenseView: View {
         date: Date(),
         type: ""
     )
-    
-    var vm: ExpenseViewModel
+    let vm: ExpenseViewModel
     
     private var isValid: Bool {
         !expense.name.isEmpty && expense.amount != 0.0
@@ -34,7 +29,10 @@ struct AddExpenseView: View {
             // Description
             Text("Description").font(.headline)
             TextFieldComp(
-                text: $expense.name,
+                text: Binding(
+                    get: { expense.description ?? "" },
+                    set: { expense.description = $0.trimmingCharacters(in: .whitespaces) }
+                ),
                 prompt: "Ex: I received 500 $",
                 leadingIcon: "text.alignleft",
                 color: .gray.opacity(0.4)
@@ -60,34 +58,14 @@ struct AddExpenseView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             }
             
-            // Buttons
-            button
-        }
-        .padding()
-        .ignoresSafeArea(edges: .bottom)
-    }
-    
-    private var button: some View {
-        HStack(spacing: 12) {
-            Button {
+            // Button
+            DButtonComp(text: "Add Expenses", color: .green, image: "plus.circle.fill") {
                 vm.addExpense(expense)
                 dismiss()
             }
-            label: {
-                HStack {
-                    Image(systemName: "plus.circle.fill")
-                    Text("Add Expense").bold()
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-            }
-            .disabled(!isValid)
-            .buttonStyle(.borderedProminent)
-            .tint(.green)
-            .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-            .shadow(color: .green.opacity(0.25), radius: 8, x: 0, y: 4)
-
         }
+        .padding()
+        .ignoresSafeArea(edges: .bottom)
     }
 }
 

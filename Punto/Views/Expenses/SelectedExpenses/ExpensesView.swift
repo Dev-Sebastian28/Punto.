@@ -10,7 +10,6 @@ import SwiftUI
 struct ExpensesView: View {
     @State private var isPresentedAddExpe: Bool = false
     @State private var isPresentedFilter: Bool = false
-    @State private var isInfoPresented: Bool = false
     
     @State private var state: ExpensesState
     @State private var vm : ExpensesViewModel
@@ -22,7 +21,7 @@ struct ExpensesView: View {
         _state = State(wrappedValue: state)
         _vm = State(wrappedValue: ExpensesViewModel(user: user, state: state))
         _listVM = State(wrappedValue: ExpenseListViewModel(user: user, state: state))
-        _expenseVM = State(wrappedValue: ExpenseViewModel(user: user, index: state.selectedIndex))
+        _expenseVM = State(wrappedValue: ExpenseViewModel(user: user, state: state))
     }
     
     var body: some View {
@@ -43,11 +42,6 @@ struct ExpensesView: View {
                 )
                 
                 controlView
-                
-                if isInfoPresented {
-                    information
-                }
-                
                 entriesList
                 
             }
@@ -86,64 +80,7 @@ struct ExpensesView: View {
             ControlButton(iconName: "slider.vertical.3") {
                 isPresentedFilter.toggle()
             }
-            
-            // Over view button
-            ControlButton(iconName: "square.split.2x2.fill") {
-                isInfoPresented.toggle()
-            }
         }.bold()
-    }
-    private var information: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            
-            // Balance
-            HStack(spacing: 6) {
-                Label("Balance:", systemImage: "wallet.pass.fill")
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
-                
-                Spacer()
-                
-                Text(vm.balance)
-                    .font(.title3.bold())
-                    .foregroundStyle(.green)
-                
-            }.customBackground(color: .white)
-            
-            HStack {
-                // Incomes
-                HStack(spacing: 6) {
-                    Image(systemName: "arrow.down.circle.fill")
-                        .foregroundStyle(.blue)
-                        .font(.title2)
-                    
-                    Text(vm.losses)
-                        .font(.headline.bold())
-                        .foregroundStyle(.blue)
-                }
-                .customBackground(color: .blue.opacity(0.15))
-                
-                Spacer()
-                
-                // Losses
-                HStack(spacing: 6) {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .foregroundStyle(.red)
-                        .font(.title2)
-                    Text(vm.profit)
-                        .font(.headline.bold())
-                        .foregroundStyle(.red)
-                }
-                .customBackground(color: .red.opacity(0.35))
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 8)
-        .background {
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundStyle(viewStyle).opacity(0.2)
-        }
     }
     private var entriesList: some View {
         ScrollView(.vertical, showsIndicators: true) {

@@ -38,13 +38,3 @@ final class ExpensesViewModel {
     }
 }
 
-
-
-
-
-//func addNewExpense(name: String, description: String, amount: Double, date: Date, type: String) {
-//    let newExpense = Expense(name: name, description: description, amount: amount, date: date, type: type)
-//    if user.vehicles.indices.contains(selectedVehicleIndex) {
-//        user.vehicles[selectedVehicleIndex].expenses.append(newExpense)
-//    }
-//}
