@@ -103,6 +103,13 @@ struct SignUpCard: View {
 }
 
 #Preview {
-    SignUpCard(vm: AuthViewModel(mode: .signUp, service: .init()))
-        .environment(NavigationRouter())
+    SignUpCard(
+        vm: AuthViewModel(
+            mode: .signUp,
+            service: AuthService()
+        )
+    )
+    .environment(
+        NavigationRouter()
+    )
 }

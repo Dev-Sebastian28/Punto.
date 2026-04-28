@@ -89,6 +89,13 @@ struct SignInCard: View {
 }
 
 #Preview {
-    SignInCard(vm: AuthViewModel(mode: .signIn, service: .init()))
-        .environment(NavigationRouter())
+    SignInCard(
+        vm: AuthViewModel(
+            mode: .signIn,
+            service: AuthService()
+        )
+    )
+    .environment(
+        NavigationRouter()
+    )
 }

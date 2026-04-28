@@ -9,7 +9,12 @@ import Foundation
 import Supabase
 import Auth
 
-struct AuthService {
+protocol AuthServiceProtocol {
+    func login(email: String, password: String) async throws -> AuthStatus
+    func signup(email: String, password: String) async throws -> AuthStatus
+}
+
+struct AuthService: AuthServiceProtocol {
     private let client: SupabaseClient
     
     init() {

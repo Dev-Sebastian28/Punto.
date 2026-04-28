@@ -6,7 +6,10 @@
 import SwiftUI
 
 struct AuthView: View {
-    @State private var vm = AuthViewModel(mode: .signUp, service: .init())
+    @State private var vm = AuthViewModel(
+        mode: .signUp,
+        service: AuthService()
+    )
     @Environment(NavigationRouter.self) var router
 
     var body: some View {

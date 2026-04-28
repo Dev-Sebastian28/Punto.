@@ -65,11 +65,11 @@ final class AuthViewModel {
     private(set) var operationState: OperationState = .idle
 
     // MARK: Dependencies 
-    private let service: AuthService
+    private let service: any AuthServiceProtocol
     private let validator: AuthValidator = .init()
 
     // MARK: Init
-    init(mode: AuthMode, service: AuthService) {
+    init(mode: AuthMode, service: any AuthServiceProtocol) {
         self.mode = mode
         self.service = service
     }
@@ -134,6 +134,7 @@ final class AuthViewModel {
         defer {
             if operationState.isLoading { operationState = .idle }
         }
+        
         do {
             authStatus = try await operation()
             operationState = .idle
