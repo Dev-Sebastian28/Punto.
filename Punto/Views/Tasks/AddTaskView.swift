@@ -3,8 +3,12 @@ import SwiftUI
 struct AddTaskView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var task: VTask = .init(
-        id: .init(), title: "", description: "",
-        deadLine: .now, importance: .medium, status: .pending
+        id: .init(),
+        title: "",
+        description: "",
+        deadLine: .now,
+        importance: .medium,
+        status: .pending
     )
     @State private var location: String = ""
     @State private var description: String = ""
@@ -205,5 +209,5 @@ struct AddTaskView: View {
 
 
 #Preview {
-    AddTaskView(vm: .init(user: .mock, selectedVehicle: 0))
+    AddTaskView(vm: TaskViewModel(user: .mock, state: TaskState()))
 }

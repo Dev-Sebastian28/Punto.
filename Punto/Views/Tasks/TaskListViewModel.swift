@@ -10,7 +10,12 @@ import Foundation
 @Observable
 final class TaskListViewModel {
     private let user: User
-    var selectedVehicle: Int
+    private let state: TaskState
+
+    var selectedVehicle: Int {
+        state.selectedVehicleIndex
+    }
+    
     private var vehicles: [Vehicle] { user.vehicles }
     var hasVehicles: Bool { !vehicles.isEmpty }
     
@@ -28,19 +33,23 @@ final class TaskListViewModel {
     var selectedVehiclePlate: String {
         user.vehicles[selectedVehicle].vehicleInformation.plate
     }
-    init(user: User, selectedVehicle: Int = 0) {
+    init(user: User, state: TaskState) {
         self.user = user
-        self.selectedVehicle = selectedVehicle
+        self.state = state
     }
 }
 
 @Observable
 final class TaskViewModel {
     private var user: User
-    var selectedVehicle: Int
+    private let state: TaskState
+
+    var selectedVehicle: Int {
+        state.selectedVehicleIndex
+    }
+    
     
     func addTask(_ task: VTask) {
-        
         user.vehicles[selectedVehicle].tasks.append(task)
     }
     
@@ -52,8 +61,8 @@ final class TaskViewModel {
         user.vehicles[selectedVehicle].tasks.removeTask(at: index)
     }
     
-    init(user: User, selectedVehicle: Int) {
+    init(user: User, state: TaskState) {
         self.user = user
-        self.selectedVehicle = selectedVehicle
+        self.state = state
     }
 }

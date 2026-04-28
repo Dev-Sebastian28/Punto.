@@ -10,9 +10,6 @@ import Testing
 import Foundation
 
 
-
-
-
 @Suite("Auth State Tests", .tags(.critical, .auth))
 struct AuthStateTests {
         

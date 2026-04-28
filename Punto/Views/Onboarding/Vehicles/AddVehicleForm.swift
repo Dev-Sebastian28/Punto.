@@ -13,7 +13,7 @@ struct AddVehicleForm: View {
     @State private var isPrivateSelected = false
     @State private var isTransportSelected = true
     @State private var vehicleInf: VehicleInformation = .init(
-        image: "",
+        image: "ken",
         plate: "",
         brand: "",
         model: "",

@@ -20,16 +20,16 @@ struct ProtocolDetailView: View {
     let mode: Mode
     let index: Int?
     var vm: ProtocolViewModel
-
+    
     private var isValid: Bool {
         switch mode {
         case .add:  return !element.name.isEmpty && !element.tasks.isEmpty
         case .edit: return oldElement != element
         }
     }
-
+    
     // MARK: - Inits (sin cambios)
-
+    
     init(user: User, index: Int) {
         let empty = VehicleProtocol(id: .init(), name: "", description: nil,
                                     tasks: [], importance: .medium, time: .daily)
@@ -39,7 +39,7 @@ struct ProtocolDetailView: View {
         self.index = index
         self.mode = .add
     }
-
+    
     init(user: User, element: VehicleProtocol, index: Int) {
         _element = State(initialValue: element)
         self.oldElement = element
@@ -47,9 +47,9 @@ struct ProtocolDetailView: View {
         self.index = index
         self.mode = .edit
     }
-
+    
     // MARK: - Body
-
+    
     var body: some View {
         VStack(spacing: 0) {
             Capsule()
@@ -57,7 +57,7 @@ struct ProtocolDetailView: View {
                 .frame(width: 36, height: 4)
                 .padding(.top, 12)
                 .padding(.bottom, 20)
-
+            
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 24) {
                     header
@@ -69,7 +69,7 @@ struct ProtocolDetailView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 24)
             }
-
+            
             actionButtons
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
@@ -88,7 +88,7 @@ struct ProtocolDetailView: View {
 // MARK: - Subviews
 
 private extension ProtocolDetailView {
-
+    
     var header: some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 4) {
@@ -99,7 +99,7 @@ private extension ProtocolDetailView {
                         .frame(width: 28, height: 28)
                         .background(Color.orange.opacity(0.12))
                         .clipShape(RoundedRectangle(cornerRadius: 8))
-
+                    
                     Text(mode == .add ? "Add protocol" : "Edit protocol")
                         .font(.title3.weight(.semibold))
                 }
@@ -120,7 +120,7 @@ private extension ProtocolDetailView {
             }
         }
     }
-
+    
     var infoSection: some View {
         labeledField("Protocol info") {
             VStack(spacing: 8) {
@@ -138,7 +138,7 @@ private extension ProtocolDetailView {
             }
         }
     }
-
+    
     var importanceSection: some View {
         labeledField("Importance") {
             HStack(spacing: 8) {
@@ -148,11 +148,11 @@ private extension ProtocolDetailView {
             }
         }
     }
-
+    
     func importanceButton(for level: ProtocolImportance) -> some View {
         let isSelected = element.importance == level
         let color = level.color   // ver extensión abajo
-
+        
         return Button {
             withAnimation(.easeInOut(duration: 0.2)) { element.importance = level }
         } label: {
@@ -172,7 +172,7 @@ private extension ProtocolDetailView {
         }
         .buttonStyle(.plain)
     }
-
+    
     var frequencySection: some View {
         labeledField("Frequency") {
             HStack {
@@ -193,7 +193,7 @@ private extension ProtocolDetailView {
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
-
+    
     var tasksSection: some View {
         labeledField("Tasks") {
             VStack(spacing: 0) {
@@ -224,7 +224,7 @@ private extension ProtocolDetailView {
                     .background(Color(.systemGray6))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-
+                
                 // Add task button
                 Button {
                     isPresented.toggle()
@@ -243,14 +243,14 @@ private extension ProtocolDetailView {
             }
         }
     }
-
+    
     func taskRow(_ task: ProtocolTask, isLast: Bool) -> some View {
         HStack(alignment: .top, spacing: 10) {
             RoundedRectangle(cornerRadius: 2)
                 .fill(Color.orange)
                 .frame(width: 4, height: 38)
                 .padding(.top, 2)
-
+            
             VStack(alignment: .leading, spacing: 2) {
                 Text(task.taskName)
                     .font(.subheadline.weight(.medium))
@@ -258,9 +258,9 @@ private extension ProtocolDetailView {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-
+            
             Spacer()
-
+            
             // Swipe-to-delete would be ideal, but a small X works in sheets
             Button {
                 withAnimation {
@@ -284,9 +284,9 @@ private extension ProtocolDetailView {
             }
         }
     }
-
+    
     // MARK: - Action buttons
-
+    
     @ViewBuilder
     var actionButtons: some View {
         if mode == .add {
@@ -304,7 +304,7 @@ private extension ProtocolDetailView {
             }
             .disabled(!isValid)
             .animation(.easeInOut(duration: 0.2), value: isValid)
-
+            
         } else {
             HStack(spacing: 10) {
                 // Delete
@@ -321,7 +321,7 @@ private extension ProtocolDetailView {
                         .overlay(RoundedRectangle(cornerRadius: 14)
                             .stroke(Color.red.opacity(0.25), lineWidth: 0.5))
                 }
-
+                
                 // Save
                 Button {
                     if let index { vm.updateProtocol(element, at: index); dismiss() }
@@ -339,9 +339,9 @@ private extension ProtocolDetailView {
             }
         }
     }
-
+    
     // MARK: - Helper
-
+    
     @ViewBuilder
     func labeledField<C: View>(_ title: String, @ViewBuilder content: () -> C) -> some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -373,7 +373,7 @@ private struct AddTaskSheet: View {
     @Binding var collection: [ProtocolTask]
     @State private var name = ""
     @State private var description = ""
-
+    
     var body: some View {
         VStack(spacing: 16) {
             // Header
@@ -391,10 +391,10 @@ private struct AddTaskSheet: View {
                 }
             }
             .padding(.top, 4)
-
+            
             TextFieldComp(text: $name, prompt: "Task name...", leadingIcon: "pencil", color: .orange)
             TextFieldComp(text: $description, prompt: "Description (optional)", leadingIcon: "list.dash")
-
+            
             HStack(spacing: 10) {
                 Button("Cancel") { dismiss() }
                     .frame(maxWidth: .infinity)
@@ -402,7 +402,7 @@ private struct AddTaskSheet: View {
                     .background(Color(.systemGray6))
                     .foregroundStyle(.secondary)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
-
+                
                 Button {
                     collection.append(ProtocolTask(
                         taskName: name,

@@ -13,19 +13,19 @@ final class TaskState {
 }
 
 struct TaskView: View {
-    @State private var isPresentingAddTask = false
+    @State private var isPresentingSheet = false
     @State private var tasksListVM: TaskListViewModel
     @State private var taskVM: TaskViewModel
     @State private var indexState: TaskState
     @State private var selectedTask: VTask?
     @State private var taskIndex: Int = 0
-
-
+    
+    
     init(user: User) {
         let state = TaskState()
         _indexState = State(initialValue: state)
-        _tasksListVM = State(wrappedValue: TaskListViewModel(user: user, selectedVehicle: state.selectedVehicleIndex))
-        _taskVM = State(wrappedValue: TaskViewModel(user: user, selectedVehicle: state.selectedVehicleIndex))
+        _tasksListVM = State(wrappedValue: TaskListViewModel(user: user, state: state))
+        _taskVM = State(wrappedValue: TaskViewModel(user: user, state: state))
     }
     
     var body: some View {
@@ -33,15 +33,15 @@ struct TaskView: View {
             VStack(alignment: .leading, spacing: 10) {
                 if !tasksListVM.hasVehicles {
                     ContentUnavailableView(
-                        "Sin vehículos",
+                        "No Vehicles added yet",
                         systemImage: "car.fill",
-                        description: Text("Agrega un vehículo para ver sus tareas.")
+                        description: Text("Add a vehicle to get started.")
                     )
                 } else {
                     HeaderComp(
                         title: "Tasks",
                         image: "line.3.horizontal",
-                        description: "Gestiona las tareas de tus vehículos y agrega nuevas desde aquí.",
+                        description: "Manage your vehicles tasks and keep track of them in real time ",
                         color: .blue,
                         gradient: .none
                     )
@@ -49,7 +49,7 @@ struct TaskView: View {
                     CarouselComp(
                         strategy: TaskAlgorithm(),
                         color: .blue,
-                        selectedIndex: $tasksListVM.selectedVehicle,
+                        selectedIndex: $indexState.selectedVehicleIndex,
                     )
                     
                     SelectedInfoComp(
@@ -64,7 +64,7 @@ struct TaskView: View {
             
         }
         .ignoresSafeArea(edges: .bottom)
-        .sheet(isPresented: $isPresentingAddTask) {
+        .sheet(isPresented: $isPresentingSheet) {
             AddTaskView(vm: taskVM)
         }
         .sheet(item: $selectedTask) { task in
@@ -89,7 +89,7 @@ struct TaskView: View {
     }
     private var addTaskButton: some View {
         Button {
-            isPresentingAddTask.toggle()
+            isPresentingSheet.toggle()
         } label: {
             HStack(spacing: 8) {
                 Image(systemName: "plus")
