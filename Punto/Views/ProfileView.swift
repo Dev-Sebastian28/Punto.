@@ -1,69 +1,142 @@
 import SwiftUI
 
+// MARK: - ROUTES
+enum ProfileRoute: Hashable {
+    case profileDetails
+    case security
+    case linkedAccounts
+    case helpCenter
+    case contactSupport
+    case faq
+    case subscription
+}
+
+// MARK: - MAIN VIEW
 struct ProfileView: View {
+    @State private var path: [ProfileRoute] = []
+    let user: User
+    
     var body: some View {
-        ScrollView {
-            ZStack(alignment: .top) {
-                // 1. Fondo Azul del Encabezado
-                Color.blue
-                    .frame(height: 300)
-                    .ignoresSafeArea()
-                
+        NavigationStack(path: $path) {
+            ScrollView {
                 VStack(spacing: 20) {
-                    // 2. Información de Perfil
-                    VStack(spacing: 10) {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(.white.opacity(0.8))
-                            .background(Circle().fill(Color.white.opacity(0.2)))
-                        
-                        Text("John Anderson")
-                            .font(.title2)
-                            .bold()
-                            .foregroundColor(.white)
-                        
-                        Text("Member since 2024")
-                            .font(.subheadline)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 6)
-                            .background(Capsule().fill(Color.white.opacity(0.2)))
-                            .foregroundColor(.white)
-                    }
-                    .padding(.top, 40)
                     
-                    // 3. Tarjeta Premium (Naranja)
-                    PremiumCard()
-                        .padding(.horizontal)
+                    header
                     
-                    // 4. Listas de Opciones
-                    VStack(alignment: .leading, spacing: 25) {
-                        MenuSection(title: "PERSONAL INFORMATION", items: [
-                            MenuItem(icon: "person.circle", text: "Profile Details"),
-                            MenuItem(icon: "lock", text: "Security & Password"),
-                            MenuItem(icon: "link", text: "Linked Accounts")
-                        ])
-                        
-                        MenuSection(title: "SUPPORT & HELP", items: [
-                            MenuItem(icon: "questionmark.circle", text: "Help Center"),
-                            MenuItem(icon: "bubble.left", text: "Contact Support"),
-                            MenuItem(icon: "info.circle", text: "FAQ")
-                        ])
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 10)
+                    premiumCard
+                    
+                    SectionView(
+                        title: "PERSONAL INFORMATION",
+                        items: [
+                            SectionItem(
+                                icon: "person",
+                                title: "Profile Details",
+                                route: .profileDetails
+                            ),
+                            SectionItem(
+                                icon: "lock",
+                                title: "Security & Password",
+                                route: .security
+                            ),
+                            SectionItem(
+                                icon: "link",
+                                title: "Linked Accounts",
+                                route: .linkedAccounts
+                            )
+                        ],
+                        path: $path
+                    )
+                    
+                    SectionView(
+                        title: "PUNTO",
+                        items: [
+                            SectionItem(
+                                icon: "car",
+                                title: "Vehicles Help Center",
+                                route: .helpCenter
+                            ),
+                            SectionItem(
+                                icon: "person",
+                                title: "Drivers Support",
+                                route: .contactSupport
+                            ),
+                            SectionItem(
+                                icon: "doc.text",
+                                title: "Cargo",
+                                route: .faq
+                            )
+                        ],
+                        path: $path
+                    )
+                    
+                    SectionView(
+                        title: "SUPPORT & HELP",
+                        items: [
+                            SectionItem(
+                                icon: "questionmark.circle",
+                                title: "Help Center",
+                                route: .helpCenter
+                            ),
+                            SectionItem(
+                                icon: "bubble.left",
+                                title: "Contact Support",
+                                route: .contactSupport
+                            ),
+                            SectionItem(
+                                icon: "doc.text",
+                                title: "FAQ",
+                                route: .faq
+                            )
+                        ],
+                        path: $path
+                    )
+                }
+                .padding(.vertical)
+            }
+            .background(Color(.systemGray6))
+            .navigationDestination(for: ProfileRoute.self) { route in
+                switch route {
+                case .profileDetails:
+                    Text("Profile Details View")
+                case .security:
+                    Text("Security & Password View")
+                case .linkedAccounts:
+                    Text("Linked Accounts View")
+                case .helpCenter:
+                    Text("Help Center View")
+                case .contactSupport:
+                    Text("Contact Support View")
+                case .faq:
+                    Text("FAQ View")
+                case .subscription:
+                    Text("Manage Subscription View")
                 }
             }
         }
-        .background(Color(uiColor: .systemGroupedBackground))
     }
-}
-
-// MARK: - Componentes Secundarios
-
-struct PremiumCard: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+    
+    // MARK: - HEADER
+    var header: some View {
+        VStack(spacing: 5) {
+            Circle()
+                .stroke(Color.blue.opacity(0.5), lineWidth: 2)
+                .frame(width: 80, height: 80)
+                .overlay(
+                    Image(systemName: "person")
+                )
+            
+            Text(user.name)
+                .font(.title2)
+                .fontWeight(.semibold)
+            Text(user.email)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+    }
+    
+    // MARK: - PREMIUM CARD
+    var premiumCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "crown.fill")
                 Text("Premium Plan")
@@ -75,66 +148,76 @@ struct PremiumCard: View {
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.9))
             
-            Button(action: {}) {
+            NavigationLink(value: ProfileRoute.subscription) {
                 Text("Manage Subscription")
-                    .bold()
+                    .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.white)
-                    .foregroundColor(.orange)
-                    .cornerRadius(12)
+                    .foregroundColor(.blue)
+                    .cornerRadius(20)
             }
         }
-        .padding(25)
+        .padding()
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(LinearGradient(colors: [.orange, .red.opacity(0.8)], startPoint: .topLeading, endPoint: .bottomTrailing))
+            LinearGradient(
+                colors: [Color.black.opacity(0.2), Color.blue],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
         )
-        .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
+        .cornerRadius(25)
+        .padding(.horizontal)
     }
 }
 
-struct MenuSection: View {
+// MARK: - SECTION ITEM MODEL
+struct SectionItem: Hashable {
+    let icon: String
     let title: String
-    let items: [MenuItem]
+    let route: ProfileRoute
+}
+
+// MARK: - SECTION VIEW
+struct SectionView: View {
+    
+    var title: String
+    var items: [SectionItem]
+    @Binding var path: [ProfileRoute]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 10) {
+            
             Text(title)
                 .font(.caption)
-                .bold()
                 .foregroundColor(.gray)
+                .padding(.horizontal)
             
             VStack(spacing: 0) {
-                ForEach(items.indices, id: \.self) { index in
-                    HStack {
-                        Image(systemName: items[index].icon)
-                            .frame(width: 30)
-                        Text(items[index].text)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                    }
-                    .padding()
+                ForEach(items, id: \.self) { item in
+                    NavigationLink(value: item.route) {
+                        HStack {
+                            Image(systemName: item.icon)
+                            Text(item.title)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.gray)
+                        }
+                        .padding()
+                    }.buttonStyle(.plain)
                     
-                    if index != items.count - 1 {
-                        Divider().padding(.leading, 50)
+                    if item != items.last {
+                        Divider()
                     }
                 }
             }
             .background(Color.white)
             .cornerRadius(15)
+            .padding(.horizontal)
         }
     }
 }
 
-struct MenuItem {
-    let icon: String
-    let text: String
-}
-
-// MARK: - Preview
 #Preview {
-    ProfileView()
+    ProfileView(user: .mock)
 }
