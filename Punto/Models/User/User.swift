@@ -35,9 +35,45 @@ final class User {
         self.access = access
         self.country = country
         self.vehicles = [
-            TransportationVehicle(vehicleInformation: .init(image: "volvo", plate: "DMW-2342", brand: "Volvo", model: "X900x", year: 2020, mileage: 10000, engine: "V8", transmission: .automatic, fuel: .diesel)),
-            PrivateVehicle(vehicleInformation: .init(image: "ford", plate: "AFV-2342", brand: "Ford", model: "F-150", year: 2020, mileage: 1000000, engine: "V8o", transmission: .automatic, fuel: .diesel)),
-            TransportationVehicle(vehicleInformation: .init(image: "ken", plate: "TGB-2342", brand: "Kenworth", model: "T800", year: 2014, mileage: 240000, engine: "V8", transmission: .manual, fuel: .gasoline))
+            TransportationVehicle(
+                vehicleInformation: .init(
+                    imageUrl: nil,
+                    plate: "DMW-2342",
+                    brand: "Volvo",
+                    model: "X900x",
+                    year: 2020,
+                    mileage: 10000,
+                    engine: "V8",
+                    transmission: .automatic,
+                    fuel: .diesel
+                )
+            ),
+            PrivateVehicle(
+                vehicleInformation: .init(
+                    imageUrl: nil,
+                    plate: "AFV-2342",
+                    brand: "Ford",
+                    model: "F-150",
+                    year: 2020,
+                    mileage: 1000000,
+                    engine: "V8o",
+                    transmission: .automatic,
+                    fuel: .diesel
+                )
+            ),
+            TransportationVehicle(
+                vehicleInformation: .init(
+                    imageUrl: nil,
+                    plate: "TGB-2342",
+                    brand: "Kenworth",
+                    model: "T800",
+                    year: 2014,
+                    mileage: 240000,
+                    engine: "V8",
+                    transmission: .manual,
+                    fuel: .gasoline
+                )
+            )
         ]
         self.drivers = []
     }

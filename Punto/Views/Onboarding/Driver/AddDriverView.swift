@@ -15,9 +15,10 @@ struct AddDriverView: View {
     // Message toast state
     @State private var showMessage: Bool = false
 
-    @Environment(NavigationRouter.self) var router
     @Environment(\.horizontalSizeClass) var hSizeClass
     @Environment(\.verticalSizeClass) var vSizeClass
+    @Environment(AppCoordinator.self) var coordinator
+
 
     private var isPortrait: Bool {
         vSizeClass == .regular
@@ -197,7 +198,7 @@ struct AddDriverView: View {
     }
     private var laterButton: some View {
         Button {
-            router.showMainTabs()
+            coordinator.onBoardingCoordinator.didFinishOnBoarding()
         } label: {
             Text("Later")
                 .font(.subheadline.weight(.semibold))
@@ -215,5 +216,5 @@ struct AddDriverView: View {
 
 #Preview {
     AddDriverView(user: .mock)
-        .environment(NavigationRouter())
+        .environment(AppCoordinator(appState: AppState()))
 }

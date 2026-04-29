@@ -28,7 +28,7 @@ struct VehicleQuickView: View {
                 VStack(alignment: .center, spacing: 10) {
                     HStack(alignment: .top, spacing: 8) {
                         ZStack {
-                            Image(vehicle.image)
+                            Image(vehicle.imageUrl ?? "")
                                 .resizable()
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .frame(width: 96, height: 68)
@@ -104,5 +104,9 @@ private struct StatPill: View {
 
 
 #Preview {
-    VehicleQuickView(vehicle: VehicleInformation.mock, quickSummary: [], selectedColor: .brandAmber)
+    VehicleQuickView(
+        vehicle: VehicleInformation.sample,
+        quickSummary: [],
+        selectedColor: .brandAmber
+    )
 }

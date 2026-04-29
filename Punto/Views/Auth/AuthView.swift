@@ -6,11 +6,7 @@
 import SwiftUI
 
 struct AuthView: View {
-    @State private var vm = AuthViewModel(
-        mode: .signUp,
-        service: AuthService()
-    )
-    @Environment(NavigationRouter.self) var router
+    @State var vm: AuthViewModel
 
     var body: some View {
         ZStack {
@@ -18,8 +14,7 @@ struct AuthView: View {
                 colors: [.myBlue, .white, .myBlue],
                 startPoint: .top,
                 endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            ).ignoresSafeArea()
 
             VStack(spacing: 25) {
                 modeSelector
@@ -31,7 +26,6 @@ struct AuthView: View {
                         SignInCard(vm: vm)
                     }
                 }.transition(.push(from: .leading))
-
                 socialSection
             }
             .animation(.snappy, value: vm.mode)
@@ -41,19 +35,16 @@ struct AuthView: View {
         .onChange(of: vm.authStatus) { _, newStatus in
             // If the user had a succefuel operation and its his first time go to onboaerding
             if newStatus == .authenticated && vm.mode == .signUp {
-                router.navigate(to: .form1)
             }
             
             // If the user had a succefuel operation and its not his first time go to maintabs
 
             else if newStatus == .authenticated && vm.mode == .signIn {
-                router.showMainTabs()
             }
         }
     }
 
     // MARK: - Mode Selector
-
     private var modeSelector: some View {
         HStack(spacing: 8) {
             ModeButton(title: "Sign Up", isSelected: vm.mode == .signUp) {
@@ -66,7 +57,6 @@ struct AuthView: View {
     }
 
     // MARK: - Social
-
     private var socialSection: some View {
         VStack(spacing: 14) {
             Text("Or continue with:")
@@ -86,7 +76,6 @@ struct AuthView: View {
 }
 
 // MARK: - Mode Button
-
 private struct ModeButton: View {
     let title: String
     let isSelected: Bool
@@ -140,6 +129,5 @@ private struct SocialButton: View {
 }
 
 #Preview {
-    AuthView()
-        .environment(NavigationRouter())
+    AuthView(vm: AuthViewModel(mode: .signIn, service: AuthService(), coordinator: AuthCoordinator()))
 }

@@ -18,7 +18,7 @@ final class FleetVehicleCardViewModel {
     vehicle.isActive
 }
     var vehicleImage: String {
-        vehicleInfo.image
+        vehicleInfo.imageUrl ?? ""
     }
     var brandModel: String {
         vehicleInfo.brand.localizedCapitalized + " " + vehicleInfo.model.localizedCapitalized

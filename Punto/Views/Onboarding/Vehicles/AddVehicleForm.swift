@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import Foundation
+import PhotosUI
 
 struct AddVehicleForm: View {
-    @Environment(\.dismiss) private var dimiss
     @State private var isPrivateSelected = false
     @State private var isTransportSelected = true
     @State private var vehicleInf: VehicleInformation = .init(
-        image: "ken",
+        imageUrl: nil,
         plate: "",
         brand: "",
         model: "",
@@ -23,19 +22,46 @@ struct AddVehicleForm: View {
         transmission: .automatic,
         fuel: .diesel
     )
+    
+    @State private var pickerItem: PhotosPickerItem?
+    @State private var selectedImage: Image?
+    
     let vm: AddVehicleViewModel
+    
+    @Environment(\.dismiss) private var dimiss
     
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
             ScrollView {
+                PhotosPicker(selection: $pickerItem, matching: .all(of: [.images, .livePhotos])) {
+                    Label("Selecet a vehicle image", systemImage: "photo")
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 200)
+                        .background {
+                            selectedImage
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.blue)
+                        }
+                }.padding(.bottom)
                 vehicleTypeSelector
+                    .padding(.bottom)
                 formFields
                 actionButtons
             }
         }.padding(.horizontal)
+            .onChange(of: pickerItem) {
+                
+                Task {
+                    selectedImage = nil
+                    if let pickerItem {
+                        let image = try await pickerItem.loadTransferable(type: Image.self)
+                        selectedImage = image
+                    }
+                }
+            }
     }
-
+    
     private var vehicleTypeSelector: some View {
         HStack(spacing: 12) {
             VehicleCategoryButton(
@@ -45,7 +71,7 @@ struct AddVehicleForm: View {
                 isSelected: isTransportSelected,
                 action: { isTransportSelected = true; isPrivateSelected = false}
             )
-
+            
             VehicleCategoryButton(
                 title: "Private",
                 systemImage: "car.fill",
@@ -55,7 +81,7 @@ struct AddVehicleForm: View {
             )
         }
     }
-
+    
     private var formFields: some View {
         VStack {
             
@@ -82,7 +108,7 @@ struct AddVehicleForm: View {
                 color: .gray,
                 autocapitalization: .words
             )
-
+            
             HStack {
                 TextFieldComp(
                     intValue: $vehicleInf.year,
@@ -96,7 +122,7 @@ struct AddVehicleForm: View {
                     leadingIcon: "rectangle.and.pencil.and.ellipsis"
                 )
             }
-
+            
             vehicleSpecsSection
             
             
@@ -107,7 +133,7 @@ struct AddVehicleForm: View {
             )
         }
     }
-
+    
     private var vehicleSpecsSection: some View {
         VStack(spacing: 12) {
             LabeledSegmentedPicker(
@@ -117,7 +143,7 @@ struct AddVehicleForm: View {
                 Text("Manual").tag(TransmissionType.manual)
                 Text("Automatic").tag(TransmissionType.automatic)
             }
-
+            
             LabeledSegmentedPicker(
                 title: "Fuel Type",
                 selection: $vehicleInf.fuel
@@ -131,7 +157,7 @@ struct AddVehicleForm: View {
         .background(Color.gray.opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 15))
     }
-
+    
     private var actionButtons: some View {
         HStack(spacing: 16) {
             DButtonComp(
@@ -143,7 +169,7 @@ struct AddVehicleForm: View {
             ) {
                 dimiss()
             }
-
+            
             DButtonComp(
                 text: "Add Vehicle",
                 color: .blue,
@@ -159,7 +185,7 @@ struct AddVehicleForm: View {
         }
         .padding(.top)
     }
- }
+}
 
 private struct VehicleCategoryButton: View {
     let title: String
@@ -167,7 +193,7 @@ private struct VehicleCategoryButton: View {
     let tint: Color
     let isSelected: Bool
     let action: () -> Void
-
+    
     var body: some View {
         Button(action: action) {
             VStack(spacing: 10) {
@@ -177,7 +203,7 @@ private struct VehicleCategoryButton: View {
                     .frame(width: 40, height: 40)
                     .background(tint.opacity(0.1))
                     .clipShape(Circle())
-
+                
                 Text(title)
                     .font(.caption)
                     .fontWeight(.bold)

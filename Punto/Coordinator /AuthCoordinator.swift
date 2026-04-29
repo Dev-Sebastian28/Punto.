@@ -7,12 +7,12 @@
 import Foundation
 import SwiftUI
 
-// Auth Flow
+// Auth Flow 
 enum AutAuthFlow: Hashable {
-    case login
+    case auth
     case aboutPunto
-   // case forgotPassword
-   // case resetPassword
+    // case forgotPassword
+    // case resetPassword
 }
 
 
@@ -20,16 +20,30 @@ enum AutAuthFlow: Hashable {
 final class AuthCoordinator {
     var path = [AutAuthFlow]()
     
-    var onLogin: (() -> Void)?
-    var onSignUp: (() -> Void)?
-
+    var onLoginSuccess: (() -> Void)?
+    var onSignUpSuccess: (() -> Void)?
+    
     @ViewBuilder
     func build(_ screen: AutAuthFlow) -> some View {
         switch screen {
-        case .login:
-            AuthView() 
+        case .auth:
+            let viewModel = AuthViewModel(service: AuthService(), coordinator: self)
+            AuthView(vm: viewModel)
         case .aboutPunto:
             IntroductionAppView()
         }
     }
+    
+    func showAboutPunto() {
+        path.append(.aboutPunto)
+    }
+    
+    func didFinishLogin() {
+        onLoginSuccess?()
+    }
+    
+    func didFinishSignUp() {
+        onSignUpSuccess?()
+    }
+
 }

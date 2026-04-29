@@ -6,7 +6,6 @@
 import SwiftUI
 
 struct SignUpCard: View {
-    @Environment(NavigationRouter.self) var router
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
@@ -91,7 +90,6 @@ struct SignUpCard: View {
 
     private var appIntroductionButton: some View {
         Button {
-            router.navigate(to: .appIntroduction)
         } label: {
             Text("Watch App Introduction")
                 .font(.headline)
@@ -106,10 +104,8 @@ struct SignUpCard: View {
     SignUpCard(
         vm: AuthViewModel(
             mode: .signUp,
-            service: AuthService()
+            service: AuthService(),
+            coordinator: AuthCoordinator()
         )
-    )
-    .environment(
-        NavigationRouter()
     )
 }

@@ -68,5 +68,9 @@ struct FormCardView: View {
 }
 
 #Preview {
-    FormCardView(title: "Coordinator", text: "You own or manage multiple vehicles but do not drive them yourself.", image: "manager")
+    FormCardView(
+        title: "Coordinator",
+        text: "You own or manage multiple vehicles but do not drive them yourself.",
+        image: "manager"
+    )
 }

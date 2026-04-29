@@ -95,10 +95,34 @@ struct VehicleFactory {
         switch type {
             
         case .transportVehicle:
-            return TransportationVehicle(vehicleInformation: .init(image: "", plate: "", brand: "", model: "", year: 0, mileage: 0, engine: "", transmission: .automatic, fuel: .diesel))
+            return TransportationVehicle(
+                vehicleInformation: .init(
+                    imageUrl: nil,
+                    plate: "",
+                    brand: "",
+                    model: "",
+                    year: 0,
+                    mileage: 0,
+                    engine: "",
+                    transmission: .automatic,
+                    fuel: .diesel
+                )
+            )
             
         case .privateVehicle:
-            return PrivateVehicle(vehicleInformation: .init(image: "", plate: "", brand: "", model: "", year: 0, mileage: 0, engine: "", transmission: .automatic, fuel: .diesel))
+            return PrivateVehicle(
+                vehicleInformation: .init(
+                    imageUrl: nil,
+                    plate: "",
+                    brand: "",
+                    model: "",
+                    year: 0,
+                    mileage: 0,
+                    engine: "",
+                    transmission: .automatic,
+                    fuel: .diesel
+                )
+            )
         }
     }
 }

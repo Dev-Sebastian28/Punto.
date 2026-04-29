@@ -10,7 +10,7 @@ struct vehicleCard:  View {
     let info: VehicleInformation
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Image(info.image)
+            Image(info.imageUrl ?? "")
                 .resizable()
                 .scaledToFill()
                 .frame(height: 180)

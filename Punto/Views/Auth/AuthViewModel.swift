@@ -8,7 +8,6 @@
 import Foundation
 
 // MARK: - Auth Status
-
 enum AuthStatus {
     case notDetermined
     case authenticated
@@ -21,7 +20,6 @@ enum AuthMode {
 }
 
 // MARK: - Operation State
-
 enum OperationState {
     case idle
     case loading
@@ -39,7 +37,6 @@ enum OperationState {
 }
 
 // MARK: - AuthViewModelError
-
 enum AuthViewModelError: Error {
     case validation(String)
     case service(String)
@@ -55,10 +52,12 @@ enum AuthViewModelError: Error {
 }
 
 // MARK: - ViewModel
-
 @Observable @MainActor
 final class AuthViewModel {
 
+    // Used unowned to
+    private weak let coordinator: AuthCoordinator?
+    
     // MARK: State
     private(set) var mode: AuthMode
     private(set) var authStatus: AuthStatus = .notDetermined
@@ -69,9 +68,10 @@ final class AuthViewModel {
     private let validator: AuthValidator = .init()
 
     // MARK: Init
-    init(mode: AuthMode, service: any AuthServiceProtocol) {
+    init(mode: AuthMode = .signUp, service: any AuthServiceProtocol, coordinator: AuthCoordinator) {
         self.mode = mode
         self.service = service
+        self.coordinator = coordinator
     }
     
     var suggestion : String {
@@ -127,7 +127,8 @@ final class AuthViewModel {
             }
         }
     }
-
+    
+    @MainActor
     /// Maneja loading y errores de servicio. La validación ya ocurrió antes.
     private func perform(operation: () async throws -> AuthStatus) async {
         operationState = .loading
@@ -138,6 +139,15 @@ final class AuthViewModel {
         do {
             authStatus = try await operation()
             operationState = .idle
+            
+            print("DEBUG: Operación exitosa, llamando al coordinador...")
+            switch mode {
+            case .signIn:
+                coordinator?.didFinishLogin()
+            case .signUp:
+                coordinator?.didFinishSignUp()
+            }
+            
         } catch {
             operationState = .failure(.service(error.localizedDescription))
         }

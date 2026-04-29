@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct IntroductionAppView: View {
-    
+    @Environment(AppCoordinator.self) var coordinator
+
     var body: some View {
         ZStack {
             LinearGradient(
@@ -37,39 +38,60 @@ struct IntroductionAppView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Bienvenido a Punto")
-                        .font(.system(size: 38, weight: .black, design: .default))
+                    Text("Welcome to Punto")
+                        .font(.title).bold()
                         .foregroundStyle(.white)
                     
-                    Text("Controla tu flota, ordena tu operacion y encuentra nuevas oportunidades de transporte desde una sola app.")
+                    Text("Manage your fleet, organize your operation, and find new transport opportunities all from a single app.")
                         .font(.system(.title3, design: .rounded, weight: .medium))
                         .foregroundStyle(.black)
                         .fixedSize(horizontal: false, vertical: true)
                 }
+                
+                Button {
+                    coordinator.onBoardingCoordinator.navigate(to: .form1)
+                } label: {
+                    Text("Next")
+                        .font(.title2).bold()
+                        .foregroundStyle(.blue)
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 16)
+                        .background(Color.white)
+                        .cornerRadius(30)
+                }
             }
             
             HStack(spacing: 5) {
-                welcomeBadge(title: "Flotas", systemImage: "truck.box.fill")
-                welcomeBadge(title: "Mantenimiento", systemImage: "wrench.and.screwdriver.fill")
-                welcomeBadge(title: "Ingresos", systemImage: "banknote.fill")
+                welcomeBadge(
+                    title: "Fleets",
+                    systemImage: "truck.box.fill"
+                )
+                welcomeBadge(
+                    title: "Maintenance",
+                    systemImage: "wrench.and.screwdriver.fill"
+                )
+                welcomeBadge(
+                    title: "Income",
+                    systemImage: "banknote.fill"
+                )
             }
         }
     }
     
     private var overviewCard: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Que puedes hacer en Punto")
+            Text("What you can do in Punto")
                 .font(.system(.title2, design: .rounded, weight: .bold))
                 .foregroundStyle(Color(red: 0.09, green: 0.19, blue: 0.22))
             
-            Text("Punto es una app para gestionar flotas de vehiculos de transporte. Puedes agregar tareas, registrar protocolos, controlar gastos y ganancias, seguir mantenimientos y, sobre todo, encontrar trabajos para mover tu operacion.")
+            Text("Punto is an app to manage vehicle transport fleets. You can add tasks, register protocols, control expenses and earnings, track maintenance, and above all, find jobs to keep your operation moving.")
                 .font(.system(.body, design: .rounded))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             
             HStack(spacing: 12) {
-                statPill(title: "Todo en orden", value: "Operacion")
-                statPill(title: "Siempre visible", value: "Tu flota")
+                statPill(title: "Everything in order", value: "Operation")
+                statPill(title: "Always visible", value: "Your Fleet")
             }
         }
         .padding(22)
@@ -86,10 +108,10 @@ struct IntroductionAppView: View {
             VStack(alignment: .leading, spacing: 14) {
                 HStack {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Tu centro de control")
+                        Text("Your Control Center")
                             .font(.system(.title3, design: .rounded, weight: .bold))
                         
-                        Text("Vehiculos, conductores, rutas y finanzas conectados en una misma vista.")
+                        Text("Vehicles, drivers, routes, and finances connected in a single view.")
                             .font(.system(.subheadline, design: .rounded, weight: .medium))
                             .foregroundStyle(.secondary)
                     }
@@ -112,15 +134,15 @@ struct IntroductionAppView: View {
         VStack(spacing: 14) {
             HStack(spacing: 14) {
                 featureCard(
-                    title: "Tareas y protocolos",
-                    description: "Organiza pendientes, entregas, inspecciones y procesos clave de cada vehiculo.",
+                    title: "Tasks & Protocols",
+                    description: "Organize pending tasks, deliveries, inspections, and key processes for each vehicle.",
                     systemImage: "checklist.checked",
                     tint: .blue
                 )
                 
                 featureCard(
-                    title: "Gastos y ganancias",
-                    description: "Registra combustible, peajes, cobros y movimientos para entender tu rentabilidad.",
+                    title: "Expenses & Earnings",
+                    description: "Track fuel, tolls, charges, and transactions to understand your profitability.",
                     systemImage: "dollarsign.arrow.circlepath",
                     tint: .blue
                 )
@@ -128,15 +150,15 @@ struct IntroductionAppView: View {
             
             HStack(spacing: 14) {
                 featureCard(
-                    title: "Mantenimientos",
-                    description: "Sigue servicios, kilometraje y partes importantes antes de que fallen.",
+                    title: "Maintenance",
+                    description: "Track services, mileage, and critical parts before they fail.",
                     systemImage: "gearshape.2.fill",
                     tint: Color(red: 0.17, green: 0.53, blue: 0.83)
                 )
                 
                 featureCard(
-                    title: "Buscar trabajos",
-                    description: "Encuentra nuevas oportunidades de transporte y mueve tu negocio con mas continuidad.",
+                    title: "Find Jobs",
+                    description: "Find new transport opportunities and move your business with more continuity.",
                     systemImage: "magnifyingglass.circle.fill",
                     tint: Color(red: 0.46, green: 0.38, blue: 0.86)
                 )
@@ -154,10 +176,10 @@ struct IntroductionAppView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             
             VStack(alignment: .leading, spacing: 6) {
-                Text("Empieza con claridad")
+                Text("Start with Clarity")
                     .font(.system(.headline, design: .rounded, weight: .bold))
                 
-                Text("Punto te ayuda a entender que pasa con tu flota hoy y a preparar el siguiente trabajo con mas control.")
+                Text("Punto helps you understand what's happening with your fleet today and prepare for the next job with more control.")
                     .font(.system(.subheadline, design: .rounded))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -227,4 +249,5 @@ struct IntroductionAppView: View {
 
 #Preview {
     IntroductionAppView()
+        .environment(OnboardingCoordinator(appState: AppState()))
 }

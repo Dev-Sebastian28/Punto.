@@ -51,7 +51,7 @@ struct VehicleInformationView: View {
     
     private var imageHeader: some View {
         ZStack(alignment: .topLeading) {
-            Image(info.image)
+            Image(info.imageUrl ?? "")
                 .resizable()
                 .scaledToFill()
                 .frame(height: 180)
@@ -157,7 +157,7 @@ private func vehicleRowCard(image: String, title: String, description: String, t
     VehicleInformationView(
         vehicle: TransportationVehicle(
             vehicleInformation: .init(
-                image: "volvo",
+                imageUrl: "volvo",
                 plate: "DMW-243",
                 brand: "Volvo",
                 model: "X700x",

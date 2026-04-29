@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MainTabView: View {
     let user: User
-    @Environment(NavigationRouter.self) var router
     init(user: User) {
         self.user = user
     }
@@ -38,5 +37,4 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView(user: .mock)
-        .environment(NavigationRouter())
 }

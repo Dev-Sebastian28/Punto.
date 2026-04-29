@@ -9,8 +9,9 @@ import SwiftUI
 
 struct AddVehicleView: View {
     @State private var isAddVehiclePresented = false
-    @Environment(NavigationRouter.self) private var router
     @State private var vm: AddVehicleViewModel
+    @Environment(AppCoordinator.self) var coordinator
+
     
     init(user: User) {
         _vm = State(wrappedValue: AddVehicleViewModel(user: user))
@@ -22,15 +23,13 @@ struct AddVehicleView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     header
                     if vm.hasVehicle {
-                        vehicleListSection
+                        vehicleInfoSection
                         DButtonComp(
                             text: "Add New Vehicle",
                             color: .blue,
-                            image: "plus"
-                            ) {
+                            image: "plus") {
                                 isAddVehiclePresented.toggle()
                             }
-                        
                     } else {
                         EmptyStateVehicleCard(isPresented: $isAddVehiclePresented)
                     }
@@ -54,7 +53,7 @@ struct AddVehicleView: View {
                         
                         Spacer()
                         
-                        laterButton
+                        navigationButton
                         
                     }
                     
@@ -66,7 +65,7 @@ struct AddVehicleView: View {
             }
         }
     }
-    private var vehicleListSection: some View {
+    private var vehicleInfoSection: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text("Your vehicles:")
@@ -85,12 +84,12 @@ struct AddVehicleView: View {
             }
         }
     }
-    private var laterButton: some View {
+    private var navigationButton: some View {
         Button {
             if vm.hasVehicle {
-                router.navigate(to: .addDriver)
+                coordinator.onBoardingCoordinator.navigate(to: .addDriver)
             } else {
-                router.showMainTabs()
+                coordinator.onBoardingCoordinator.didFinishOnBoarding()
             }
         } label: {
             
@@ -110,5 +109,5 @@ struct AddVehicleView: View {
 
 #Preview {
     AddVehicleView(user: .mock)
-        .environment(NavigationRouter())
+        .environment(OnboardingCoordinator(appState: AppState()))
 }

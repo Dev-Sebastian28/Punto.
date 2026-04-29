@@ -11,11 +11,12 @@ struct FleetView: View {
     @State private var searchText: String
     @State private var hideHeader: Bool
     @State private var vm: FleetViewModel
+    @Environment(AppCoordinator.self) var coordinator
     
     init(user: User) {
         self.searchText = ""
         self.hideHeader = false
-        self.vm = .init(user: user)
+        self.vm = FleetViewModel(user: user)
     }
     
     var body: some View {
@@ -57,5 +58,5 @@ struct FleetView: View {
 
 #Preview {
     FleetView(user: .mock)
-        .environment(NavigationRouter())
+        .environment(AppCoordinator(appState: AppState()))
 }

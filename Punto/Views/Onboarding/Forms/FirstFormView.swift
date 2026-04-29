@@ -24,8 +24,9 @@ private enum FirstFormAnswer {
 }
 
 struct FirstFormView: View {
-    @Environment(NavigationRouter.self) var router
     let vm = OnboardingFormsViewModel(path: .form1)
+    @Environment(AppCoordinator.self) var coordinator
+
     var body: some View {
         ZStack {
             VStack (alignment: .center, spacing: 10) {
@@ -39,7 +40,7 @@ struct FirstFormView: View {
                     image: "singleDriver") {
                         let answer: String = FirstFormAnswer.ownerOperator.response
                         vm.sendAnswer(answer)
-                        router.navigate(to: .form2)
+                        coordinator.onBoardingCoordinator.navigate(to: .form2)
                     }
                 
                 FormCardView(
@@ -48,8 +49,7 @@ struct FirstFormView: View {
                     image: "manager") {
                         let answer: String = FirstFormAnswer.cordinator.response
                         vm.sendAnswer(answer)
-                        router.navigate(to: .form2)
-                        
+                        coordinator.onBoardingCoordinator.navigate(to: .form2)
                     }
                 
                 FormCardView(
@@ -58,9 +58,8 @@ struct FirstFormView: View {
                     image: "driver") {
                         let answer: String = FirstFormAnswer.contractedDriver.response
                         vm.sendAnswer(answer)
-                        router.navigate(to: .form2)
+                        coordinator.onBoardingCoordinator.navigate(to: .form2)
                     }
-                            
                 Spacer()
             }.padding(.horizontal, 10)
         }
@@ -82,5 +81,5 @@ struct FirstFormView: View {
 
 #Preview {
     FirstFormView()
-        .environment(NavigationRouter())
+        .environment(AppCoordinator(appState: AppState()))
 }

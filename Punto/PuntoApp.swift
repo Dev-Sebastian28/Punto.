@@ -10,53 +10,22 @@ import SwiftUI
 @main
 struct PuntoApp: App {
     @State private var carouselVM: CarouselViewModel
-    @State private var router: NavigationRouter
     @State private var appState: AppState
+    @State private var coordinator: AppCoordinator
     
     init() {
         let state = AppState()
         _appState = State(initialValue: state)
         _carouselVM = State(initialValue: CarouselViewModel(user: state.user))
-        _router = State(initialValue: NavigationRouter())
+        _coordinator = State(initialValue: AppCoordinator(appState: state))
     }
     
     var body: some Scene {
         WindowGroup {
-            Group {
-                switch router.root {
-                case .onboarding:
-                    NavigationStack(path: $router.onboardingPath) {
-                        AuthView()
-                            .navigationDestination(for: OnboardingRoute.self) { route in
-                                switch route {
-                                case .appIntroduction:  IntroductionAppView()
-                                case .createAccount:    AuthView()
-                                case .form1:            FirstFormView().navigationBarBackButtonHidden(true)
-                                case .form2:            SecondFormView().navigationBarBackButtonHidden(true)
-                                case .addVehicle:       AddVehicleView(user: appState.user).navigationBarBackButtonHidden(true)
-                                case .addDriver:        AddDriverView(user: appState.user)
-                                }
-                            }
-                    }
-                case .mainTabs:
-                    NavigationStack(path: $router.appPath) {
-                        MainTabView(user: appState.user)
-                            .navigationDestination(for: AppRoute.self) { route in
-                                switch route {
-                                case .tasks:        TaskView(user: appState.user)
-                                case .protocols:    ProtocolsView(user: appState.user)
-                                case .manteinances: MaintenanceView(user: appState.user)
-                                case .expenses:     ExpensesView(user: appState.user)
-                                }
-                            }.navigationBarBackButtonHidden(true)
-                    }
-                }
-            }
-            
-            .environment(carouselVM)
-            .environment(router)
-            .environment(appState)
+            AppCoordinatorView(coordinator: coordinator )
         }
+        .environment(coordinator)
+        .environment(carouselVM)
     }
 }
 

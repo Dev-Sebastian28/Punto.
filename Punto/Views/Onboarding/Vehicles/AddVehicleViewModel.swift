@@ -9,6 +9,8 @@ import Foundation
 @Observable
 final class AddVehicleViewModel {
     private(set) var user: User
+    let vehicleRepository = VehicleRepository()
+    
     var hasVehicle: Bool {
         !user.vehicles.isEmpty
     }
@@ -21,6 +23,10 @@ final class AddVehicleViewModel {
     
     func addVehicle(_ vehicle: Vehicle) {
         user.vehicles.append(vehicle)
+        Task {
+            try? await vehicleRepository.createVehicle(info: vehicle.vehicleInformation)
+
+        }
     }
     
     init(user: User) {

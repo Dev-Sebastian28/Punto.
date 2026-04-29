@@ -26,8 +26,9 @@ private enum SecondFormAnswer {
 }
 
 struct SecondFormView: View {
-    @Environment(NavigationRouter.self) var router
     let vm = OnboardingFormsViewModel(path: .form2)
+    @Environment(AppCoordinator.self) var coordinator
+
     
     var body: some View {
         ZStack {
@@ -42,7 +43,7 @@ struct SecondFormView: View {
                     image: "privateCar") {
                         let answer: String = SecondFormAnswer.heavyLogistics.response
                         vm.sendAnswer(answer)
-                        router.navigate(to: .addVehicle)
+                        coordinator.onBoardingCoordinator.navigate(to: .addVehicle)
                     }
                 
                 
@@ -52,14 +53,16 @@ struct SecondFormView: View {
                     image: "transportation") {
                         let answer: String = SecondFormAnswer.privateVehicles.response
                         vm.sendAnswer(answer)
-                        router.navigate(to: .addVehicle)
+                        coordinator.onBoardingCoordinator.navigate(to: .addVehicle)
+
                     }
                 
                 
                 Button {
                     let answer: String = SecondFormAnswer.other.response
                     vm.sendAnswer(answer)
-                    router.navigate(to: .addVehicle)
+                    coordinator.onBoardingCoordinator.navigate(to: .addVehicle)
+
                 } label: {
                     Text("Other")
                         .font(.subheadline)
@@ -100,5 +103,5 @@ struct SecondFormView: View {
 
 #Preview {
     SecondFormView()
-        .environment(NavigationRouter())
+        .environment(AppCoordinator(appState: AppState()))
 }

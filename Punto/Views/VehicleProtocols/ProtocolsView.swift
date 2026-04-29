@@ -91,7 +91,6 @@ struct ProtocolsView: View {
 
 #Preview {
     ProtocolsView(user: .mock)
-        .environment(NavigationRouter())
         .environment(CarouselViewModel(user: .mock))
     
 }

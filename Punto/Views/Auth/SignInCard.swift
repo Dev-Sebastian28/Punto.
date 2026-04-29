@@ -6,7 +6,6 @@
 import SwiftUI
 
 struct SignInCard: View {
-    @Environment(NavigationRouter.self) var router
     @State private var email: String = ""
     @State private var password: String = ""
 
@@ -92,10 +91,7 @@ struct SignInCard: View {
     SignInCard(
         vm: AuthViewModel(
             mode: .signIn,
-            service: AuthService()
+            service: AuthService(), coordinator: AuthCoordinator()
         )
-    )
-    .environment(
-        NavigationRouter()
     )
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FleetVehicleCard: View {
     let vm: FleetVehicleCardViewModel
-    @Environment(NavigationRouter.self) var router
+    @Environment(AppCoordinator.self) var coordinator
     
     init(vehicle: Vehicle) {
         self.vm = .init(vehicle: vehicle)
@@ -45,18 +45,27 @@ struct FleetVehicleCard: View {
                         NavigationLink {
                             DriverControlPanel(vehicle: vm.vehicle)
                         } label: {
-                            Text("Start working")
-                                .font(.title2).bold()
-
-                            Image(systemName: "road.lanes")
-                                .font(.title2).bold()
-                                .padding(6)
-                                .background(Color.brandGreen)
-                                .cornerRadius(10)
+                            HStack(spacing: 12) {
+                                Text("Start working")
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                
+                                Image(systemName: "road.lanes")
+                                    .font(.title3)
+                                    .padding(8)
+                                    .background(Color.brandGreen)
+                                    .clipShape(.circle)
+                            }
+                            .foregroundColor(.white)
+                            .padding(.leading, 20)
+                            .padding(.trailing, 8)
+                            .padding(.vertical, 8)
+                            .background(
+                                Capsule()
+                                    .fill(Color.myBlue)
+                                    .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
+                            )
                         }
-                        .padding(6)
-                        .background(Color.myBlue.opacity(0.8))
-                        .cornerRadius(10)
                     }
                     
                     
@@ -163,7 +172,7 @@ struct FleetVehicleCard: View {
                 value: vm.pendingTask,
                 image: "checklist",
                 color: .blue) {
-                    router.navigate(to: .tasks)
+                    coordinator.fleetCoordinator.navigate(to: .tasks)
                 }
             
             QuickInfoButton(
@@ -171,7 +180,7 @@ struct FleetVehicleCard: View {
                 value: vm.pendingProtocols,
                 image: "shield",
                 color: .brandAmber) {
-                    router.navigate(to: .protocols)
+                    coordinator.fleetCoordinator.navigate(to: .protocols)
                 }
             
             QuickInfoButton(
@@ -179,7 +188,7 @@ struct FleetVehicleCard: View {
                 value: vm.maintenances,
                 image: "wrench.fill",
                 color: .brandBlueDark) {
-                    router.navigate(to: .manteinances)
+                    coordinator.fleetCoordinator.navigate(to: .manteinances)
                 }
             
             QuickInfoButton(
@@ -187,11 +196,11 @@ struct FleetVehicleCard: View {
                 value: vm.newExpeneses,
                 image: "dollarsign",
                 color: .brandGreen) {
-                    router.navigate(to: .expenses)
+                    coordinator.fleetCoordinator.navigate(to: .expenses)
+
                 }
         }
     }
-    
 }
 
 private struct QuickInfoButton: View {
@@ -234,5 +243,5 @@ private struct QuickInfoButton: View {
 
 #Preview {
     FleetVehicleCard(vehicle: User.mock.vehicles.first!)
-        .environment(NavigationRouter())
+        .environment(AppCoordinator(appState: AppState()))
 }

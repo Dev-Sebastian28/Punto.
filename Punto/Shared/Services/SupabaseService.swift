@@ -15,19 +15,7 @@ protocol AuthServiceProtocol {
 }
 
 struct AuthService: AuthServiceProtocol {
-    private let client: SupabaseClient
-    
-    init() {
-        self.client = SupabaseClient(
-            supabaseURL: URL(string: AppConstants.baseURL)!,
-            supabaseKey: AppConstants.projectAPIKey,
-            options: SupabaseClientOptions(
-                auth: .init(
-                    emitLocalSessionAsInitialSession: true
-                )
-            )
-        )
-    }
+    let client = SupabaseManager.shared.client
     
     func login(email: String, password: String) async throws -> AuthStatus {
         try await client.auth.signIn(email: email, password: password)
