@@ -4,7 +4,7 @@ struct DriverControlPanel: View {
     let vehicle: any Vehicle
     @State private var isHeaderExpanded = false
     
-    private var factories: [any FactoryQuickInfoCard] {
+    private var factories: [any ViewFactoryInterface] {
         [
             MaintenanceFactory(vehicle: vehicle),
             TaskFactory(vehicle: vehicle),
@@ -16,7 +16,7 @@ struct DriverControlPanel: View {
     var body: some View {
         VStack(spacing: 0) {
             
-            VehicleHeader(vehicle: vehicle, isExpanded: $isHeaderExpanded)
+            VehicleHeader(vehicle: vehicle.vehicleInformation, isExpanded: $isHeaderExpanded)
             
             QuickActionsGrid()
             
@@ -35,23 +35,23 @@ struct DriverControlPanel: View {
 }
 
 struct VehicleHeader: View {
-    let vehicle: any Vehicle
+    let vehicle: VehicleInformation
     @Binding var isExpanded: Bool
     
     var body: some View {
         VStack(alignment: .center, spacing: 2) {
            
             if isExpanded {
-                vehicleCard(info: vehicle.vehicleInformation)
+                vehicleCard(info: vehicle)
                     .transition(.move(edge: .top).combined(with: .opacity))
             } else {
                 HStack(alignment: .bottom) {
-                    Text(vehicle.vehicleInformation.model + " " + vehicle.vehicleInformation.brand)
+                    Text(vehicle.model + " " + vehicle.brand)
                         .font(.title2.bold())
                     
                     Spacer()
                     
-                    Text(vehicle.vehicleInformation.plate)
+                    Text(vehicle.plate)
                         .foregroundStyle(.secondary)
                     
                 }
@@ -86,7 +86,7 @@ struct VehicleHeader: View {
             }
         } label: {
             Image(systemName: "chevron.down")
-                .font(.body.bold())
+                .font(.title.bold())
                 .foregroundStyle(.secondary)
                 .rotationEffect(.degrees(isExpanded ? 180 : 0))
                 .padding(.vertical, 6)

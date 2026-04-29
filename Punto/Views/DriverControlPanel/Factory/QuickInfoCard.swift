@@ -8,18 +8,17 @@ import SwiftUI
 
 // MARK: - Protocols
 
-protocol FactoryQuickInfoCard {
+protocol ViewFactoryInterface {
     associatedtype Content: View
     func make() -> Content
 }
 
 
 // MARK: - Generic Card View
-
 struct QuickInfoCard<Item: Identifiable>: View {
     let title: String
     let icon: String
-    let iconColor: Color
+    let color: Color
     let items: [Item]
     let quickInfo: [QuickSummary]
     let rowContent: (Item) -> AnyView
@@ -48,10 +47,10 @@ struct QuickInfoCard<Item: Identifiable>: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text(title)
                         .font(.title2.bold())
-                    Text("\(items.count) items")
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(color)
                 }
             }
+            
             Spacer()
             HStack(alignment: .top) {
                 ForEach(quickInfo, id: \.title) { info in
@@ -65,19 +64,18 @@ struct QuickInfoCard<Item: Identifiable>: View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .frame(width: 55, height: 55)
-                .foregroundStyle(iconColor.opacity(0.3))
+                .foregroundStyle(color.opacity(0.5))
             Circle()
                 .frame(width: 40, height: 40)
                 .foregroundStyle(.white)
             Image(systemName: icon)
                 .font(.title3.bold())
-                .foregroundStyle(iconColor)
+                .foregroundStyle(color)
         }
     }
 }
 
 // MARK: - Quick Summary Badge
-
 struct QuickSummaryBadge: View {
     let info: QuickSummary
     var body: some View {
@@ -85,13 +83,10 @@ struct QuickSummaryBadge: View {
             Text(info.title)
                 .foregroundStyle(info.color)
             Text("\(info.value)")
+            Rectangle()
+                .fill(info.color)
+                .frame(width: 30, height: 1)
+                
         }
-        .padding(.vertical, 3)
-        .padding(.horizontal, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 5)
-                .stroke(info.color)
-                .fill(info.color.opacity(0.1))
-        )
     }
 }

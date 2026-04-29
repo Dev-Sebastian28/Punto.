@@ -8,25 +8,38 @@
 
 import SwiftUI
 
-struct ProtocolFactory: FactoryQuickInfoCard {
+struct ProtocolFactory: ViewFactoryInterface {
     let vehicle: any Vehicle
 
     private var sortedProtocols: [VehicleProtocol] {
         vehicle.protocols
     }
+    
+    private var quickInfo: [QuickSummary] {
+        let high = vehicle.protocols.filter { $0.importance == .high }.count
+        let medium = vehicle.protocols.filter { $0.importance == .medium }.count
+        let low = vehicle.protocols.filter { $0.importance == .low }.count
+        
+        return [
+            QuickSummary(title: "low", value: low, color: .green),
+            QuickSummary(title: "mid", value: medium, color: .yellow),
+            QuickSummary(title: "High", value: high, color: .red)
+        ]
+    }
 
     func make() -> some View {
         QuickInfoCard(
             title: "Protocols",
-            icon: "doc.badge.checkmark",
-            iconColor: .purple,
+            icon: "shield.fill",
+            color: .yellow,
             items: sortedProtocols,
-            quickInfo: []
+            quickInfo: quickInfo
         ) { proto in
             AnyView(ProtocolRow(proto: proto))
         }
     }
 }
+
 
 // MARK: - Protocol Row
 

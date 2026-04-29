@@ -8,21 +8,29 @@
 
 import SwiftUI
 
-struct MaintenanceFactory: FactoryQuickInfoCard {
+struct MaintenanceFactory: ViewFactoryInterface {
     let vehicle: any Vehicle
 
     private var sortedMaintenances: [VehiclePartWrapper] {
         vehicle.maintenance
     }
-
+    
+    private var quickInfo: [QuickSummary] {
+        let pending = vehicle.tasks.filter { $0.status == .pending }.count
+        let high    = vehicle.tasks.filter { $0.importance == .high }.count
+        return [
+            QuickSummary(title: "Warning", value: pending, color: .yellow),
+            QuickSummary(title: "Critical",    value: high,    color: .red)
+        ]
+    }
 
     func make() -> some View {
         QuickInfoCard(
-            title: "Maintenance",
+            title: "Maintenan...",
             icon: "wrench.and.screwdriver.fill",
-            iconColor: .orange,
+            color: .gray,
             items: sortedMaintenances,
-            quickInfo: []
+            quickInfo: quickInfo
         ) { maintenance in
             AnyView(MaintenanceRow(maintenance: maintenance))
         }

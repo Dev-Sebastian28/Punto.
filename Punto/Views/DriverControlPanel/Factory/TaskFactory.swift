@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct TaskFactory: FactoryQuickInfoCard {
+struct TaskFactory: ViewFactoryInterface {
     let vehicle: any Vehicle
 
     private var sortedTasks: [VTask] {
@@ -32,7 +32,7 @@ struct TaskFactory: FactoryQuickInfoCard {
         QuickInfoCard(
             title: "Tasks",
             icon: "list.dash",
-            iconColor: .blue,
+            color: .blue,
             items: sortedTasks,
             quickInfo: quickInfo
         ) { task in

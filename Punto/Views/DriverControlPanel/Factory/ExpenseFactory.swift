@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ExpenseFactory: FactoryQuickInfoCard {
+struct ExpenseFactory: ViewFactoryInterface {
     let vehicle: any Vehicle
 
     private var sortedExpenses: [Expense] {
@@ -26,7 +26,7 @@ struct ExpenseFactory: FactoryQuickInfoCard {
         QuickInfoCard(
             title: "Expenses",
             icon: "creditcard.fill",
-            iconColor: .green,
+            color: .green,
             items: sortedExpenses,
             quickInfo: quickInfo
         ) { expense in

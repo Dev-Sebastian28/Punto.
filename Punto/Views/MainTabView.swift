@@ -29,7 +29,7 @@ struct MainTabView: View {
                 }
 
                 Tab("Account", systemImage: "person.crop.circle.fill") {
-                    EmptyView()
+                    ProfileView(user: user)
                 }
             }
     }
