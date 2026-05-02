@@ -6,14 +6,30 @@
 //
 
 @testable import Punto
-
 import Foundation
+
+enum AuthError: Error {
+    case invalidCredentials
+    case unknown
+}
 
 /// Un Mock profesional debe permitir:
 /// 1. Controlar el resultado (Éxito/Error).
 /// 2. Simular latencia de red.
 /// 3. Registrar llamadas (Spying) para unit testing.
 final class AuthMock: AuthServiceProtocol {
+    // MARK: - Coordinator Dependence
+    let authCoordinator: AuthCoordinator
+
+    // MARK: - init
+    init(authCoordinator: AuthCoordinator) {
+        self.authCoordinator = authCoordinator
+    }
+    
+    init() {
+        self.authCoordinator = AuthCoordinator()
+    }
+
     
     // MARK: - Configuration Properties
     /// Define qué debe devolver cada método
@@ -23,16 +39,9 @@ final class AuthMock: AuthServiceProtocol {
     /// Simula el delay del servidor (útil para probar ProgressViews)
     var networkDelay: UInt64 = 10000
 
-    // MARK: - Spy Properties
-    /// Registran si los métodos fueron llamados y con qué parámetros
-    private(set) var loginCallCount = 0
-    private(set) var lastLoginEmail: String?
-    private(set) var signupCallCount = 0
 
     // MARK: - Protocol Methods
     func login(email: String, password: String) async throws -> Punto.AuthStatus {
-        loginCallCount += 1
-        lastLoginEmail = email
         
         // Simular delay de red si se configura
         if networkDelay > 0 {
@@ -42,24 +51,26 @@ final class AuthMock: AuthServiceProtocol {
         // Retornar resultado configurado o lanzar error
         switch loginResult {
         case .success(let status):
+            authCoordinator.didFinishLogin()
             return status
-        case .failure(let error):
-            throw error
+        case .failure:
+            return .notAuthenticated
+            
         }
     }
 
     func signup(email: String, password: String) async throws -> Punto.AuthStatus {
-        signupCallCount += 1
-        
         if networkDelay > 0 {
             try await Task.sleep(nanoseconds: networkDelay)
         }
         
         switch signupResult {
         case .success(let status):
+            authCoordinator.didFinishSignUp()
+
             return status
-        case .failure(let error):
-            throw error
+        case .failure:
+            return .notAuthenticated
         }
     }
 }
