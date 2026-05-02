@@ -28,12 +28,9 @@ struct VehicleQuickView: View {
                 VStack(alignment: .center, spacing: 10) {
                     HStack(alignment: .top, spacing: 8) {
                         ZStack {
-                            Image(vehicle.imageUrl ?? "")
-                                .resizable()
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .frame(width: 96, height: 68)
+                            VehicleImageView(imageUrl: vehicle.imageUrl, height: 80, cornerRadius: 12)
+
                         }
-                        
                         vehicleInfo
                     }
                     
@@ -56,6 +53,7 @@ struct VehicleQuickView: View {
             }
         }
     }
+    
     private var vehicleInfo: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(vehicle.brand + " " + vehicle.model )

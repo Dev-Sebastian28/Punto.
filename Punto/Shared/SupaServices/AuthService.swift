@@ -15,7 +15,7 @@ protocol AuthServiceProtocol {
 }
 
 struct AuthService: AuthServiceProtocol {
-    let client = SupabaseManager.shared.client
+    let client = SupabaseManagerSingleton.shared.client
     
     func login(email: String, password: String) async throws -> AuthStatus {
         try await client.auth.signIn(email: email, password: password)

@@ -34,8 +34,7 @@ struct AddDriverView: View {
             Color(.systemGroupedBackground)
                 .ignoresSafeArea()
 
-            // Main layout
-            VStack(spacing: 0) {
+            VStack {
                 header
                     .padding(.horizontal, 10)
                     .padding(.top, 0)
@@ -49,13 +48,15 @@ struct AddDriverView: View {
                     landscapeContent
                 }
             }
+            .ignoresSafeArea(edges: .bottom)
+            .padding(.horizontal)
 
             if showMessage {
-                messageToast
+                MessageToast(message: vm.message)
             }
         }
         // Watch the message from VM and trigger animation
-        .onChange(of: vm.mesage) { _, newValue in
+        .onChange(of: vm.message) { _, newValue in
             guard !newValue.isEmpty else { return }
             presentMessage()
         }
@@ -65,26 +66,7 @@ struct AddDriverView: View {
                 .presentationDetents([.height(310)])
         }
     }
-
-    // MARK: – Toast
-    private var messageToast: some View {
-        HStack(spacing: 10) {
-            Text(vm.mesage)
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.primary)
-            Spacer()
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(.regularMaterial)
-                .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 4)
-        )
-        .padding(.horizontal, 16)
-        .padding(.top, 8)
-    }
-
+    
     private func presentMessage() {
         showMessage = true
         Task {
@@ -94,6 +76,7 @@ struct AddDriverView: View {
         }
 
     }
+    
     private var header: some View {
         HStack(alignment: .top, spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
@@ -111,91 +94,42 @@ struct AddDriverView: View {
             laterButton
         }
     }
+    
     private var portraitContent: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(spacing: 16) {
-                ForEach(vm.vehicles.enumerated(), id: \.element.vehicleInformation.id) { index, vehicle in
-                    vehicleRow(index: index, vehicle: vehicle)
+                ForEach(vm.vehicles.enumerated(), id: \.element.vehicleInformation.id) {
+                    index,
+                    vehicle in
+                    VehicleDriversCard(
+                        vehicle: vehicle,
+                        vm: vm,
+                        index: index,
+                        isPresented: $isAddDriverPresented
+                    )
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 16)
         }
     }
+    
     private var landscapeContent: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(alignment: .top, spacing: 16) {
-                ForEach(vm.vehicles.enumerated(), id: \.element.vehicleInformation.id) { index, vehicle in
-                    vehicleRow(index: index, vehicle: vehicle)
+                ForEach(vm.vehicles.enumerated(), id: \.element.vehicleInformation.id) {
+                    index,
+                    vehicle in
+                    VehicleDriversCard(
+                        vehicle: vehicle,
+                        vm: vm,
+                        index: index,
+                        isPresented: $isAddDriverPresented
+                    )
                         .frame(width: 340)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 16)
         }
     }
-    private func vehicleRow(index: Int, vehicle: Vehicle) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            vehicleCard(info: vehicle.vehicleInformation)
-
-            Divider()
-
-            HStack(alignment: .top, spacing: 12) {
-                // Add driver button
-                Button {
-                    selectedVehicleIndex = index
-                    isAddDriverPresented = true
-                } label: {
-                    VStack(spacing: 6) {
-                        Image(systemName: "person.crop.circle.badge.plus")
-                            .font(.system(size: 30))
-                            .foregroundStyle(.green)
-                        Text("Add")
-                            .font(.caption.bold())
-                            .foregroundStyle(.green)
-                    }
-                    .frame(width: 64, height: 70)
-                    .background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
-                }
-                .buttonStyle(.plain)
-
-                Divider()
-                    .frame(height: 70)
-
-                // Drivers list or empty state
-                if vm.user.vehicles[index].drivers.isEmpty {
-                    VStack(spacing: 6) {
-                        Image(systemName: "person.crop.circle.dashed")
-                            .font(.system(size: 28))
-                            .foregroundStyle(.tertiary)
-                        Text("No drivers yet")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity)
-                } else {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 10) {
-                            ForEach(vehicle.drivers, id: \.name) { driver in
-                                DriverCardView(driver: driver)
-                                    .transition(.scale(scale: 0.85).combined(with: .opacity))
-                            }
-                        }
-                        .padding(.horizontal, 4)
-                    }
-                }
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(.secondarySystemGroupedBackground))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .strokeBorder(Color(.separator).opacity(0.5), lineWidth: 0.5)
-        )
-    }
+    
     private var laterButton: some View {
         Button {
             coordinator.onBoardingCoordinator.didFinishOnBoarding()
@@ -203,12 +137,7 @@ struct AddDriverView: View {
             Text("Later")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
-                .padding(.vertical, 6)
-                .padding(.horizontal, 12)
-                .background(
-                    Capsule()
-                        .fill(Color(.tertiarySystemFill))
-                )
+                .genericCapsuleBackground(color: .gray.opacity(0.1))
         }
         .buttonStyle(.plain)
     }

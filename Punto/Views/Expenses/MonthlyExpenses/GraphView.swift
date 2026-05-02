@@ -55,20 +55,20 @@ struct GraphView: View {
                 HStack {
                     Text(data[index].amount.formatted(.number.grouping(.automatic)))
                         .foregroundStyle(.green)
-                        .customBackground(color: .green.opacity(0.25))
+                        .genericRoundedBackground(color: .green.opacity(0.25))
                     
                     Spacer()
                     Text(data[index].amount.formatted(.number.grouping(.automatic)))
                         .foregroundStyle(.red)
-                        .customBackground(color: .red.opacity(0.25))
+                        .genericRoundedBackground(color: .red.opacity(0.25))
 
-                }.customBackground(color: .white)
+                }.genericRoundedBackground(color: .white)
 
 
             } else {
                 Text("Error")
             }
-        }.customBackground(color: .blue.opacity(0.2))
+        }.genericRoundedBackground(color: .blue.opacity(0.2))
     }
 
 }

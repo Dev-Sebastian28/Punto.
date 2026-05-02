@@ -188,10 +188,7 @@ private extension ProtocolDetailView {
                 }
                 .pickerStyle(.menu)
                 .tint(.orange)
-            }
-            .padding(12)
-            .background(Color(.systemGray6))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            }.genericRoundedBackground(color: .gray.opacity(0.1))
         }
     }
     
@@ -212,9 +209,8 @@ private extension ProtocolDetailView {
                             .foregroundStyle(.tertiary)
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 24)
-                    .background(Color(.systemGray6))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .genericRoundedBackground(color: .gray.opacity(0.1))
+                    
                 } else {
                     // Task list
                     VStack(spacing: 0) {
@@ -227,20 +223,13 @@ private extension ProtocolDetailView {
                 }
                 
                 // Add task button
-                Button {
+                DButtonComp(
+                    text: "Add Task",
+                    color: .orange.opacity(0.5),
+                    image: "plus"
+                ) {
                     isPresented.toggle()
-                } label: {
-                    Label("Add task", systemImage: "plus")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.orange)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 11)
-                        .background(Color.orange.opacity(0.10))
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .overlay(RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.orange.opacity(0.3), lineWidth: 0.5))
                 }
-                .padding(.top, 8)
             }
         }
     }

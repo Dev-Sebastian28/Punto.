@@ -21,6 +21,7 @@ enum FuelType: String, Codable {
 
 struct VehicleInformation: Identifiable, Codable {
     var id: UUID = UUID()
+    var userId: UUID?
     var imageUrl: String?
     var plate: String
     var brand: String
@@ -28,13 +29,13 @@ struct VehicleInformation: Identifiable, Codable {
     var year: Int
     var mileage: Int
     var engine: String
-    
     var transmission: TransmissionType
     var fuel: FuelType
     
     enum CodingKeys: String, CodingKey {
         case id
-        case imageUrl = "image_url" // En la DB se llamará image_url
+        case userId = "user_id" // <--- AÑADE ESTO
+        case imageUrl = "image_url"
         case plate, brand, model, year, mileage, engine, transmission, fuel
     }
 }

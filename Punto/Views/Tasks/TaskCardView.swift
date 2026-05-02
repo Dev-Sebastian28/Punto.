@@ -13,7 +13,7 @@ struct TaskCardView: View {
     var body: some View {
         HStack(spacing: 10) {
             // Contenido a la izquierda
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 20) {
                 
                 VStack (alignment: .leading) {
                     Text(task.title)

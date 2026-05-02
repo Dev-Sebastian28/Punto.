@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import UIKit
 
 struct AddVehicleForm: View {
     @State private var isPrivateSelected = false
@@ -24,7 +25,8 @@ struct AddVehicleForm: View {
     )
     
     @State private var pickerItem: PhotosPickerItem?
-    @State private var selectedImage: Image?
+    @State private var uiImage: UIImage?
+    @State private var selectedImageData: Data?
     
     let vm: AddVehicleViewModel
     
@@ -34,32 +36,41 @@ struct AddVehicleForm: View {
         VStack(spacing: 16) {
             Spacer()
             ScrollView {
-                PhotosPicker(selection: $pickerItem, matching: .all(of: [.images, .livePhotos])) {
-                    Label("Selecet a vehicle image", systemImage: "photo")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 200)
-                        .background {
-                            selectedImage
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.blue)
-                        }
-                }.padding(.bottom)
+                imagePicker
                 vehicleTypeSelector
-                    .padding(.bottom)
                 formFields
                 actionButtons
             }
-        }.padding(.horizontal)
-            .onChange(of: pickerItem) {
-                
-                Task {
-                    selectedImage = nil
-                    if let pickerItem {
-                        let image = try await pickerItem.loadTransferable(type: Image.self)
-                        selectedImage = image
-                    }
+        }
+        .padding(.horizontal)
+        .onChange(of: pickerItem) { _, newItem in
+            Task {
+                if let data = try? await newItem?.loadTransferable(type: Data.self),
+                   let image = UIImage(data: data),
+                   let compressedData = image.jpegData(compressionQuality: 0.5) {
+                    selectedImageData = compressedData
+                    uiImage = image
                 }
             }
+        }
+    }
+    
+    private var imagePicker: some View {
+        VStack {
+            PhotosPicker(selection: $pickerItem, matching: .images) {
+                if let uiImage = uiImage {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 200)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                } else {
+                    Label("Select a vehicle image", systemImage: "photo")
+                        .frame(maxWidth: .infinity, minHeight: 200)
+                        .background(Color.gray.opacity(0.1))
+                }
+            }
+        }.clipShape(RoundedRectangle(cornerRadius: 10))
     }
     
     private var vehicleTypeSelector: some View {
@@ -175,11 +186,15 @@ struct AddVehicleForm: View {
                 color: .blue,
                 image: "car.fill",
                 maxWidth: 150) {
-                    if isTransportSelected {
-                        vm.addVehicle(TransportationVehicle(vehicleInformation: vehicleInf))
-                    } else {
-                        vm.addVehicle(PrivateVehicle(vehicleInformation: vehicleInf))
+                    Task {
+                        if isTransportSelected {
+                            await vm.addVehicle(TransportationVehicle(vehicleInformation: vehicleInf), imageData: selectedImageData)
+                            
+                        } else {
+                            await vm.addVehicle(TransportationVehicle(vehicleInformation: vehicleInf), imageData: selectedImageData)
+                        }
                     }
+                    
                     dimiss()
                 }
         }

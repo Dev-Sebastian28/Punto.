@@ -148,6 +148,5 @@ private struct AnimatedPressButtonStyle: ButtonStyle {
             maxWidth: 120
         ) {
         }
-    }
-    .padding()
+    }.padding()
 }

@@ -7,62 +7,61 @@ import SwiftUI
 
 struct AuthView: View {
     @State var vm: AuthViewModel
-
+    private let viewStyle: LinearGradient = LinearGradient(
+        colors: [.myBlue, .white, .myBlue],
+        startPoint: .top,
+        endPoint: .bottom
+    )
+    
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: [.myBlue, .white, .myBlue],
-                startPoint: .top,
-                endPoint: .bottom
-            ).ignoresSafeArea()
-
+            viewStyle.ignoresSafeArea()
+            
             VStack(spacing: 25) {
-                modeSelector
-
+                authModeSelector
                 Group {
-                    if vm.mode == .signUp {
-                        SignUpCard(vm: vm)
-                    } else {
+                    switch vm.mode {
+                    case .signIn:
                         SignInCard(vm: vm)
+                    case .signUp:
+                        SignUpCard(vm: vm)
                     }
                 }.transition(.push(from: .leading))
-                socialSection
+                appleButton
             }
             .animation(.snappy, value: vm.mode)
-            .padding(.horizontal, 15)
-            .padding(.vertical, 28)
-        }
-        .onChange(of: vm.authStatus) { _, newStatus in
-            // If the user had a succefuel operation and its his first time go to onboaerding
-            if newStatus == .authenticated && vm.mode == .signUp {
-            }
-            
-            // If the user had a succefuel operation and its not his first time go to maintabs
-
-            else if newStatus == .authenticated && vm.mode == .signIn {
-            }
+            .padding(.horizontal)
         }
     }
-
+    
     // MARK: - Mode Selector
-    private var modeSelector: some View {
+    private var authModeSelector: some View {
         HStack(spacing: 8) {
-            ModeButton(title: "Sign Up", isSelected: vm.mode == .signUp) {
-                vm.setMode(.signUp)
-            }
-            ModeButton(title: "Sign In", isSelected: vm.mode == .signIn) {
-                vm.setMode(.signIn)
-            }
+            ModeButton(
+                title: "Sign Up",
+                isSelected: vm.mode == .signUp) {
+                    vm.changeAuthMode(
+                        .signUp
+                    )
+                }
+            
+            ModeButton(
+                title: "Sign In",
+                isSelected: vm.mode == .signIn) {
+                    vm.changeAuthMode(
+                        .signIn
+                    )
+                }
         }
     }
-
-    // MARK: - Social
-    private var socialSection: some View {
+    
+    // MARK: - Apple Button
+    private var appleButton: some View {
         VStack(spacing: 14) {
             Text("Or continue with:")
                 .font(.title2.weight(.semibold))
                 .foregroundStyle(.white.opacity(0.88))
-
+            
             SocialButton(
                 assetName: "appleIcon",
                 description: "Continue with Apple",
@@ -80,7 +79,7 @@ private struct ModeButton: View {
     let title: String
     let isSelected: Bool
     let action: () -> Void
-
+    
     var body: some View {
         Button(action: action) {
             Text(title)
@@ -103,31 +102,34 @@ private struct SocialButton: View {
     let background: Color
     let iconSize: CGFloat
     let action: () -> Void
-
+    
     var body: some View {
         Button(action: action) {
             HStack(spacing: 16) {
                 Image(systemName: "applelogo")
                     .font(.title)
                     .foregroundStyle(.white)
-
+                
                 Text(description)
                     .font(.title3.bold())
                     .foregroundStyle(.white)
-
+                
                 Spacer()
-
+                
                 Image(systemName: "arrow.right")
                     .foregroundStyle(.white.opacity(0.6))
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 14)
-            .background(background)
-            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .genericRoundedBackground(color: background)
         }
     }
 }
 
 #Preview {
-    AuthView(vm: AuthViewModel(mode: .signIn, service: AuthService(), coordinator: AuthCoordinator()))
+    AuthView(
+        vm: AuthViewModel(
+            mode: .signIn,
+            service: AuthService(),
+            coordinator: AuthCoordinator()
+        )
+    ).environment(AppCoordinator(appState: AppState()))
 }

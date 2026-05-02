@@ -9,17 +9,15 @@ import SwiftUI
 
 struct IntroductionAppView: View {
     @Environment(AppCoordinator.self) var coordinator
+    private let backgroundColor: LinearGradient = LinearGradient(
+        colors: [.myBlue, .myBlue.opacity(0.4), .blue],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
 
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: [.myBlue, .myBlue.opacity(0.4), .blue],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
-            
-            
+            backgroundColor.ignoresSafeArea()
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 10) {
                     headerSection
@@ -28,16 +26,14 @@ struct IntroductionAppView: View {
                     featureGrid
                     footerCard
                 }
-                .padding(.horizontal, 15)
-                .padding(.vertical, 28)
-            }
+            }.padding(.horizontal)
         }
     }
     
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text("Welcome to Punto")
                         .font(.title).bold()
                         .foregroundStyle(.white)
@@ -49,7 +45,7 @@ struct IntroductionAppView: View {
                 }
                 
                 Button {
-                    coordinator.onBoardingCoordinator.navigate(to: .form1)
+                    coordinator.onBoardingCoordinator.navigate(to: .createAccount)
                 } label: {
                     Text("Next")
                         .font(.title2).bold()
@@ -79,31 +75,25 @@ struct IntroductionAppView: View {
     }
     
     private var overviewCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 4) {
             Text("What you can do in Punto")
                 .font(.system(.title2, design: .rounded, weight: .bold))
-                .foregroundStyle(Color(red: 0.09, green: 0.19, blue: 0.22))
+                .foregroundStyle(.black)
             
             Text("Punto is an app to manage vehicle transport fleets. You can add tasks, register protocols, control expenses and earnings, track maintenance, and above all, find jobs to keep your operation moving.")
                 .font(.system(.body, design: .rounded))
                 .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+                .padding(.bottom)
             
             HStack(spacing: 12) {
                 statPill(title: "Everything in order", value: "Operation")
                 statPill(title: "Always visible", value: "Your Fleet")
             }
-        }
-        .padding(22)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .shadow(color: Color.black.opacity(0.10), radius: 18, x: 0, y: 12)
+        }.genericRoundedBackground(color: .white)
     }
     
     private var visualSection: some View {
-        ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(.white)
+
             
             VStack(alignment: .leading, spacing: 14) {
                 HStack {
@@ -116,19 +106,8 @@ struct IntroductionAppView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                
-                Image("transportation")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 140)
-                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-                
-            }
-            .padding(18)
+            }.genericRoundedBackground(color: .white)
         }
-        .frame(minHeight: 200)
-    }
     
     private var featureGrid: some View {
         VStack(spacing: 14) {
@@ -144,7 +123,7 @@ struct IntroductionAppView: View {
                     title: "Expenses & Earnings",
                     description: "Track fuel, tolls, charges, and transactions to understand your profitability.",
                     systemImage: "dollarsign.arrow.circlepath",
-                    tint: .blue
+                    tint: .green
                 )
             }
             
@@ -153,14 +132,14 @@ struct IntroductionAppView: View {
                     title: "Maintenance",
                     description: "Track services, mileage, and critical parts before they fail.",
                     systemImage: "gearshape.2.fill",
-                    tint: Color(red: 0.17, green: 0.53, blue: 0.83)
+                    tint: .gray
                 )
                 
                 featureCard(
                     title: "Find Jobs",
                     description: "Find new transport opportunities and move your business with more continuity.",
                     systemImage: "magnifyingglass.circle.fill",
-                    tint: Color(red: 0.46, green: 0.38, blue: 0.86)
+                    tint: .yellow
                 )
             }
         }
@@ -171,24 +150,18 @@ struct IntroductionAppView: View {
             Image(systemName: "road.lanes.curved.right")
                 .font(.system(size: 34, weight: .bold))
                 .foregroundStyle(.white)
-                .frame(width: 64, height: 64)
-                .background(.blue)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .genericRoundedBackground(color: .gray)
             
             VStack(alignment: .leading, spacing: 6) {
                 Text("Start with Clarity")
-                    .font(.system(.headline, design: .rounded, weight: .bold))
+                    .font(.title3).bold()
                 
                 Text("Punto helps you understand what's happening with your fleet today and prepare for the next job with more control.")
                     .font(.system(.subheadline, design: .rounded))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-        }
-        .padding(20)
-        .background(.white.opacity(0.92))
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        .shadow(color: Color.black.opacity(0.08), radius: 16, x: 0, y: 8)
+        }.genericRoundedBackground(color: .white)
     }
     
     private func welcomeBadge(title: String, systemImage: String) -> some View {
@@ -199,10 +172,7 @@ struct IntroductionAppView: View {
         }
         .font(.system(.subheadline, design: .rounded))
         .foregroundStyle(.white)
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .background(.white.opacity(0.10))
-        .clipShape(Capsule())
+        .genericCapsuleBackground(color: .white.opacity(0.1))
     }
     
     private func statPill(title: String, value: String) -> some View {
@@ -213,41 +183,32 @@ struct IntroductionAppView: View {
             
             Text(value)
                 .font(.system(.headline, design: .rounded, weight: .bold))
-                .foregroundStyle(Color(red: 0.09, green: 0.19, blue: 0.22))
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(14)
-        .background(.black.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .foregroundStyle(.black)
+        }.genericRoundedBackground(color: .gray.opacity(0.24))
     }
     
     private func featureCard(title: String, description: String, systemImage: String, tint: Color) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Image(systemName: systemImage)
-                .font(.system(size: 26, weight: .bold))
-                .foregroundStyle(tint)
-                .frame(width: 52, height: 52)
-                .background(tint.opacity(0.12))
-                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            
-            Text(title)
-                .font(.system(.headline, design: .rounded, weight: .bold))
-                .foregroundStyle(Color(red: 0.09, green: 0.19, blue: 0.22))
+            HStack(alignment: .top) {
+                Image(systemName: systemImage)
+                    .font(.title2)
+                    .foregroundStyle(tint)
+                    .genericRoundedBackground(color: tint.opacity(0.1))
+                
+                Text(title)
+                    .font(.system(.headline, design: .rounded, weight: .bold))
+                    .foregroundStyle(.black)
+            }
             
             Text(description)
                 .font(.system(.footnote, design: .rounded, weight: .medium))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, minHeight: 190, alignment: .topLeading)
-        .padding(18)
-        .background(.white.opacity(0.92))
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .shadow(color: Color.black.opacity(0.08), radius: 14, x: 0, y: 8)
+        }.genericRoundedBackground(color: .white)
     }
 }
 
 #Preview {
     IntroductionAppView()
-        .environment(OnboardingCoordinator(appState: AppState()))
+        .environment(AppCoordinator(appState: AppState()))
 }

@@ -42,7 +42,7 @@ struct VehicleHeader: View {
         VStack(alignment: .center, spacing: 2) {
            
             if isExpanded {
-                vehicleCard(info: vehicle)
+                VehicleCard(info: vehicle)
                     .transition(.move(edge: .top).combined(with: .opacity))
             } else {
                 HStack(alignment: .bottom) {

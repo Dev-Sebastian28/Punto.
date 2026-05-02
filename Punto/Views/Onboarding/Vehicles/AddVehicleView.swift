@@ -10,18 +10,20 @@ import SwiftUI
 struct AddVehicleView: View {
     @State private var isAddVehiclePresented = false
     @State private var vm: AddVehicleViewModel
+    @State private var showMessage: Bool = false
     @Environment(AppCoordinator.self) var coordinator
-
+    
     
     init(user: User) {
         _vm = State(wrappedValue: AddVehicleViewModel(user: user))
     }
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .center) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 24) {
                     header
+                    
                     if vm.hasVehicle {
                         vehicleInfoSection
                         DButtonComp(
@@ -31,15 +33,39 @@ struct AddVehicleView: View {
                                 isAddVehiclePresented.toggle()
                             }
                     } else {
-                        EmptyStateVehicleCard(isPresented: $isAddVehiclePresented)
+                        EmptyStateVehicleCard(isFormPresented: $isAddVehiclePresented)
                     }
+                    
                 }.padding(.horizontal, 16)
             }
             .background(Color.platformGroupedBackground)
             .sheet(isPresented: $isAddVehiclePresented) {
                 AddVehicleForm(vm: self.vm)
             }
+            
+            if showMessage {
+                if let message = vm.message {
+                    MessageToast(message: message)
+                }
+            }
+            
+            if vm.isLoading {
+                Color.white
+                ProgressView()
+            }
+            
+        }.onChange(of: vm.message) { _, _ in
+            presentMessage()
         }
+    }
+    private func presentMessage() {
+        showMessage = true
+        Task {
+            try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
+            showMessage = false
+            
+        }
+        
     }
     
     private var header: some View {
@@ -65,6 +91,7 @@ struct AddVehicleView: View {
             }
         }
     }
+    
     private var vehicleInfoSection: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
@@ -84,6 +111,7 @@ struct AddVehicleView: View {
             }
         }
     }
+    
     private var navigationButton: some View {
         Button {
             if vm.hasVehicle {
@@ -96,18 +124,13 @@ struct AddVehicleView: View {
             Text(vm.hasVehicle ?  "Add Drivers" : "Add Later")
                 .font(.caption2.weight(.bold))
                 .foregroundStyle(vm.hasVehicle ? .green : .secondary )
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(vm.hasVehicle ? .green.opacity(0.1) : .secondary.opacity(0.1))
-                .clipShape(Capsule())
-        }
-        .buttonStyle(.plain)
+                .genericCapsuleBackground(color: vm.hasVehicle ? .green.opacity(0.1) : .secondary.opacity(0.1))
+        }.buttonStyle(.plain)
     }
 }
 
 
-
 #Preview {
     AddVehicleView(user: .mock)
-        .environment(OnboardingCoordinator(appState: AppState()))
+        .environment(AppCoordinator(appState: AppState()))
 }

@@ -26,43 +26,41 @@ private enum FirstFormAnswer {
 struct FirstFormView: View {
     let vm = OnboardingFormsViewModel(path: .form1)
     @Environment(AppCoordinator.self) var coordinator
-
+    
     var body: some View {
-        ZStack {
-            VStack (alignment: .center, spacing: 10) {
-                
-                header
-                    .padding(.bottom)
-                
-                FormCardView(
-                    title: "Owner-Operator",
-                    text: "You own the vehicle and you are the primary driver.",
-                    image: "singleDriver") {
-                        let answer: String = FirstFormAnswer.ownerOperator.response
-                        vm.sendAnswer(answer)
-                        coordinator.onBoardingCoordinator.navigate(to: .form2)
-                    }
-                
-                FormCardView(
-                    title: "Coordinator",
-                    text: "You own or manage multiple vehicles but do not drive them yourself.",
-                    image: "manager") {
-                        let answer: String = FirstFormAnswer.cordinator.response
-                        vm.sendAnswer(answer)
-                        coordinator.onBoardingCoordinator.navigate(to: .form2)
-                    }
-                
-                FormCardView(
-                    title: "Contracted Driver",
-                    text: "You drive a vehicle owned by a fleet owner or a company.",
-                    image: "driver") {
-                        let answer: String = FirstFormAnswer.contractedDriver.response
-                        vm.sendAnswer(answer)
-                        coordinator.onBoardingCoordinator.navigate(to: .form2)
-                    }
-                Spacer()
-            }.padding(.horizontal, 10)
-        }
+        VStack (alignment: .leading, spacing: 10) {
+            
+            header
+                .padding(.bottom)
+            
+            FormCardView(
+                title: "Owner-Operator",
+                text: "You own the vehicle and you are the primary driver.",
+                image: "singleDriver") {
+                    let answer: String = FirstFormAnswer.ownerOperator.response
+                    vm.sendAnswer(answer)
+                    coordinator.onBoardingCoordinator.uniqueNavigation(to: .form2)
+                }
+            
+            FormCardView(
+                title: "Coordinator",
+                text: "You own or manage multiple vehicles but do not drive them yourself.",
+                image: "manager") {
+                    let answer: String = FirstFormAnswer.cordinator.response
+                    vm.sendAnswer(answer)
+                    coordinator.onBoardingCoordinator.uniqueNavigation(to: .form2)
+                }
+            
+            FormCardView(
+                title: "Contracted Driver",
+                text: "You drive a vehicle owned by a fleet owner or a company.",
+                image: "driver") {
+                    let answer: String = FirstFormAnswer.contractedDriver.response
+                    vm.sendAnswer(answer)
+                    coordinator.onBoardingCoordinator.uniqueNavigation(to: .form2)
+                }
+            Spacer()
+        }.padding(.horizontal, 10)
     }
     
     private var header: some View {

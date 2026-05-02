@@ -12,6 +12,11 @@ struct FormCardView: View {
     var text: String
     var image: String
     var action: () -> Void = {}
+    private let cardStyle = LinearGradient(
+        colors: [.brandBlue, .brandBlueDark],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
 
 
     var body: some View {
@@ -19,28 +24,22 @@ struct FormCardView: View {
             Button {
                 action()
             } label: {
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(.title2.bold())
                         .foregroundStyle(.white)
                         .padding(.vertical, 8)
                         .padding(.horizontal, 20)
                         .background(
-                            LinearGradient(
-                                colors: [.brandBlue, .brandBlueDark],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .clipShape(.capsule)
+                            cardStyle
+                        ).clipShape(.capsule)
                     
                     HStack(alignment: .top, spacing: 5) {
-                        
                         Text(text)
-                            .frame(maxWidth: 270, maxHeight: 80, alignment: .leading)
+                            .frame(maxWidth: 270, maxHeight: 80)
                             .multilineTextAlignment(.leading)
                             .italic()
-                            .foregroundStyle(Color.textMuted)
+                            .foregroundStyle(Color.black)
                         
                         Spacer()
                         
@@ -49,10 +48,9 @@ struct FormCardView: View {
                             .scaledToFit()
                             .frame(width: 100, height: 100)
                             .padding(.top, -20)
-                            
                     }
                 }
-                .padding(10)
+                .padding()
                 .background {
                     RoundedRectangle(cornerRadius: 20)
                         .foregroundStyle(Color.surfacePrimary)

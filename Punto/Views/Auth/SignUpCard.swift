@@ -9,18 +9,17 @@ struct SignUpCard: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
+    @Environment(AppCoordinator.self) var coordinator
 
     var vm: AuthViewModel
+    
+    private var areCredentialsValid: Bool {
+        password == confirmPassword
 
-    private var passwordsMatch: Bool {
-        password == confirmPassword || confirmPassword.isEmpty
     }
 
-    private var canSubmit: Bool {
-        !email.isEmpty &&
-        !password.isEmpty &&
-        !confirmPassword.isEmpty &&
-        password == confirmPassword
+    private var isValid: Bool {
+        !email.isEmpty
     }
 
     var body: some View {
@@ -47,9 +46,10 @@ struct SignUpCard: View {
                 binding: $confirmPassword,
                 prompt: "Repeat your password"
             )
+            
+            if !areCredentialsValid {
+                FieldErrorLabel("Credentials don't match")
 
-            if !passwordsMatch {
-                FieldErrorLabel("Passwords don't match")
             }
 
             if let error = vm.operationState.error {
@@ -60,8 +60,9 @@ struct SignUpCard: View {
                 text: "Sign Up to Punto",
                 color: .myBlue,
                 image: "arrow.right",
-                isEnabled: canSubmit && !vm.operationState.isLoading
-            ) {
+                isEnabled: isValid && !vm.operationState.isLoading && areCredentialsValid
+            )
+            {
                 Task { await vm.signUp(email: email, password: password) }
             }
             .overlay(loadingOverlay)
@@ -90,6 +91,7 @@ struct SignUpCard: View {
 
     private var appIntroductionButton: some View {
         Button {
+            coordinator.onBoardingCoordinator.navigate(to: .appIntroduction)
         } label: {
             Text("Watch App Introduction")
                 .font(.headline)
@@ -107,5 +109,5 @@ struct SignUpCard: View {
             service: AuthService(),
             coordinator: AuthCoordinator()
         )
-    )
+    ).environment(AppCoordinator(appState: AppState()))
 }

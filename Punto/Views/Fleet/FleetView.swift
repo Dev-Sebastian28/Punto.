@@ -11,6 +11,7 @@ struct FleetView: View {
     @State private var searchText: String
     @State private var hideHeader: Bool
     @State private var vm: FleetViewModel
+    
     @Environment(AppCoordinator.self) var coordinator
     
     init(user: User) {
@@ -23,25 +24,10 @@ struct FleetView: View {
         ZStack(alignment: .top) {
             if vm.hasVehicles {
                 vehiclesList
+                    .padding(.horizontal, 2)
                 FleetControlPanel(vm: vm)
             } else {
-                VStack {
-                    Image(systemName: "car")
-                        .font(.system(size: 70))
-                    Text("No vehicles added yet")
-                        .font(.title)
-                    Text("Add a new vehicle to get started")
-                        .foregroundStyle(.secondary) 
-                        .padding(.bottom)
-                    
-                    NavigationLink {
-                        // Todo create a addVehicle View
-                    } label: {
-                        Text("Add a new vehicle")
-                            .foregroundColor(.white)
-                            .customBackground(color: .blue)
-                    }
-                }
+                FleetEmptyState()
             }
         }.ignoresSafeArea(edges: [.top, .bottom])
     }
@@ -49,7 +35,7 @@ struct FleetView: View {
     private var vehiclesList: some View {
         ScrollView(.vertical, showsIndicators: false) {
             ForEach(vm.vehicles, id: \.vehicleInformation.id) { vehicle in
-                FleetVehicleCard(vehicle: vehicle).padding(.horizontal, 9)
+                FleetVehicleCard(vehicle: vehicle)
             }
         }.padding(.top, 100)
     }

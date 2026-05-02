@@ -13,7 +13,7 @@ final class AddDriverViewModel {
     var vehicles: [any Vehicle] {
         user.vehicles
     }
-    var mesage: String = ""
+    var message: String = ""
     
     init(user: User) {
         self.user = user
@@ -49,7 +49,7 @@ final class AddDriverViewModel {
             default:
                 message = "unknown error"
             }
-            self.mesage = message
+            self.message = message
         }
     }
 }

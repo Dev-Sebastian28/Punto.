@@ -31,8 +31,7 @@ struct SecondFormView: View {
 
     
     var body: some View {
-        ZStack {
-            VStack (alignment: .center, spacing: 7) {
+            VStack (alignment: .center, spacing: 16) {
                 
                 header
                     .padding(.bottom)
@@ -43,7 +42,7 @@ struct SecondFormView: View {
                     image: "privateCar") {
                         let answer: String = SecondFormAnswer.heavyLogistics.response
                         vm.sendAnswer(answer)
-                        coordinator.onBoardingCoordinator.navigate(to: .addVehicle)
+                        coordinator.onBoardingCoordinator.uniqueNavigation(to: .addVehicle)
                     }
                 
                 
@@ -53,7 +52,7 @@ struct SecondFormView: View {
                     image: "transportation") {
                         let answer: String = SecondFormAnswer.privateVehicles.response
                         vm.sendAnswer(answer)
-                        coordinator.onBoardingCoordinator.navigate(to: .addVehicle)
+                        coordinator.onBoardingCoordinator.uniqueNavigation(to: .addVehicle)
 
                     }
                 
@@ -61,7 +60,7 @@ struct SecondFormView: View {
                 Button {
                     let answer: String = SecondFormAnswer.other.response
                     vm.sendAnswer(answer)
-                    coordinator.onBoardingCoordinator.navigate(to: .addVehicle)
+                    coordinator.onBoardingCoordinator.uniqueNavigation(to: .addVehicle)
 
                 } label: {
                     Text("Other")
@@ -83,8 +82,7 @@ struct SecondFormView: View {
                 }
                 
                 Spacer()
-            }.padding(.horizontal, 10)
-        }
+            }.padding(.horizontal)
     }
     
     private var header: some View {

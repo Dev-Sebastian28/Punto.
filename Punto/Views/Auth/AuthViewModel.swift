@@ -55,7 +55,7 @@ enum AuthViewModelError: Error {
 @Observable @MainActor
 final class AuthViewModel {
 
-    // Used unowned to
+    // Used weak to not create a strong reference to "AuthCoordinator"
     private weak let coordinator: AuthCoordinator?
     
     // MARK: State
@@ -65,7 +65,7 @@ final class AuthViewModel {
 
     // MARK: Dependencies 
     private let service: any AuthServiceProtocol
-    private let validator: AuthValidator = .init()
+    private let validator: AuthValidator = AuthValidator()
 
     // MARK: Init
     init(mode: AuthMode = .signUp, service: any AuthServiceProtocol, coordinator: AuthCoordinator) {
@@ -78,8 +78,7 @@ final class AuthViewModel {
         return operationState.error?.displayMessage ?? ""
     }
 
-    // MARK: Public Interface
-    func setMode(_ mode: AuthMode) {
+    func changeAuthMode(_ mode: AuthMode) {
         self.mode = mode
         self.operationState = .idle
     }
@@ -115,7 +114,6 @@ final class AuthViewModel {
             do {
                 let isEmailValid = try validator.emailValidation(email: email)
                 let isPasswordSecure = try validator.passwordValidation(password: password)
-
                 return isEmailValid && isPasswordSecure
                 
             } catch let error as ValidatorError {
@@ -129,7 +127,7 @@ final class AuthViewModel {
     }
     
     @MainActor
-    /// Maneja loading y errores de servicio. La validación ya ocurrió antes.
+    /// It manages loading status and errors, The local inputs validation already happened before, it also talks to the cordinator via delegate.
     private func perform(operation: () async throws -> AuthStatus) async {
         operationState = .loading
         defer {
@@ -140,7 +138,7 @@ final class AuthViewModel {
             authStatus = try await operation()
             operationState = .idle
             
-            print("DEBUG: Operación exitosa, llamando al coordinador...")
+            // Coordiantor Callback or delegate depending on the mode
             switch mode {
             case .signIn:
                 coordinator?.didFinishLogin()

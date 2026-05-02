@@ -11,7 +11,7 @@ struct FleetControlPanel: View {
     @State private var hideHeader: Bool = false
     @State private var searchText: String = ""
     let vm: FleetViewModel
-    let gradient: LinearGradient = LinearGradient(
+    private let gradient: LinearGradient = LinearGradient(
         colors: [Color.brandBlue, Color.brandBlueDark,Color.brandBlue],
         startPoint: .center,
         endPoint: .bottomTrailing
@@ -51,13 +51,14 @@ struct FleetControlPanel: View {
             Text("Fleet")
             
             Spacer()
+            
             Button {
-                withAnimation(.linear(duration: 0.5)) {
-                    hideHeader.toggle()
-                }
+             hideHeader.toggle()
+                
             } label: {
                 Image(systemName: hideHeader ? "chevron.down" : "chevron.up")
             }
+            
             Spacer()
             
             VStack(alignment: .leading, spacing: 0) {
@@ -74,17 +75,19 @@ struct FleetControlPanel: View {
                 summaryCard(.init(
                     title: "Actives",
                     value: "\(vm.activeVehiclesCount)",
-                    icon: "")
+                    icon: "car.side.hill.up")
                 )
+                
                 summaryCard(.init(
                     title: "Inactives",
                     value: "\(vm.inactiveVehiclesCount)",
-                    icon: "")
+                    icon: "car.window.right.xmark")
                 )
+                
                 summaryCard(.init(
                     title: "Maintena.",
                     value: "\(vm.manteinicesCount)",
-                    icon: "")
+                    icon: "menucard.fill")
                 )
             }
         }
@@ -103,7 +106,7 @@ struct FleetControlPanel: View {
             
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.title2.bold())
-        }.customBackground(color: .white.opacity(0.14))
+        }.genericRoundedBackground(color: .white.opacity(0.14))
     }
     
     @ViewBuilder
@@ -125,12 +128,7 @@ struct FleetControlPanel: View {
                         .foregroundStyle(Color.textMuted)
                 }.buttonStyle(.plain)
             }
-        }
-        .padding(.horizontal, 16)
-        .frame(height: 44)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 4)
+        }.genericCapsuleBackground(color: .white)
         
     }
     
@@ -149,9 +147,7 @@ struct FleetControlPanel: View {
             }
             Text(item.value)
                 .font(.title2.bold())
-        }
-        .frame(alignment: .leading)
-        .customBackground(color: .white.opacity(0.14))
+        }.genericRoundedBackground(color: .white.opacity(0.14))
     }
 }
 
@@ -159,4 +155,9 @@ private struct FleetSummaryItem {
     let title: String
     let value: String
     let icon: String
+}
+
+#Preview {
+    FleetControlPanel(vm: FleetViewModel(user: .mock))
+    
 }

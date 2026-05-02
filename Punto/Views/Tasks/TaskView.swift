@@ -59,7 +59,7 @@ struct TaskView: View {
                     )
                     taskListSection
                 }
-            }.padding(.horizontal, 7)
+            }.padding(.horizontal)
             addTaskButton
             
         }
@@ -81,8 +81,7 @@ struct TaskView: View {
                     } label: {
                         TaskCardView(task: task)
                             .padding(2)
-                    }
-                    .buttonStyle(.plain)
+                    }.buttonStyle(.plain)
                 }
             }
         }

@@ -50,8 +50,7 @@ struct SignInCard: View {
                         .font(.footnote.weight(.semibold))
                         .foregroundStyle(.secondary)
                 }
-            }
-            .padding(.bottom, 4)
+            }.padding(.bottom, 4)
 
             // Error del VM
             if let error = vm.operationState.error {
@@ -68,13 +67,7 @@ struct SignInCard: View {
             }
             .overlay(loadingOverlay)
         }
-        .padding(22)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .onDisappear {
-            email = ""
-            password = ""
-        }
+        .genericRoundedBackground(color: .white)
     }
 
     @ViewBuilder

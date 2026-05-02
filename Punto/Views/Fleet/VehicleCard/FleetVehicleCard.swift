@@ -17,7 +17,7 @@ struct FleetVehicleCard: View {
     
     var body: some View {
         VStack {
-            vehicleInformation
+            sample
                 .padding(.bottom, 6)
             driverSection
             buttonsList
@@ -31,70 +31,17 @@ struct FleetVehicleCard: View {
                 .stroke(vm.isWorking ? Color.blue : Color.gray, lineWidth: 1)
         }
     }
-    
-    private var vehicleInformation: some View {
-        Image(vm.vehicleImage)
-            .resizable()
-            .scaledToFit()
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .overlay(alignment: .bottomLeading) {
-                VStack (alignment: .leading) {
-                    
-                    // Start Working, button to DriverControlPanel
-                    if !vm.isWorking {
-                        NavigationLink {
-                            DriverControlPanel(vehicle: vm.vehicle)
-                        } label: {
-                            HStack(spacing: 12) {
-                                Text("Start working")
-                                    .font(.headline)
-                                    .fontWeight(.bold)
-                                
-                                Image(systemName: "road.lanes")
-                                    .font(.title3)
-                                    .padding(8)
-                                    .background(Color.brandGreen)
-                                    .clipShape(.circle)
-                            }
-                            .foregroundColor(.white)
-                            .padding(.leading, 20)
-                            .padding(.trailing, 8)
-                            .padding(.vertical, 8)
-                            .background(
-                                Capsule()
-                                    .fill(Color.myBlue)
-                                    .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
-                            )
-                        }
-                    }
-                    
-                    
-                    Spacer()
-                    
-                    HStack(alignment: .bottom) {
-                        VStack(alignment: .leading) {
-                            Text(vm.brandModel)
-                                .font(.title2.bold())
-                            Text(vm.licensePlate)
-                            
-                            
-                        }
-                        Spacer()
-                        
-                        Text(vm.isWorking ? "Active" : "Inactive")
-                            .font(.subheadline)
-                            .foregroundStyle(vm.isWorking ? Color.white : Color.black).bold()
-                            .padding(.horizontal, 13)
-                            .padding(.vertical, 5)
-                            .background(vm.isWorking ? Color.brandGreen : Color.platformGray6)
-                            .clipShape(.capsule)
-                    }
-                    
-                }
-                .foregroundStyle(.white)
-                .padding(.horizontal)
-                .padding(.vertical)
-            }
+    private var  sample: some View {
+        VehicleImageView(
+            imageUrl: vm.vehicleImage,
+            height: 200
+        ) {
+            VehicleNameOverlay(
+                brand: vm.brandModel,
+                model: vm.brandModel,
+                plate: vm.licensePlate
+            )
+        }
     }
     
     private var driverSection: some View {
@@ -242,6 +189,6 @@ private struct QuickInfoButton: View {
 
 
 #Preview {
-    FleetVehicleCard(vehicle: User.mock.vehicles.first!)
+    FleetVehicleCard(vehicle: TransportationVehicle(vehicleInformation: .sample))
         .environment(AppCoordinator(appState: AppState()))
 }

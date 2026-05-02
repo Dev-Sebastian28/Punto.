@@ -13,27 +13,25 @@ struct  EmptyStateVehicleCard: View {
         ("steeringwheel", .brandGreen),
         ("wrench.and.screwdriver.fill", .orange)
     ]
-    @Binding var isPresented: Bool
+    @Binding var isFormPresented: Bool
     
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 22) {
+        VStack(alignment: .center, spacing: 22) {
             HStack(spacing: 12) {
                 ForEach(Array(vehicleSymbols.enumerated()), id: \.offset) { item in
                     Image(systemName: item.element.symbol)
                         .font(.title3.weight(.bold))
                         .foregroundStyle(item.element.color)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 62)
-                        .background(item.element.color.opacity(0.12))
-                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        .genericRoundedBackground(color: item.element.color.opacity(0.2))
                 }
             }
             
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text("Add your first vehicle")
                     .font(.title2.weight(.bold))
                     .foregroundStyle(.primary)
+                
                 
                 Text("Enter your vehicle's information manually or use your property card to scan the vehicle's information.")
                     .font(.subheadline)
@@ -60,7 +58,7 @@ struct  EmptyStateVehicleCard: View {
                     image: "camera.fill",
                     maxWidth: .infinity
                 ) {
-                    isPresented = true
+                    isFormPresented = true
                     
                 }
                 
@@ -71,20 +69,15 @@ struct  EmptyStateVehicleCard: View {
                     style: .neutral,
                     maxWidth: .infinity
                 ) {
-                    isPresented = true
+                    isFormPresented = true
                 }
             }
-        }
-        .padding(22)
-        .background(
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(Color.platformSystemBackground)
-        )
+        }.genericRoundedBackground(color: .white)
+
         .overlay {
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(Color.cardStroke, lineWidth: 1)
-        }
-        .shadow(color: .black.opacity(0.06), radius: 18, x: 0, y: 10)
+        }.shadow(color: .black.opacity(0.06), radius: 18, x: 0, y: 10)
     }
 }
 
@@ -103,15 +96,10 @@ private func emptyStateInfo(title: String, description: String) -> some View {
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        
-        Spacer(minLength: 0)
-    }
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(14)
-    .background(Color.platformGray6)
-    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        Spacer()
+    }.genericRoundedBackground(color: .secondary.opacity(0.1))
 }
 
 #Preview {
-    EmptyStateVehicleCard(isPresented: .constant(true))
+    EmptyStateVehicleCard(isFormPresented: .constant(true))
 }

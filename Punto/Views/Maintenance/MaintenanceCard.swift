@@ -151,7 +151,7 @@ private struct MetricTile: View {
                 .font(.system(size: 13, weight: .medium, design: .monospaced))
                 .foregroundStyle(color)
         }
-        .customBackground(color: .gray.opacity(0.2))
+        .genericRoundedBackground(color: .gray.opacity(0.2))
     }
 }
 
