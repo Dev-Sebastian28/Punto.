@@ -84,9 +84,9 @@ extension Array where Element == VehicleProtocol {
                 name: "Inspección Pre-Operacional",
                 description: "Chequeo obligatorio antes de salir de la base.",
                 tasks: [
-                    ProtocolTask(taskName: "Nivel de Aceite", description: "Verificar varilla en frío", isCompleted: true, isActive: true),
-                    ProtocolTask(taskName: "Presión de Llantas", description: "Incluyendo la de repuesto", isCompleted: false, isActive: true),
-                    ProtocolTask(taskName: "Líquido de Frenos", isCompleted: false, isActive: false)
+                    ProtocolTask(taskName: "Nivel de Aceite", description: "Verificar varilla en frío", isCompleted: true),
+                    ProtocolTask(taskName: "Presión de Llantas", description: "Incluyendo la de repuesto", isCompleted: false),
+                    ProtocolTask(taskName: "Líquido de Frenos", isCompleted: false)
                 ],
                 importance: .high,
                 time: .startingWork
@@ -96,9 +96,9 @@ extension Array where Element == VehicleProtocol {
                 name: "Revisión de Kit de Carretera",
                 description: "Verificar fechas de vencimiento y estado de herramientas.",
                 tasks: [
-                    ProtocolTask(taskName: "Extintor Vigente", isCompleted: true, isActive: true),
-                    ProtocolTask(taskName: "Botiquín Completo", isCompleted: true, isActive: true),
-                    ProtocolTask(taskName: "Triángulos y Tacos", isCompleted: true, isActive: true)
+                    ProtocolTask(taskName: "Extintor Vigente", isCompleted: true, ),
+                    ProtocolTask(taskName: "Botiquín Completo", isCompleted: true, ),
+                    ProtocolTask(taskName: "Triángulos y Tacos", isCompleted: true, )
                 ],
                 importance: .high,
                 time: .weekly
@@ -108,8 +108,8 @@ extension Array where Element == VehicleProtocol {
                 name: "Aseo de Cabina",
                 description: "Mantener el espacio de trabajo limpio.",
                 tasks: [
-                    ProtocolTask(taskName: "Retirar Basura", isCompleted: false, isActive: true),
-                    ProtocolTask(taskName: "Desinfectar Volante", isCompleted: false, isActive: false)
+                    ProtocolTask(taskName: "Retirar Basura", isCompleted: false, ),
+                    ProtocolTask(taskName: "Desinfectar Volante", isCompleted: false)
                 ],
                 importance: .low,
                 time: .daily
@@ -119,9 +119,9 @@ extension Array where Element == VehicleProtocol {
                 name: "Entrega de Turno",
                 description: "Reporte final del estado del vehículo.",
                 tasks: [
-                    ProtocolTask(taskName: "Reportar Kilometraje", isCompleted: false, isActive: true),
-                    ProtocolTask(taskName: "Asegurar Puertas/Bodega", isCompleted: false, isActive: false),
-                    ProtocolTask(taskName: "Entrega de Llaves", isCompleted: false, isActive: false)
+                    ProtocolTask(taskName: "Reportar Kilometraje", isCompleted: false),
+                    ProtocolTask(taskName: "Asegurar Puertas/Bodega", isCompleted: false),
+                    ProtocolTask(taskName: "Entrega de Llaves", isCompleted: false)
                 ],
                 importance: .medium,
                 time: .finishingWork

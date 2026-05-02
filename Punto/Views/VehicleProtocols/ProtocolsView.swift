@@ -80,7 +80,7 @@ struct ProtocolsView: View {
                 NavigationLink {
                     ProtocolDetailView(user: .mock, element: protocolData, index: index)
                 } label: {
-                    ProtocolCardView(protocolM: protocolData)
+                    ProtocolCardView(VProtocol: protocolData)
                         .padding(2)
                 }.buttonStyle(.automatic)
             }

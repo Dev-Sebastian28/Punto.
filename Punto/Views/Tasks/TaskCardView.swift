@@ -28,9 +28,9 @@ struct TaskCardView: View {
                 
                 HStack(spacing: 6) {
                     
-                    StatusBadge(text: task.importance.rawValue, color: importanceColor)
+                    StatusBadge(text: task.importance.rawValue, color: task.importance.color)
                     
-                    StatusBadge(text: task.status.rawValue, color: statusColor)
+                    StatusBadge(text: task.status.rawValue, color: task.status.color)
                     
                     
                     Text(Date().formatted(.dateTime.day().month()))
@@ -54,25 +54,6 @@ struct TaskCardView: View {
                 .fill(Color.white)
                 .shadow(radius: 2)
         )
-    }
-    
-    private var statusColor: Color {
-        if task.status == .done {
-            return .green
-        } else if task.status == .inProgress {
-            return .orange
-        } else {
-            return .gray
-        }
-    }
-    private var importanceColor: Color {
-        if task.importance == .high {
-            return .red
-        } else if task.importance == .medium {
-            return .yellow
-        } else {
-            return .green
-        }
     }
 }
 

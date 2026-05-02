@@ -8,19 +8,20 @@
 import Foundation
 import SwiftUI
 
-enum TaskImportance: String, CaseIterable {
+enum TaskImportance: String, Codable, CaseIterable {
     case low, medium, high
 }
 
-enum TaskStatus: String, CaseIterable {
+enum TaskStatus: String, Codable, CaseIterable {
     case pending, inProgress, done
 }
 
-struct VTask: Identifiable, Hashable {
+struct VTask: Codable ,Identifiable, Hashable {
     var id: UUID
     var title: String
     var description: String?
     var deadLine: Date
+    //var destination: String? = nil
     var importance: TaskImportance
     var status: TaskStatus
 

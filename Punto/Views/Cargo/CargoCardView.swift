@@ -23,7 +23,7 @@ struct CargoCardView: View {
                         .textCase(.uppercase)
                         .tracking(0.5)
 
-                    Text(cargo.type)
+                    Text(cargo.cargoType)
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundStyle(.primary)
@@ -31,7 +31,7 @@ struct CargoCardView: View {
 
                 Spacer()
 
-                Label("\(cargo.distance) km", systemImage: "location.fill")
+                Label("\(cargo.distanceToCargo) km", systemImage: "location.fill")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white)
@@ -69,7 +69,7 @@ struct CargoCardView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     RouteStopView(
                         label: "Origen",
-                        address: cargo.origine,
+                        address: cargo.origin,
                         color: .green
                     )
 
@@ -99,7 +99,7 @@ struct CargoCardView: View {
                 Divider()
                     .frame(height: 16)
 
-                Label(cargo.type, systemImage: "shippingbox.fill")
+                Label(cargo.cargoType, systemImage: "shippingbox.fill")
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
@@ -153,14 +153,5 @@ struct RouteStopView: View {
 
 
 #Preview {
-    CargoCardView(cargo: Cargo(
-        id: 1,
-        origine: "Bogotá, Calle 2, Catedral",
-        destination: "Bogotá, Calle 12, 10 de Julio",
-        weight: 22,
-        type: "Máquina Industrial",
-        distance: 12
-    ))
-    .padding()
-    .background(Color(.systemGroupedBackground))
+    CargoCardView(cargo: Cargo(origin: "Boston", destination: "Texas", weight: 120, cargoType: "Furniture", distanceToCargo: 250, distanceToDestination: 230, dueDate: .distantFuture, price: 2000))
 }

@@ -8,22 +8,15 @@ import SwiftUI
 
 struct ExpenseCardView: View {
     let expense: Expense
-    var color: Color {
-        if expense.amount >= 0 {
-            return .green
-        } else {
-            return .red
-        }
-    }
-    
+
     var body: some View {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "fuelpump.fill")
-                        .foregroundStyle(color)
+                        .foregroundStyle(expense.dominatColor)
                         .bold()
                         .frame(width: 50, height: 50)
-                        .background(color.opacity(0.2))
+                        .background(expense.dominatColor.opacity(0.2))
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .padding(10)
 
@@ -40,7 +33,7 @@ struct ExpenseCardView: View {
 
                             Text(expense.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                                 .font(.title2)
-                                .foregroundStyle(color)
+                                .foregroundStyle(expense.dominatColor)
                                 .bold()
                                 .padding(.trailing)
                         }
@@ -56,5 +49,5 @@ struct ExpenseCardView: View {
 }
 
 #Preview {
-    ExpenseCardView(expense: .init(id: .init(), name: "Food", description: "I ate a lot of food", amount: -200, date: .now, type: ""))
+    ExpenseCardView(expense: .init(id: .init(), name: "Food", description: "I ate a lot of food", amount: 200, date: .now, type: ""))
 }

@@ -71,6 +71,7 @@ struct TaskView: View {
             TaskDetailView(task: task, vm: taskVM, index: taskIndex)
         }
     }
+    
     private var taskListSection: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(spacing: 10) {
@@ -86,6 +87,7 @@ struct TaskView: View {
             }
         }
     }
+    
     private var addTaskButton: some View {
         Button {
             isPresentingSheet.toggle()

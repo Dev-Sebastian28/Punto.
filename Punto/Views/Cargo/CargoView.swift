@@ -28,13 +28,7 @@ struct CargoView: View {
     @State private var selectedFilter: CargoFilter = .all
     @State private var searchText: String = ""
     
-    private let cargos: [Cargo] = [
-        Cargo(id: 1, origine: "Bogotá, Calle 2, Catedral",    destination: "Bogotá, Calle 12, 10 de Julio", weight: 22, type: "Máquina Industrial", distance: 12),
-        Cargo(id: 2, origine: "Medellín, El Poblado",          destination: "Cali, Granada",                 weight: 5,  type: "Electrodomésticos",   distance: 45),
-        Cargo(id: 3, origine: "Barranquilla, Centro",          destination: "Cartagena, Bocagrande",         weight: 10, type: "Materiales",           distance: 120),
-        Cargo(id: 4, origine: "Cali, Chipichape",              destination: "Pereira, Centro",               weight: 3,  type: "Paquetería",           distance: 90),
-        Cargo(id: 5, origine: "Bogotá, Usaquén",               destination: "Tunja, Parque Central",         weight: 8,  type: "Alimentos",            distance: 150),
-    ]
+    private let cargos: [Cargo] = []
     
     var body: some View {
         ZStack(alignment: .top) {

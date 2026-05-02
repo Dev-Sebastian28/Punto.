@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import SwiftUI
 
 struct Expense: Codable, Identifiable {
     let id: UUID
@@ -23,6 +23,29 @@ struct Expense: Codable, Identifiable {
         self.amount = amount
         self.date = date
         self.type = type
+    }
+}
+
+extension Expense {
+    var typColor: Color {
+        switch type {
+        case "Food":
+            return .red
+        case "Transport":
+            return .blue
+        case "Other":
+            return .yellow
+        default:
+            return .gray
+        }
+    }
+    
+    var dominatColor: Color {
+        if amount < 0 {
+            return .red
+        } else {
+            return .green
+        }
     }
 }
 
