@@ -29,19 +29,23 @@ final class OnboardingCoordinator {
     // CallBack:
     var finishOnBoarding: (() -> Void)?
     
+    
     @ViewBuilder
     func build(_ screen: OnboardingRoute) -> some View {
         switch screen {
         case .appIntroduction:
             IntroductionAppView()
         case .createAccount:
-            EmptyView()
+            CreationAccountView()
         case .form1:
             FirstFormView()
+                .navigationBarBackButtonHidden()
         case .form2:
             SecondFormView()
+                .navigationBarBackButtonHidden()
         case .addVehicle:
             AddVehicleView(user: appState.user)
+                .navigationBarBackButtonHidden()
         case .addDriver:
             AddDriverView(user: appState.user)
         }
@@ -49,6 +53,14 @@ final class OnboardingCoordinator {
     
     func navigate(to screen: OnboardingRoute) {
         path.append(screen)
+        print(path)
+    }
+    
+    func uniqueNavigation(to screen: OnboardingRoute) {
+        path = .init()
+        path.append(screen)
+        print(path)
+
     }
     
     func didFinishOnBoarding() {

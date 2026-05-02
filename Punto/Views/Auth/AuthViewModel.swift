@@ -52,7 +52,7 @@ enum AuthViewModelError: Error {
 }
 
 // MARK: - ViewModel
-@Observable @MainActor
+@Observable
 final class AuthViewModel {
 
     // Used weak to not create a strong reference to "AuthCoordinator"
@@ -126,7 +126,6 @@ final class AuthViewModel {
         }
     }
     
-    @MainActor
     /// It manages loading status and errors, The local inputs validation already happened before, it also talks to the cordinator via delegate.
     private func perform(operation: () async throws -> AuthStatus) async {
         operationState = .loading

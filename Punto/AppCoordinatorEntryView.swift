@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct AppCoordinatorView: View {
+struct AppCoordinatorEntryView: View {
     var coordinator: AppCoordinator
     
     var body: some View {
@@ -21,12 +21,7 @@ struct AppCoordinatorView: View {
                 }
                 
             case .mainTabs:
-                NavigationStack(path: Bindable(coordinator.fleetCoordinator).path) {
-                    coordinator.fleetCoordinator.build(route: .main)
-                        .navigationDestination(for: FleetRoute.self) { scren in
-                            coordinator.fleetCoordinator.build(route: scren)
-                        }
-                }
+                MainTabsView(user: .mock)
 
             case .auth:
                 NavigationStack(path: Bindable(coordinator.authCoordinator).path) {

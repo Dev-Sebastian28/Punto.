@@ -14,7 +14,7 @@ enum FleetRoute: Hashable {
     case protocols
     case manteinances
     case expenses
-    case main
+    case fleet
 }
 
 @Observable
@@ -37,8 +37,8 @@ final class FleetCoordinator {
             MaintenanceView(user: appState.user)
         case .expenses:
             ExpensesView(user: appState.user)
-        case .main:
-            MainTabView(user: appState.user)
+        case .fleet:
+            FleetView(user: appState.user)
         }
     }
     
