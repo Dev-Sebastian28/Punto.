@@ -8,5 +8,18 @@ import Foundation
 
 @Observable
 final class AppState {
-    let user: User = .mock
+    var user: User = .mock {
+        willSet {
+            print("changed from \(user) to \(newValue)")
+        }
+    }
+    
+    init() {
+        print(" 👋 init: AppState")
+        print(user.id)
+    }
+    
+    deinit {
+        print(" 👋 deinit: AppState")
+    }
 }

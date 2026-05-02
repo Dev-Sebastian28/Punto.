@@ -9,10 +9,10 @@ import Foundation
 
 @Observable
 final class ExpensesViewModel {
-    private var user: User
+    private var appState: AppState
     private let state: ExpensesState
     var expenses: [Expense] {
-        user.vehicles[state.selectedIndex].expenses
+        appState.user.vehicles[state.selectedIndex].expenses
 }
     var accountingService: ExpensesCalculator {
     ExpensesCalculator(entries: expenses)
@@ -32,8 +32,8 @@ final class ExpensesViewModel {
         expenses.count.description
     }
     
-    init(user: User, state: ExpensesState) {
-        self.user = user
+    init(AppState: AppState, state: ExpensesState) {
+        self.appState = AppState
         self.state = state
     }
 }

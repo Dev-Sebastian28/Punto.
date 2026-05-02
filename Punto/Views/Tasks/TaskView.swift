@@ -14,18 +14,18 @@ final class TaskState {
 
 struct TaskView: View {
     @State private var isPresentingSheet = false
-    @State private var tasksListVM: TaskListViewModel
-    @State private var taskVM: TaskViewModel
-    @State private var indexState: TaskState
     @State private var selectedTask: VTask?
     @State private var taskIndex: Int = 0
     
-    
-    init(user: User) {
+    var tasksListVM: TaskListViewModel
+    var taskVM: TaskViewModel
+    @State var indexState: TaskState
+
+    init(appState: AppState) {
         let state = TaskState()
-        _indexState = State(initialValue: state)
-        _tasksListVM = State(wrappedValue: TaskListViewModel(user: user, state: state))
-        _taskVM = State(wrappedValue: TaskViewModel(user: user, state: state))
+        self.indexState = state
+        self.tasksListVM = TaskListViewModel(appState: appState, state: state)
+        self.taskVM = TaskViewModel(appState: appState, state: state)
     }
     
     var body: some View {
@@ -111,7 +111,7 @@ struct TaskView: View {
 }
 
 #Preview {
-    let user = User.mock
-    TaskView(user: user)
-        .environment(CarouselViewModel(user: user))
+    let appState = AppState()
+    TaskView(appState: appState)
+        .environment(CarouselViewModel(user: appState.user))
 }

@@ -158,6 +158,6 @@ private struct FleetSummaryItem {
 }
 
 #Preview {
-    FleetControlPanel(vm: FleetViewModel(user: .mock))
+    FleetControlPanel(vm: FleetViewModel(appState: AppState()))
     
 }

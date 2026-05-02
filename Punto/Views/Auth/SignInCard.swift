@@ -84,7 +84,7 @@ struct SignInCard: View {
     SignInCard(
         vm: AuthViewModel(
             mode: .signIn,
-            service: AuthService(), coordinator: AuthCoordinator()
+            service: AuthService(), coordinator: AuthCoordinator(appState: AppState())
         )
     )
 }

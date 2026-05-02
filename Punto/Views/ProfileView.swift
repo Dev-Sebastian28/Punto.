@@ -125,10 +125,10 @@ struct ProfileView: View {
                     Image(systemName: "person")
                 )
             
-            Text(user.name)
+            Text(user.userInformation.name)
                 .font(.title2)
                 .fontWeight(.semibold)
-            Text(user.email)
+            Text(user.userInformation.email)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }

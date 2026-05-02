@@ -9,14 +9,14 @@ import Foundation
 
 @Observable
 final class ProtocoslListViewModel {
-    private(set) var user: User
+    private(set) var appState: AppState
     var selectedVehicleIndex: Int = 0
     private var seletedVehicleInfo: VehicleInformation {
-        user.vehicles[selectedVehicleIndex].vehicleInformation
+        appState.user.vehicles[selectedVehicleIndex].vehicleInformation
     }
     
     var protocols: [VehicleProtocol] {
-        user.vehicles[selectedVehicleIndex].protocols
+        appState.user.vehicles[selectedVehicleIndex].protocols
     }
     var areProtocols: Bool {
         return !protocols.isEmpty
@@ -32,8 +32,8 @@ final class ProtocoslListViewModel {
         seletedVehicleInfo.plate.uppercased()
     }
     
-    init(user: User) {
-        self.user = user
+    init(appState: AppState) {
+        self.appState = appState
     }
 }
 

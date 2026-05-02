@@ -8,12 +8,12 @@ import Foundation
 
 @Observable
 final class ExpenseListViewModel {
-    private var user: User
+    private var appState: AppState
     private let state: ExpensesState
     var strategy: ExpenseStrategies = .defaultStrategy
     
     private var expenses: [Expense] {
-        user.vehicles[state.selectedIndex].expenses
+        appState.user.vehicles[state.selectedIndex].expenses
         
     }
     
@@ -25,8 +25,8 @@ final class ExpenseListViewModel {
         strategy = .defaultStrategy
     }
     
-    init(user: User, state: ExpensesState) {
-        self.user = user
+    init(appState: AppState, state: ExpensesState) {
+        self.appState = appState
         self.state = state
 
     }

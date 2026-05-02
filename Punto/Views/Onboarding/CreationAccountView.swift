@@ -10,9 +10,19 @@ import SwiftUI
 struct CreationAccountView: View {
     @State private var name: String = ""
     @State private var phoneNumber: String = ""
-    @State private var vehiclesNumber: Int = 0
+    @State private var vehiclesNumber: Int = 1
+    @State private var vm: CreationAccountViewModel
     
     @Environment(AppCoordinator.self) var coordinator
+    
+    
+    private var isValid: Bool {
+        !name.isEmpty && !phoneNumber.isEmpty 
+    }
+    
+    init(appState: AppState) {
+        _vm = State(initialValue: CreationAccountViewModel(user: appState.user))
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -21,6 +31,7 @@ struct CreationAccountView: View {
                     .font(.title)
                     .foregroundStyle(Color.blue)
                     .genericRoundedBackground(color: .blue.opacity(0.1))
+                
                 VStack(alignment: .leading) {
                     Text("Account Information")
                         .font(.title2.bold())
@@ -35,7 +46,7 @@ struct CreationAccountView: View {
             )
             
             TextFieldComp(
-                text: $name,
+                text: $phoneNumber,
                 prompt: "Whats your phone number",
                 leadingIcon: "phone"
             ).padding(.bottom)
@@ -52,14 +63,33 @@ struct CreationAccountView: View {
                 .pickerStyle(.menu)
             }
             
-            DButtonComp(text: "Create", color: .green, image: "plus") {
+            DButtonComp(
+                text: "Create",
+                color: .green,
+                image: "plus",
+                isEnabled: isValid
+            ) {
+                vm.createAccount(name: name, phone: phoneNumber, vehicles: vehiclesNumber)
                 coordinator.onBoardingCoordinator.uniqueNavigation(to: .form1)
             }
         }.padding(.horizontal)
     }
 }
 
+@Observable
+final class CreationAccountViewModel {
+    private var user: User
+    
+    func createAccount(name: String, phone: String, vehicles: Int) {
+        user.userInformation.name = name
+        user.userInformation.phone = phone
+    }
+    init(user: User) {
+        self.user = user
+    }
+}
+
 #Preview {
-    CreationAccountView()
+    CreationAccountView(appState: AppState())
         .environment(AppCoordinator(appState: AppState()))
 }

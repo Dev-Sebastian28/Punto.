@@ -7,34 +7,32 @@
 
 import Foundation
 
-enum ProfileAccess {
-    case admin
-    case user
-    case driver
-}
+
 
 enum AvailableCountries: String, Codable {
     case colombia
     case argentina
 }
 
-@Observable
-final class User {
-    let id: UUID
-    let name: String
-    let email: String
-    let access: ProfileAccess
-    var country: AvailableCountries
+struct User {
+    var id: UUID
+    var userInformation: UserInformation
     var vehicles: [Vehicle]
     var drivers: [User]
 
-    init(id: UUID = UUID(), name: String, email: String, access: ProfileAccess, country: AvailableCountries) {
+    init(id: UUID, userInformation: UserInformation, vehicles: [Vehicle], drivers: [User]) {
         self.id = id
-        self.name = name
-        self.email = email
-        self.access = access
-        self.country = country
-        self.vehicles = [
+        self.userInformation = userInformation
+        self.vehicles = vehicles
+        self.drivers = drivers
+    }
+    
+    static var mock: User {
+        User(id: UUID(),
+             userInformation: UserInformation(
+                name: "sebastian", email: "sebastian@gmail.com", phone: "3213123", country: .colombia
+             ),
+             vehicles: [
                 TransportationVehicle(
                     vehicleInformation: .init(
                         imageUrl: nil,
@@ -74,56 +72,17 @@ final class User {
                         fuel: .gasoline
                     )
                 )
-            ]
-        self.drivers = []
+            ],
+             drivers: [])
     }
+}
 
-    static var mock: User {
-        User(name: "Sebastian", email: "ejemplo@correo.com", access: .admin, country: .colombia)
-    }
+struct UserInformation: Codable {
+    var name: String
+    var email: String
+    var phone: String?
+    var country: AvailableCountries
 }
 
 
 
-
-//[
-//    TransportationVehicle(
-//        vehicleInformation: .init(
-//            imageUrl: nil,
-//            plate: "DMW-2342",
-//            brand: "Volvo",
-//            model: "X900x",
-//            year: 2020,
-//            mileage: 10000,
-//            engine: "V8",
-//            transmission: .automatic,
-//            fuel: .diesel
-//        )
-//    ),
-//    PrivateVehicle(
-//        vehicleInformation: .init(
-//            imageUrl: nil,
-//            plate: "AFV-2342",
-//            brand: "Ford",
-//            model: "F-150",
-//            year: 2020,
-//            mileage: 1000000,
-//            engine: "V8o",
-//            transmission: .automatic,
-//            fuel: .diesel
-//        )
-//    ),
-//    TransportationVehicle(
-//        vehicleInformation: .init(
-//            imageUrl: nil,
-//            plate: "TGB-2342",
-//            brand: "Kenworth",
-//            model: "T800",
-//            year: 2014,
-//            mileage: 240000,
-//            engine: "V8",
-//            transmission: .manual,
-//            fuel: .gasoline
-//        )
-//    )
-//]

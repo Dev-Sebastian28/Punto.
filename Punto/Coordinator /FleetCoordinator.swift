@@ -30,15 +30,15 @@ final class FleetCoordinator {
     func build(route: FleetRoute) -> some View {
         switch route {
         case .tasks:
-            TaskView(user: appState.user)
+            TaskView(appState: appState)
         case .protocols:
-            ProtocolsView(user: appState.user)
+            ProtocolsView(appState: appState)
         case .manteinances:
-            MaintenanceView(user: appState.user)
+            MaintenanceView(appState: appState)
         case .expenses:
-            ExpensesView(user: appState.user)
+            ExpensesView(appState: appState)
         case .fleet:
-            FleetView(user: appState.user)
+            FleetView(appState: appState)
         }
     }
     

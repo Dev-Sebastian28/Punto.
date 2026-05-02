@@ -9,39 +9,40 @@ import Foundation
 
 @Observable
 final class TaskListViewModel {
-    private let user: User
+    private let appState: AppState
     private let state: TaskState
 
     var selectedVehicle: Int {
         state.selectedVehicleIndex
     }
     
-    private var vehicles: [Vehicle] { user.vehicles }
+    private var vehicles: [Vehicle] { appState.user.vehicles }
     var hasVehicles: Bool { !vehicles.isEmpty }
     
     var selectedtotalTasks: String {
-        user.vehicles[selectedVehicle].tasks.count.description
+        appState.user.vehicles[selectedVehicle].tasks.count.description
     }
     
     var Tasks: [VTask] {
-        user.vehicles[selectedVehicle].tasks
+        appState.user.vehicles[selectedVehicle].tasks
     }
     
     var selectedVehicleBrandModel: String {
-        user.vehicles[selectedVehicle].vehicleInformation.model + " " + user.vehicles[selectedVehicle].vehicleInformation.brand
+        appState.user.vehicles[selectedVehicle].vehicleInformation.model + " " + appState.user.vehicles[selectedVehicle].vehicleInformation.brand
     }
     var selectedVehiclePlate: String {
-        user.vehicles[selectedVehicle].vehicleInformation.plate
+        appState.user.vehicles[selectedVehicle].vehicleInformation.plate
     }
-    init(user: User, state: TaskState) {
-        self.user = user
+    
+    init(appState: AppState, state: TaskState) {
+        self.appState = appState
         self.state = state
     }
 }
 
 @Observable
 final class TaskViewModel {
-    private var user: User
+    private var appState: AppState
     private let state: TaskState
 
     var selectedVehicle: Int {
@@ -50,19 +51,19 @@ final class TaskViewModel {
     
     
     func addTask(_ task: VTask) {
-        user.vehicles[selectedVehicle].tasks.append(task)
+        appState.user.vehicles[selectedVehicle].tasks.append(task)
     }
     
     func updateTask(_ updatedTask: VTask, at index: Int) {
-        user.vehicles[selectedVehicle].tasks.updateTask(updatedTask, at: index)
+        appState.user.vehicles[selectedVehicle].tasks.updateTask(updatedTask, at: index)
     }
     
     func deleteTask(at index: Int) {
-        user.vehicles[selectedVehicle].tasks.removeTask(at: index)
+        appState.user.vehicles[selectedVehicle].tasks.removeTask(at: index)
     }
     
-    init(user: User, state: TaskState) {
-        self.user = user
+    init(appState: AppState, state: TaskState) {
+        self.appState = appState
         self.state = state
     }
 }

@@ -26,6 +26,8 @@ struct MainTabsView: View {
                         coordinator.fleetCoordinator.build(route: .fleet)
                             .navigationDestination(for: FleetRoute.self) { scren in
                                 coordinator.fleetCoordinator.build(route: scren)
+                                    .toolbar(.hidden, for: .tabBar) // <-- Esta es la clave
+
                             }
                     }
                 }

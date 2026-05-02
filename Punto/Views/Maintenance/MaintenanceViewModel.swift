@@ -9,14 +9,14 @@ import Foundation
 
 @Observable
 final class MaintenanceViewModel {
-    private let user: User
+    private let appState: AppState
     var selectedVehicleIndex: Int = 0
     private var vehicles: [Vehicle] {
-        user.vehicles
+        appState.user.vehicles
     }
     
     var components: [VehiclePartWrapper] {
-        user.vehicles[selectedVehicleIndex].maintenance
+        appState.user.vehicles[selectedVehicleIndex].maintenance
     }
     
     var totalVehicleMaintenances: String {
@@ -27,8 +27,8 @@ final class MaintenanceViewModel {
         vehicles[self.selectedVehicleIndex].vehicleInformation.mileage.description
     }
     
-    init(user: User) {
-        self.user = user
+    init(appState: AppState) {
+        self.appState = appState
     }
 }
 

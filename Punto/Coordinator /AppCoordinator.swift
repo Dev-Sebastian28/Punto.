@@ -24,7 +24,7 @@ final class AppCoordinator {
     
     // MARK: - Init
     init(appState: AppState) {
-        self.authCoordinator = AuthCoordinator()
+        self.authCoordinator = AuthCoordinator(appState: appState)
         self.onBoardingCoordinator = OnboardingCoordinator(appState: appState)
         self.fleetCoordinator = FleetCoordinator(appState: appState)
         self.cargoCoordinator = CargoCoordinator()

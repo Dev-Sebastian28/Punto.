@@ -36,7 +36,7 @@ final class OnboardingCoordinator {
         case .appIntroduction:
             IntroductionAppView()
         case .createAccount:
-            CreationAccountView()
+            CreationAccountView(appState: appState)
         case .form1:
             FirstFormView()
                 .navigationBarBackButtonHidden()

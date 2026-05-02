@@ -18,7 +18,12 @@ enum AutAuthFlow: Hashable {
 
 @Observable
 final class AuthCoordinator {
+    var appState: AppState
     var path = [AutAuthFlow]()
+    
+    init(appState: AppState) {
+        self.appState = appState
+    }
     
     var onLoginSuccess: (() -> Void)?
     var onSignUpSuccess: (() -> Void)?
@@ -27,8 +32,7 @@ final class AuthCoordinator {
     func build(_ screen: AutAuthFlow) -> some View {
         switch screen {
         case .auth:
-            let viewModel = AuthViewModel(service: AuthService(), coordinator: self)
-            AuthView(vm: viewModel)
+            AuthView(vm: AuthViewModel(service: AuthService(), coordinator: self))
         case .aboutPunto:
             IntroductionAppView()
         }

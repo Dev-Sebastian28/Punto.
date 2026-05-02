@@ -209,5 +209,5 @@ struct AddTaskView: View {
 
 
 #Preview {
-    AddTaskView(vm: TaskViewModel(user: .mock, state: TaskState()))
+    AddTaskView(vm: TaskViewModel(appState: AppState(), state: TaskState()))
 }

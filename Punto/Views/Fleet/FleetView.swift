@@ -8,16 +8,14 @@
 import SwiftUI
 
 struct FleetView: View {
-    @State private var searchText: String
-    @State private var hideHeader: Bool
+    @State private var searchText: String = ""
+    @State private var hideHeader: Bool = false
     @State private var vm: FleetViewModel
     
     @Environment(AppCoordinator.self) var coordinator
     
-    init(user: User) {
-        self.searchText = ""
-        self.hideHeader = false
-        self.vm = FleetViewModel(user: user)
+    init(appState: AppState) {
+        self.vm = FleetViewModel(appState: appState)
     }
     
     var body: some View {
@@ -43,6 +41,6 @@ struct FleetView: View {
 }
 
 #Preview {
-    FleetView(user: .mock)
+    FleetView(appState: AppState())
         .environment(AppCoordinator(appState: AppState()))
 }

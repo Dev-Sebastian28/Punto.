@@ -22,7 +22,7 @@ struct PuntoApp: App {
     
     var body: some Scene {
         WindowGroup {
-            AppCoordinatorEntryView(coordinator: coordinator )
+            AppCoordinatorEntryView(coordinator: coordinator, appState: appState)
         }
         .environment(coordinator)
         .environment(carouselVM)

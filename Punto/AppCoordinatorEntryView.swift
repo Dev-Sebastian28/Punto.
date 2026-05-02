@@ -8,6 +8,7 @@ import SwiftUI
 
 struct AppCoordinatorEntryView: View {
     var coordinator: AppCoordinator
+    var appState: AppState
     
     var body: some View {
         Group {
@@ -21,7 +22,7 @@ struct AppCoordinatorEntryView: View {
                 }
                 
             case .mainTabs:
-                MainTabsView(user: .mock)
+                MainTabsView(user: appState.user)
 
             case .auth:
                 NavigationStack(path: Bindable(coordinator.authCoordinator).path) {

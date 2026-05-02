@@ -16,12 +16,13 @@ struct ExpensesView: View {
     @State private var listVM: ExpenseListViewModel
     @State private var expenseVM: ExpenseViewModel
     
-    init(user: User) {
+    init(appState: AppState) {
         let state = ExpensesState()
         _state = State(wrappedValue: state)
-        _vm = State(wrappedValue: ExpensesViewModel(user: user, state: state))
-        _listVM = State(wrappedValue: ExpenseListViewModel(user: user, state: state))
-        _expenseVM = State(wrappedValue: ExpenseViewModel(user: user, state: state))
+        _vm = State(wrappedValue: ExpensesViewModel(AppState: appState, state: state))
+        _listVM = State(wrappedValue: ExpenseListViewModel(appState: appState, state: state))
+        _expenseVM = State(wrappedValue: ExpenseViewModel(appState: appState, state: state))
+
     }
     
     var body: some View {
@@ -127,7 +128,7 @@ private struct ControlButton: View {
 
 #Preview {
     let user = User.mock
-    ExpensesView(user: user)
+    ExpensesView(appState: AppState())
         .environment(CarouselViewModel(user: user))
     
 }

@@ -9,8 +9,8 @@ import Foundation
 
 @Observable
 final class FleetViewModel {
-    private var user: User
-    var vehicles: [Vehicle] { user.vehicles }
+    private var appState: AppState
+    var vehicles: [Vehicle] { appState.user.vehicles }
     var hasVehicles: Bool { !vehicles.isEmpty }
     var enoughVehiclesToQuickInfo: Bool { vehicles.count >= 3 }
     
@@ -47,7 +47,7 @@ final class FleetViewModel {
         ExpensesCalculator(entries: totalExpenses).calculateTotalBalance().formatted(.number.grouping(.automatic)).description
     }
     
-    init(user: User) {
-        self.user = user
+    init(appState: AppState) {
+        self.appState = appState
     }
 }

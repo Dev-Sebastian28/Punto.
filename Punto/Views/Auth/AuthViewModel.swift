@@ -54,7 +54,7 @@ enum AuthViewModelError: Error {
 // MARK: - ViewModel
 @Observable
 final class AuthViewModel {
-
+    
     // Used weak to not create a strong reference to "AuthCoordinator"
     private weak let coordinator: AuthCoordinator?
     

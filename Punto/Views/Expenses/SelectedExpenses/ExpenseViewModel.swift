@@ -8,26 +8,26 @@ import Foundation
 
 @Observable
 final class ExpenseViewModel {
-    private let user: User
+    private var appState: AppState
     private let state: ExpensesState
     
     var selectedIndex: Int {
         state.selectedIndex
     }
     
-    init(user: User, state: ExpensesState) {
-        self.user = user
+    init(appState: AppState, state: ExpensesState) {
+        self.appState = appState
         self.state = state
     }
     
     func addExpense(_ expense: Expense) {
-        user.vehicles[selectedIndex].expenses.append(expense)
+        appState.user.vehicles[selectedIndex].expenses.append(expense)
     }
     
     func updateExpense(_ expense: Expense, at index: Int) {
-        guard user.vehicles[selectedIndex].expenses.indices.contains(index) else { return }
+        guard appState.user.vehicles[selectedIndex].expenses.indices.contains(index) else { return }
         
-        user.vehicles[selectedIndex].expenses[index] = expense
+        appState.user.vehicles[selectedIndex].expenses[index] = expense
     }
     
 }

@@ -9,10 +9,9 @@ import SwiftUI
 
 struct ProtocolsView: View {
     @State private var vm : ProtocoslListViewModel
-    var user: User
-    init(user: User) {
-        _vm = State(wrappedValue: ProtocoslListViewModel(user: user))
-        self.user = user
+    
+    init(appState: AppState) {
+        _vm = State(wrappedValue: ProtocoslListViewModel(appState: appState))
     }
     
     var body: some View {
@@ -51,7 +50,7 @@ struct ProtocolsView: View {
             }.padding(.horizontal, 8)
             NavigationLink {
                 ProtocolDetailView(
-                    user: user,
+                    user: .mock,
                     index: vm.selectedVehicleIndex
                 )
             } label: {
@@ -79,7 +78,7 @@ struct ProtocolsView: View {
             ForEach(vm.protocols.enumerated(),id: \.element.id ) { index ,protocolData in
                 
                 NavigationLink {
-                    ProtocolDetailView(user: user, element: protocolData, index: index)
+                    ProtocolDetailView(user: .mock, element: protocolData, index: index)
                 } label: {
                     ProtocolCardView(protocolM: protocolData)
                         .padding(2)
@@ -90,7 +89,7 @@ struct ProtocolsView: View {
 }
 
 #Preview {
-    ProtocolsView(user: .mock)
+    ProtocolsView(appState: AppState())
         .environment(CarouselViewModel(user: .mock))
     
 }

@@ -10,8 +10,8 @@ import SwiftUI
 struct MaintenanceView: View {
     @State private var vm: MaintenanceViewModel
     
-    init(user: User) {
-        _vm = State(wrappedValue: MaintenanceViewModel(user: user))
+    init(appState: AppState) {
+        _vm = State(wrappedValue: MaintenanceViewModel(appState: appState))
     }
     
     var body: some View {
@@ -58,7 +58,7 @@ struct MaintenanceView: View {
 
 
 #Preview {
-    MaintenanceView(user: .mock)
+    MaintenanceView(appState: AppState())
         .environment(CarouselViewModel(user: .mock))
     
 }

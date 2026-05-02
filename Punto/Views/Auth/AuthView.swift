@@ -129,7 +129,7 @@ private struct SocialButton: View {
         vm: AuthViewModel(
             mode: .signIn,
             service: AuthService(),
-            coordinator: AuthCoordinator()
+            coordinator: AuthCoordinator(appState: AppState())
         )
     ).environment(AppCoordinator(appState: AppState()))
 }
