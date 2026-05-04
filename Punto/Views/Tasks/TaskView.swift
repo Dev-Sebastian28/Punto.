@@ -23,9 +23,10 @@ struct TaskView: View {
 
     init(appState: AppState) {
         let state = TaskState()
+        let repository = TaskRepository(userId: appState.user.id)
         self.indexState = state
-        self.tasksListVM = TaskListViewModel(appState: appState, state: state)
-        self.taskVM = TaskViewModel(appState: appState, state: state)
+        self.tasksListVM = TaskListViewModel(appState: appState, state: state, service: repository)
+        self.taskVM = TaskViewModel(appState: appState, state: state, service: repository)
     }
     
     var body: some View {
@@ -69,6 +70,11 @@ struct TaskView: View {
         }
         .sheet(item: $selectedTask) { task in
             TaskDetailView(task: task, vm: taskVM, index: taskIndex)
+        }
+        .onAppear {
+            Task {
+                   await tasksListVM.updateTasks()
+            }
         }
     }
     

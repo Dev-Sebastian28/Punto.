@@ -8,7 +8,7 @@ import Foundation
 
 @Observable
 final class AppState {
-    var user: User = .mock {
+    var user: User = empty {
         willSet {
             print("changed from \(user) to \(newValue)")
         }

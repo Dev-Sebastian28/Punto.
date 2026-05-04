@@ -15,6 +15,7 @@ struct FleetEmptyState: View {
         ("wrench.and.screwdriver.fill", .orange)
     ]
     
+    
     var body: some View {
         VStack(alignment: .center, spacing: 33) {
             HStack(spacing: 12) {
@@ -44,6 +45,7 @@ struct FleetEmptyState: View {
                 ) {
                     
                 }
+                
                 DButtonComp(
                     text: "Accept Invitation",
                     color: .blue,

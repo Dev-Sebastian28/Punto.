@@ -223,5 +223,5 @@ struct AddTaskView: View {
 
 
 #Preview {
-    AddTaskView(vm: TaskViewModel(appState: AppState(), state: TaskState()))
+    AddTaskView(vm: TaskViewModel(appState: AppState(), state: TaskState(), service: MockTaskRepository()))
 }

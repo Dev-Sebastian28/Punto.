@@ -26,6 +26,7 @@ struct FleetView: View {
                 FleetControlPanel(vm: vm)
             } else {
                 FleetEmptyState()
+                    .padding(.horizontal)
             }
         }.ignoresSafeArea(edges: [.top, .bottom])
     }
@@ -37,7 +38,6 @@ struct FleetView: View {
             }
         }.padding(.top, 100)
     }
-    
 }
 
 #Preview {

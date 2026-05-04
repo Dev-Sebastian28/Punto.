@@ -250,6 +250,6 @@ private extension TaskDetailView {
             importance: .medium,
             status: .pending,
         ),
-        vm: TaskViewModel(appState: AppState(), state: TaskState()), index: 0
+        vm: TaskViewModel(appState: AppState(), state: TaskState(), service: MockTaskRepository()), index: 0
     )
 }
