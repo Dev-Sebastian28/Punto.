@@ -9,22 +9,24 @@ import Foundation
 
 @Observable
 final class TaskListViewModel {
+    
+    // MARK: - Dependencies:
     private let appState: AppState
-    private let state: TaskState
+    private let indexState: TaskState
 
     var selectedVehicle: Int {
-        state.selectedVehicleIndex
+        indexState.selectedVehicleIndex
     }
     
     private var vehicles: [Vehicle] { appState.user.vehicles }
     var hasVehicles: Bool { !vehicles.isEmpty }
     
+    // MARK: - State:
     var selectedtotalTasks: String {
         appState.user.vehicles[selectedVehicle].tasks.count.description
     }
-    
     var Tasks: [VTask] {
-        appState.user.vehicles[selectedVehicle].tasks
+    appState.user.vehicles[selectedVehicle].tasks
     }
     
     var selectedVehicleBrandModel: String {
@@ -36,21 +38,31 @@ final class TaskListViewModel {
     
     init(appState: AppState, state: TaskState) {
         self.appState = appState
-        self.state = state
+        self.indexState = state
     }
 }
 
 @Observable
 final class TaskViewModel {
+    
+    // MARK: - Dependencies:
     private var appState: AppState
-    private let state: TaskState
+    private let indexState: TaskState
+    private let respository: TaskRepository
 
     var selectedVehicle: Int {
-        state.selectedVehicleIndex
+        indexState.selectedVehicleIndex
     }
     
+    // MARK: - Dependencies:
+    var message: String?
     
-    func addTask(_ task: VTask) {
+    
+    func addTask(_ task: VTask) async {
+        guard let result = try? await respository.save(task: task).get() else {
+            return
+        }
+        print(result)
         appState.user.vehicles[selectedVehicle].tasks.append(task)
     }
     
@@ -64,6 +76,7 @@ final class TaskViewModel {
     
     init(appState: AppState, state: TaskState) {
         self.appState = appState
-        self.state = state
+        self.indexState = state
+        self.respository = TaskRepository(userId: appState.user.id)
     }
 }

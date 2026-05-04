@@ -12,9 +12,18 @@ import Auth
 protocol AuthServiceProtocol {
     func login(email: String, password: String) async throws -> AuthStatus
     func signup(email: String, password: String) async throws -> AuthStatus
+    func getUser() async throws  -> Auth.User?
+    
 }
 
-struct AuthService: AuthServiceProtocol {
+// MARK: - Auth Status
+enum AuthStatus {
+    case notDetermined
+    case authenticated
+    case notAuthenticated
+}
+
+struct AuthSupaService: AuthServiceProtocol {
     let client = SupabaseManagerSingleton.shared.client
     
     func login(email: String, password: String) async throws -> AuthStatus {
@@ -32,8 +41,8 @@ struct AuthService: AuthServiceProtocol {
         try await client.auth.signOut()
     }
     
-    func getAuthState() async throws -> AuthStatus {
-        let user = try? await client.auth.session.user
-        return user == nil ? .notDetermined : .authenticated
+    func getUser() async throws -> Auth.User? {
+        guard let user = try? await client.auth.user() else { return nil }
+        return user
     }
 }

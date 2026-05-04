@@ -26,7 +26,7 @@ final class AddVehicleViewModel {
     private(set) var user: User
     
     // MARK: - Dependency
-    let vehicleRepository = VehicleSupaRepository()
+    let vehicleRepository: VehicleSupaRepository
     
     // MARK: - States:
     var hasVehicle: Bool {
@@ -74,7 +74,29 @@ final class AddVehicleViewModel {
         }
     }
     
+    func fetchVehicles() async {
+        isLoading = true
+        
+        defer {
+            isLoading = false
+        }
+        
+        do {
+            if user.vehicles.isEmpty {
+                
+            } else {
+                let fetchedVehicles = try await vehicleRepository.fetchVehicles()
+                for userVehicle in 0...user.vehicles.indices.count {
+                    user.vehicles[userVehicle].vehicleInformation = fetchedVehicles[userVehicle]
+                }
+            }
+        } catch {
+            
+        }
+    }
+    
     init(user: User) {
         self.user = user
+        self.vehicleRepository = VehicleSupaRepository(userId: user.id)
     }
 }

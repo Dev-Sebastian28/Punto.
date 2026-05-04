@@ -11,20 +11,20 @@ import SwiftUI
 
 class VehicleSupaRepository {
     let client = SupabaseManagerSingleton.shared.client
+    let userId: UUID
+    
+    init(userId: UUID) {
+        self.userId = userId
+    }
     
     func saveVehicle(_ vehicle: VehicleInformation) async throws {
             do {
-                // 1. Check the current user status (may not be authenticated)
-                guard let currentUser = try? await client.auth.session.user else {
-                    print("❌ No session found (login or register required) ")
-                    return
-                }
                 
-                // 2. Assign the current user ID and set it to the vehicle just created
+                // 1. Assign the current user ID and set it to the vehicle just created
                 var vehicleToSave = vehicle
-                vehicleToSave.userId = currentUser.id
+                vehicleToSave.userId = userId
                 
-                // 3. Insert to the table with the new userId
+                // 2. Insert to the table with the new userId
                 try await client
                     .from("vehicles")
                     .insert(vehicleToSave)
@@ -58,5 +58,24 @@ class VehicleSupaRepository {
             print("❌ Image upload error: \(error)")
             return nil
         }
+    }
+    
+    func fetchVehicles() async throws -> [VehicleInformation] {
+        do {
+            guard let currentUser = try? await client.auth.session.user else {
+                print("❌ No session found (login or register required) ")
+                return []
+            }
+
+            try await client
+                .from("vehicles")
+                .select()
+                .eq("user_id", value: "\(currentUser.id)")
+                .execute()
+                .value
+        } catch {
+            print("error: \(error)")
+        }
+        return []
     }
 }

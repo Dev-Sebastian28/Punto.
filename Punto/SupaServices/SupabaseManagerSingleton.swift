@@ -5,6 +5,7 @@
 //  Created by Sebastian Garcia on 29/04/26.
 //
 import Supabase
+import Auth
 import Foundation
 
 

@@ -15,14 +15,14 @@ struct AuthNavigationTests {
     
     @Test("Log in navigation - Succesful log in")
     func logInSuccesfulNavigation() async throws {
-        let coordinator = await AuthCoordinator()
+        let coordinator = await AuthCoordinator(appState: AppState())
         let appState = await AppState()
         let serviceMock = AuthMock(authCoordinator: coordinator)
 
         
         let appCoordinator = await AppCoordinator(authCoordinator: coordinator, onboardingCoordinator: OnboardingCoordinator(appState: appState), fleetCoordinator: FleetCoordinator(appState: appState), cargoCoordinator: CargoCoordinator())
         
-        let authViewModel = await AuthViewModel(service: serviceMock, coordinator: AuthCoordinator())
+        let authViewModel = await AuthViewModel(service: serviceMock, coordinator: coordinator)
         
         try? #require(appCoordinator.currentRoot == .auth)
         
@@ -34,14 +34,14 @@ struct AuthNavigationTests {
     
     @Test("Log in navigation - Failure log in")
     func logInFailureNavigation() async throws {
-        let coordinator = await AuthCoordinator()
+        let coordinator = await AuthCoordinator(appState: AppState())
         let appState = await AppState()
         let serviceMock = AuthMock(authCoordinator: coordinator)
 
         
         let appCoordinator = await AppCoordinator(authCoordinator: coordinator, onboardingCoordinator: OnboardingCoordinator(appState: appState), fleetCoordinator: FleetCoordinator(appState: appState), cargoCoordinator: CargoCoordinator())
         
-        let authViewModel = await AuthViewModel(service: serviceMock, coordinator: AuthCoordinator())
+        let authViewModel = await AuthViewModel(service: serviceMock, coordinator: coordinator)
         
         try? #require(appCoordinator.currentRoot == .auth)
         
@@ -53,14 +53,14 @@ struct AuthNavigationTests {
     
     @Test("Sign Up navigation - Succesful Sign Up")
     func signUpSuccesfulNavigation() async throws {
-        let coordinator = await AuthCoordinator()
+        let coordinator = await AuthCoordinator(appState: AppState())
         let appState = await AppState()
         let serviceMock = AuthMock(authCoordinator: coordinator)
 
         
         let appCoordinator = await AppCoordinator(authCoordinator: coordinator, onboardingCoordinator: OnboardingCoordinator(appState: appState), fleetCoordinator: FleetCoordinator(appState: appState), cargoCoordinator: CargoCoordinator())
         
-        let authViewModel = await AuthViewModel(service: serviceMock, coordinator: AuthCoordinator())
+        let authViewModel = await AuthViewModel(service: serviceMock, coordinator: coordinator)
         
         try? #require(appCoordinator.currentRoot == .auth)
         
@@ -72,14 +72,14 @@ struct AuthNavigationTests {
     
     @Test("Sign Up navigation - Failure Sign Up")
     func signUpFailureNavigation() async throws {
-        let coordinator = await AuthCoordinator()
+        let coordinator = await AuthCoordinator(appState: AppState())
         let appState = await AppState()
         let serviceMock = AuthMock(authCoordinator: coordinator)
 
         
         let appCoordinator = await AppCoordinator(authCoordinator: coordinator, onboardingCoordinator: OnboardingCoordinator(appState: appState), fleetCoordinator: FleetCoordinator(appState: appState), cargoCoordinator: CargoCoordinator())
         
-        let authViewModel = await AuthViewModel(service: serviceMock, coordinator: AuthCoordinator())
+        let authViewModel = await AuthViewModel(service: serviceMock, coordinator: coordinator)
         
         try? #require(appCoordinator.currentRoot == .auth)
         

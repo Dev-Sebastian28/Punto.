@@ -18,14 +18,15 @@ enum TaskStatus: String, Codable, CaseIterable {
 
 struct VTask: Codable ,Identifiable, Hashable {
     var id: UUID
+    var vehicleId: UUID?
     var title: String
     var description: String?
     var deadLine: Date
-    //var destination: String? = nil
     var importance: TaskImportance
     var status: TaskStatus
-
+    
 }
+//var destination: String? = nil
 
 
 extension TaskImportance {

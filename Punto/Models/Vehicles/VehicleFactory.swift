@@ -9,7 +9,10 @@ import Foundation
 
 // I used this pattern because for now we have various option of vehicle such as transport vehicle who has an special property cargoInfo and private vehicle who do not have cargoInfo, as the app grows there may be other type of vehicles, and by using this pattern I only need to add new vehicle but not change the factory. I did not use abstractFactory because there are many variants of vehicles but they are to related.
 
-
+enum AccessLevel:String, Codable {
+    case driver
+    case owner
+}
 // Product Interface
 protocol Vehicle {
     var maintenance: [VehiclePartWrapper] { get set }

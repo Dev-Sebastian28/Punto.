@@ -81,10 +81,12 @@ struct SignInCard: View {
 }
 
 #Preview {
+    let  appState = AppState()
     SignInCard(
         vm: AuthViewModel(
             mode: .signIn,
-            service: AuthService(), coordinator: AuthCoordinator(appState: AppState())
+            service: AuthSupaService(), coordinator: AuthCoordinator(appState: appState),
+            appState: appState
         )
     )
 }

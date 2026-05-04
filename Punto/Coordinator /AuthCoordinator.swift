@@ -32,7 +32,7 @@ final class AuthCoordinator {
     func build(_ screen: AutAuthFlow) -> some View {
         switch screen {
         case .auth:
-            AuthView(vm: AuthViewModel(service: AuthService(), coordinator: self))
+            AuthView(vm: AuthViewModel(service: AuthSupaService(), coordinator: self, appState: appState))
         case .aboutPunto:
             IntroductionAppView()
         }

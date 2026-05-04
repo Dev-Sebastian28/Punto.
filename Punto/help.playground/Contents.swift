@@ -33,3 +33,4 @@ let daate = Date(timeIntervalSince1970: unixTimestamp)
 print(date as Any) // Output will be in UTC by default, e.g., "2023-03-15 00:00:00 +0000"
 
 let fixed = 10000
+print()

@@ -23,3 +23,5 @@ final class AppState {
         print(" 👋 deinit: AppState")
     }
 }
+
+var empty = User(id: UUID(), userInformation: UserInformation(name: "", country: .argentina), vehicles: [], drivers: [])

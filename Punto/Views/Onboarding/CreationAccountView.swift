@@ -82,7 +82,7 @@ final class CreationAccountViewModel {
     
     func createAccount(name: String, phone: String, vehicles: Int) {
         user.userInformation.name = name
-        user.userInformation.phone = phone
+        user.phone = phone
     }
     init(user: User) {
         self.user = user

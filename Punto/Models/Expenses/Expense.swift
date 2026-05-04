@@ -10,6 +10,7 @@ import SwiftUI
 
 struct Expense: Codable, Identifiable {
     let id: UUID
+    var userId: UUID?
     var name: String
     var description: String?
     var amount: Double

@@ -6,13 +6,8 @@
 //
 
 import Foundation
+import Auth
 
-// MARK: - Auth Status
-enum AuthStatus {
-    case notDetermined
-    case authenticated
-    case notAuthenticated
-}
 
 enum AuthMode {
     case signIn
@@ -66,12 +61,14 @@ final class AuthViewModel {
     // MARK: Dependencies 
     private let service: any AuthServiceProtocol
     private let validator: AuthValidator = AuthValidator()
+    private var appState: AppState
 
     // MARK: Init
-    init(mode: AuthMode = .signUp, service: any AuthServiceProtocol, coordinator: AuthCoordinator) {
+    init(mode: AuthMode = .signUp, service: any AuthServiceProtocol, coordinator: AuthCoordinator, appState: AppState) {
         self.mode = mode
         self.service = service
         self.coordinator = coordinator
+        self.appState = appState
     }
     
     var suggestion : String {
@@ -86,6 +83,8 @@ final class AuthViewModel {
     func login(email: String, password: String) async {
         guard localValidate(email: email, password: password) else { return }
         await perform { try await self.service.login(email: email, password: password) }
+        guard let supaUser = try? await service.getUser() else { return }
+        self.appState.user = AuthUserTransformer().transform(supaUser: supaUser)
     }
 
     func signUp(email: String, password: String) async {
@@ -93,10 +92,9 @@ final class AuthViewModel {
         await perform { try await self.service.signup(email: email, password: password) }
     }
 
-
+  
     // MARK: Private
     /// Valida localmente y setea el estado si falla. Devuelve `true` si pasó.
-    @discardableResult
     private func localValidate(email: String, password: String) -> Bool {
         switch mode {
         case .signIn:
@@ -149,8 +147,19 @@ final class AuthViewModel {
             operationState = .failure(.service(error.localizedDescription))
         }
     }
+}
 
-    private func mapError(_ error: Error) -> AuthViewModelError {
-        .service(error.localizedDescription)
+struct AuthUserTransformer {
+    func transform(supaUser: Auth.User) -> User {
+        var userModel = User(id: UUID(), userInformation: UserInformation(name: "", country: .argentina), vehicles: [], drivers: [])
+        
+        let supaId = supaUser.id
+        userModel.id = supaId
+        
+        if let supaEmail = supaUser.email, let supaPhone = supaUser.phone {
+            userModel.email = supaEmail
+            userModel.phone = supaPhone
+        }
+        return userModel
     }
 }

@@ -128,7 +128,7 @@ struct ProfileView: View {
             Text(user.userInformation.name)
                 .font(.title2)
                 .fontWeight(.semibold)
-            Text(user.userInformation.email)
+            Text(user.email ?? "")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }

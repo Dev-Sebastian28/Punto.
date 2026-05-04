@@ -16,6 +16,8 @@ enum AvailableCountries: String, Codable {
 
 struct User {
     var id: UUID
+    var email: String?
+    var phone: String?
     var userInformation: UserInformation
     var vehicles: [Vehicle]
     var drivers: [User]
@@ -30,7 +32,7 @@ struct User {
     static var mock: User {
         User(id: UUID(),
              userInformation: UserInformation(
-                name: "sebastian", email: "sebastian@gmail.com", phone: "3213123", country: .colombia
+                name: "sebastian", country: .colombia
              ),
              vehicles: [
                 TransportationVehicle(
@@ -79,8 +81,6 @@ struct User {
 
 struct UserInformation: Codable {
     var name: String
-    var email: String
-    var phone: String?
     var country: AvailableCountries
 }
 

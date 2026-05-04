@@ -103,11 +103,12 @@ struct SignUpCard: View {
 }
 
 #Preview {
+    let appState = AppState()
     SignUpCard(
         vm: AuthViewModel(
             mode: .signUp,
-            service: AuthService(),
-            coordinator: AuthCoordinator(appState: AppState())
+            service: AuthSupaService(),
+            coordinator: AuthCoordinator(appState:appState), appState: appState
         )
-    ).environment(AppCoordinator(appState: AppState()))
+    ).environment(AppCoordinator(appState:appState))
 }

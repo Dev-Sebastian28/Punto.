@@ -178,13 +178,27 @@ struct AddTaskView: View {
 
     private var actionButtons: some View {
         HStack(spacing: 12) {
-            DButtonComp(text: "cancel", color: .gray, image: .none, style: .neutral) {
+            DButtonComp(
+                text: "cancel",
+                color: .gray,
+                image: .none,
+                style: .neutral
+            ) {
                 dismiss()
 
             }
             
-            DButtonComp(text: "Add Task", color: .blue, image: "plus", style: .dominant, isEnabled: isValid) {
-                vm.addTask(task)
+            DButtonComp(
+                text: "Add Task",
+                color: .blue,
+                image: "plus",
+                style: .dominant,
+                isEnabled: isValid
+            ) {
+                Task {
+                    await vm.addTask(task)
+
+                }
                 dismiss()
             }
             .animation(.easeInOut(duration: 0.2), value: isValid)

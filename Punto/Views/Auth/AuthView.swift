@@ -125,11 +125,13 @@ private struct SocialButton: View {
 }
 
 #Preview {
+    let appState = AppState()
+    
     AuthView(
         vm: AuthViewModel(
             mode: .signIn,
-            service: AuthService(),
-            coordinator: AuthCoordinator(appState: AppState())
+            service: AuthSupaService(),
+            coordinator: AuthCoordinator(appState: appState), appState: appState
         )
-    ).environment(AppCoordinator(appState: AppState()))
+    ).environment(AppCoordinator(appState: appState))
 }

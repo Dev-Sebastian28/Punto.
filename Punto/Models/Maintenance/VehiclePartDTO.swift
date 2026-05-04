@@ -31,6 +31,7 @@ struct VehiclePartDTO: Codable {
 struct VehiclePartWrapper: Identifiable {
     let vehiclePart: VehiclePartDTO
     let id: UUID
+    var userId: UUID?
     
     // Last mainteined Info
     let lastMaintenanceDate: Date

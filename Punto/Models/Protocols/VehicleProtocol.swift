@@ -23,6 +23,7 @@ enum ProtocolTime: String, Codable, CaseIterable {
 
 struct VehicleProtocol: Identifiable, Codable, Equatable {
     var id: UUID = UUID()
+    var userId: UUID?
     var name: String
     var description: String?
     var tasks: [ProtocolTask]

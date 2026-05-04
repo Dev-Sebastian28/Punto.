@@ -27,7 +27,7 @@ final class AuthMock: AuthServiceProtocol {
     }
     
     init() {
-        self.authCoordinator = AuthCoordinator()
+        self.authCoordinator = AuthCoordinator(appState: AppState())
     }
 
     
