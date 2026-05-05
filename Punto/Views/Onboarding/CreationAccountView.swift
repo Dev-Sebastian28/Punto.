@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct CreationAccountView: View {
     @State private var name: String = ""
     @State private var phoneNumber: String = ""
@@ -15,9 +17,8 @@ struct CreationAccountView: View {
     
     @Environment(AppCoordinator.self) var coordinator
     
-    
     private var isValid: Bool {
-        !name.isEmpty && !phoneNumber.isEmpty 
+        !name.isEmpty && !phoneNumber.isEmpty
     }
     
     init(appState: AppState) {
@@ -25,54 +26,95 @@ struct CreationAccountView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack(alignment: .top) {
-                Image(systemName: "person.fill")
-                    .font(.title)
-                    .foregroundStyle(Color.blue)
-                    .genericRoundedBackground(color: .blue.opacity(0.1))
-                
-                VStack(alignment: .leading) {
-                    Text("Account Information")
-                        .font(.title2.bold())
-                    Text("Name and Lastname")
-                }
-            }
-            
-            TextFieldComp(
-                text: $name,
-                prompt: "Whats your name",
-                leadingIcon: "pencil"
-            )
-            
-            TextFieldComp(
-                text: $phoneNumber,
-                prompt: "Whats your phone number",
-                leadingIcon: "phone"
-            ).padding(.bottom)
-
-            
-            HStack {
-                Text("Number of vehicles you have:")
-                Picker("Select a number", selection: $vehiclesNumber) {
-                    ForEach(1...100, id: \.self) { number in
-                        Text("\(number)").tag(number)
+        VStack {
+            ScrollView {
+                VStack(spacing: 24) {
+                    
+                    // HEADER
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Image(systemName: "person.crop.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundStyle(.blue)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Create Account")
+                                    .font(.title.bold())
+                                Text("Enter your personal info")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    
+                    // CARD: USER INFO
+                    VStack(spacing: 16) {
+                        TextFieldComp(
+                            text: $name,
+                            prompt: "Full name",
+                            leadingIcon: "person"
+                        )
+                        
+                        TextFieldComp(
+                            text: $phoneNumber,
+                            prompt: "Phone number",
+                            leadingIcon: "phone"
+                        )
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color(.systemBackground))
+                            .shadow(color: .black.opacity(0.05), radius: 10)
+                    )
+                    
+                    
+                    // CARD: VEHICLES
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Vehicles")
+                            .font(.headline)
+                        
+                        HStack {
+                            Text("How many do you have?")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            
+                            Spacer()
+                            
+                            Picker("", selection: $vehiclesNumber) {
+                                ForEach(1...20, id: \.self) { number in
+                                    Text("\(number)").tag(number)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                        }
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color(.systemBackground))
+                            .shadow(color: .black.opacity(0.05), radius: 10)
+                    )
                 }
-                .genericCapsuleBackground(color: .blue.opacity(0.1))
-                .pickerStyle(.menu)
+                .padding()
             }
             
+            
+            // BOTÓN FIJO ABAJO
             DButtonComp(
-                text: "Create",
+                text: "Create Account",
                 color: .green,
-                image: "plus",
+                image: "checkmark",
                 isEnabled: isValid
             ) {
                 vm.createAccount(name: name, phone: phoneNumber, vehicles: vehiclesNumber)
                 coordinator.onBoardingCoordinator.uniqueNavigation(to: .form1)
             }
-        }.padding(.horizontal)
+            .padding()
+        }
+        .background(Color(.systemGroupedBackground))
     }
 }
 

@@ -8,20 +8,19 @@ import Foundation
 import SwiftUI
 
 enum TransmissionType: String, Codable {
-    case manual = "Manual"
-    case automatic = "Automático"
+    case manual = "manual"
+    case automatic = "automatic"
 }
 
 enum FuelType: String, Codable {
-    case diesel = "Diesel"
-    case gasoline = "Gasoline"
-    case other = "Other"
+    case diesel = "diesel"
+    case gasoline = "gasoline"
+    case other = "other"
 }
-
 
 struct VehicleInformation: Identifiable, Codable {
     var id: UUID = UUID()
-    var userId: UUID?
+    var userId: UUID
     var imageUrl: String?
     var plate: String
     var brand: String
@@ -41,8 +40,11 @@ struct VehicleInformation: Identifiable, Codable {
 }
 
 extension VehicleInformation {
+    
+    static var empty: Self { .init(userId: UUID(), plate: "", brand: "", model: "", year: 0, mileage: 0, engine: "", transmission: .automatic, fuel: .gasoline) }
+    
     static var sample: Self {
-        .init(plate: "ABC123", brand: "Toyota", model: "Celica", year: 1988, mileage: 10000, engine: "1.8L", transmission: .automatic, fuel: .gasoline)
+        .init(userId: UUID(), plate: "ABC123", brand: "Toyota", model: "Celica", year: 1988, mileage: 10000, engine: "1.8L", transmission: .automatic, fuel: .gasoline)
     }
 }
 

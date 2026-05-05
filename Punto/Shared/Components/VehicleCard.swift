@@ -86,6 +86,7 @@ struct VehicleCard: View {
 
 #Preview {
     VehicleCard(info: VehicleInformation(
+        userId: UUID(),
         plate: "GHT-990",
         brand: "Kenworth",
         model: "T800",

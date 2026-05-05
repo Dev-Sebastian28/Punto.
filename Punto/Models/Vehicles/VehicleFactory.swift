@@ -99,32 +99,12 @@ struct VehicleFactory {
             
         case .transportVehicle:
             return TransportationVehicle(
-                vehicleInformation: .init(
-                    imageUrl: nil,
-                    plate: "",
-                    brand: "",
-                    model: "",
-                    year: 0,
-                    mileage: 0,
-                    engine: "",
-                    transmission: .automatic,
-                    fuel: .diesel
-                )
+                vehicleInformation: .empty
             )
             
         case .privateVehicle:
             return PrivateVehicle(
-                vehicleInformation: .init(
-                    imageUrl: nil,
-                    plate: "",
-                    brand: "",
-                    model: "",
-                    year: 0,
-                    mileage: 0,
-                    engine: "",
-                    transmission: .automatic,
-                    fuel: .diesel
-                )
+                vehicleInformation: .empty
             )
         }
     }

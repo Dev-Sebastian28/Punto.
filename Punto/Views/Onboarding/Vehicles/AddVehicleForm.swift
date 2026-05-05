@@ -12,23 +12,14 @@ import UIKit
 struct AddVehicleForm: View {
     @State private var isPrivateSelected = false
     @State private var isTransportSelected = true
-    @State private var vehicleInf: VehicleInformation = .init(
-        imageUrl: nil,
-        plate: "",
-        brand: "",
-        model: "",
-        year: 0,
-        mileage: 0,
-        engine: "",
-        transmission: .automatic,
-        fuel: .diesel
-    )
+    @State private var vehicleInf: VehicleInformation = .sample
     
     @State private var pickerItem: PhotosPickerItem?
     @State private var uiImage: UIImage?
     @State private var selectedImageData: Data?
     
     let vm: AddVehicleViewModel
+    let userId: UUID
     
     @Environment(\.dismiss) private var dimiss
     
@@ -186,12 +177,26 @@ struct AddVehicleForm: View {
                 color: .blue,
                 image: "car.fill",
                 maxWidth: 150) {
+                    
+                    vehicleInf.userId = userId
+                    print(vehicleInf)
+                    
                     Task {
                         if isTransportSelected {
-                            await vm.addVehicle(TransportationVehicle(vehicleInformation: vehicleInf), imageData: selectedImageData)
+                            await vm.addVehicle(
+                                TransportationVehicle(
+                                    vehicleInformation: vehicleInf
+                                ),
+                                imageData: selectedImageData
+                            )
                             
                         } else {
-                            await vm.addVehicle(TransportationVehicle(vehicleInformation: vehicleInf), imageData: selectedImageData)
+                            await vm.addVehicle(
+                                TransportationVehicle(
+                                    vehicleInformation: vehicleInf
+                                ),
+                                imageData: selectedImageData
+                            )
                         }
                     }
                     
@@ -233,5 +238,7 @@ private struct VehicleCategoryButton: View {
 }
 
 #Preview {
-    AddVehicleForm(vm: AddVehicleViewModel(user: .mock))
+    AddVehicleForm(
+        vm: AddVehicleViewModel(appState: AppState()), userId: UUID()
+    )
 }

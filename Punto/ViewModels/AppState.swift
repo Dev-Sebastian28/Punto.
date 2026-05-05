@@ -10,7 +10,9 @@ import Foundation
 final class AppState {
     var user: User = empty {
         willSet {
-            print("changed from \(user) to \(newValue)")
+            print("""
+changed from \(user) ----------------------------------------------------------------------------------------------------------------------------------------------------to \(newValue)
+""")
         }
     }
     

@@ -6,6 +6,7 @@
 //
 import Foundation
 import SwiftUI
+import Supabase
 
 private enum Message {
     case success
@@ -25,8 +26,15 @@ private enum Message {
 final class AddVehicleViewModel {
     private(set) var user: User
     
+    // MARK: - init
+    init(appState: AppState) {
+        self.user = appState.user
+        self.vehicleRepository = VehicleSupaRepository(appState: appState)
+    }
+    
     // MARK: - Dependency
     let vehicleRepository: VehicleSupaRepository
+    
     
     // MARK: - States:
     var hasVehicle: Bool {
@@ -35,68 +43,75 @@ final class AddVehicleViewModel {
     var vehicles: [Vehicle] {
         user.vehicles
     }
+    
     var vehicleCount: String {
         user.vehicles.count.description
     }
+    
     var isLoading: Bool = false
     var message: String?
     
-    func addVehicle(_ vehicle: Vehicle, imageData: Data?) async {
+    func addVehicle(_ vehicle: Vehicle, imageData: Data?) async  {
         isLoading = true
         
         defer {
             isLoading = false
         }
         
-        do {
+        
+        
+        let result = try? await vehicleRepository.saveVehicle(vehicle.vehicleInformation)
+        print(user.id)
+        print("🔑 user id: \(try? await SupabaseManagerSingleton.shared.client.auth.user().id, default: "ERror")")
+        print("🔑 vehicle user_id: \(vehicle.vehicleInformation.userId)")
+
+        switch result {
+        case .success(_):
+            
             var finalImageUrl: String? = nil
             
+            // Store Vehicle Image in Supabase Buckets
             if let data = imageData {
                 let fileName = "\(vehicle.vehicleInformation.plate)_\(UUID().uuidString).jpg"
                 finalImageUrl = await vehicleRepository.uploadVehicleImage(data: data, fileName: fileName)
             }
-            
             var infoToSave = vehicle.vehicleInformation
             infoToSave.imageUrl = finalImageUrl
-            
-            try await vehicleRepository.saveVehicle(infoToSave)
             
             user.vehicles.append(vehicle)
             message = Message.success.message
             
+            
             if let index = user.vehicles.firstIndex(where: { $0.vehicleInformation.id == vehicle.vehicleInformation.id }) {
                 user.vehicles[index].vehicleInformation.imageUrl = finalImageUrl
             }
+            break
+        case .failure(let error):
+            print("❌ saveVehicle failure: \(error)")
+            message = Message.error.message
             
-        } catch {
-            print("Error al guardar el vehículo: \(error)")
+        case .none:
+
             message = Message.error.message
         }
     }
     
     func fetchVehicles() async {
-        isLoading = true
+        let result = try? await vehicleRepository.fetchVehicles()
         
-        defer {
-            isLoading = false
-        }
-        
-        do {
-            if user.vehicles.isEmpty {
-                
-            } else {
-                let fetchedVehicles = try await vehicleRepository.fetchVehicles()
-                for userVehicle in 0...user.vehicles.indices.count {
-                    user.vehicles[userVehicle].vehicleInformation = fetchedVehicles[userVehicle]
-                }
+        switch result {
+        case .success(let success):
+            for vehicle in success {
+                user.vehicles.append(TransportationVehicle(vehicleInformation: vehicle))
             }
-        } catch {
-            
+            print(success)
+        case .failure(let error):
+            print("❌ fetchVehicles failure: \(error)")
+            message = Message.error.message
+        case .none:
+            message = Message.error.message
         }
     }
     
-    init(user: User) {
-        self.user = user
-        self.vehicleRepository = VehicleSupaRepository(userId: user.id)
-    }
+    
 }

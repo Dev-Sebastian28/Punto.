@@ -90,6 +90,9 @@ final class AuthViewModel {
     func signUp(email: String, password: String) async {
         guard localValidate(email: email, password: password) else { return }
         await perform { try await self.service.signup(email: email, password: password) }
+        guard let supaUser = try? await service.getUser() else { return }
+        self.appState.user = AuthUserTransformer().transform(supaUser: supaUser)
+
     }
 
   

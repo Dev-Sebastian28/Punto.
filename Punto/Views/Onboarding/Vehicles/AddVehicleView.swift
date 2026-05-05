@@ -7,40 +7,62 @@
 
 import SwiftUI
 
+enum AddVehicleViewMode {
+    case firstTime
+    case addNew
+}
+
 struct AddVehicleView: View {
+    let mode: AddVehicleViewMode
     @State private var isAddVehiclePresented = false
     @State private var vm: AddVehicleViewModel
     @State private var showMessage: Bool = false
     @Environment(AppCoordinator.self) var coordinator
     
     
-    init(user: User) {
-        _vm = State(wrappedValue: AddVehicleViewModel(user: user))
+    init(appState: AppState, mode: AddVehicleViewMode) {
+        _vm = State(wrappedValue: AddVehicleViewModel(appState: appState))
+        self.mode = mode
     }
     
     var body: some View {
         ZStack(alignment: .center) {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 24) {
-                    header
+            Color.platformGroupedBackground
+            VStack(alignment: .center, spacing: 24) {
+                
+                switch mode {
+                case .firstTime:
                     
-                    if vm.hasVehicle {
-                        vehicleInfoSection
-                        DButtonComp(
-                            text: "Add New Vehicle",
-                            color: .blue,
-                            image: "plus") {
-                                isAddVehiclePresented.toggle()
+                    VStack {
+                        header
+                        if vm.hasVehicle {
+                            ScrollView(.vertical, showsIndicators: false) {
+                                vehicleInfoSection
+                                DButtonComp(
+                                    text: "Add New Vehicle",
+                                    color: .blue,
+                                    image: "plus") {
+                                        isAddVehiclePresented.toggle()
+                                    }
                             }
-                    } else {
-                        EmptyStateVehicleCard(isFormPresented: $isAddVehiclePresented)
+                            
+                        } else {
+                            EmptyStateVehicleCard(isFormPresented: $isAddVehiclePresented)
+                        }
                     }
                     
-                }.padding(.horizontal, 16)
+                case .addNew:
+                  
+                    VStack {
+                        EmptyStateVehicleCard(isFormPresented: $isAddVehiclePresented)
+
+                    }
+                }
             }
-            .background(Color.platformGroupedBackground)
+            
+            .padding(.horizontal)
             .sheet(isPresented: $isAddVehiclePresented) {
-                AddVehicleForm(vm: self.vm)
+                AddVehicleForm(vm: self.vm, userId: vm.user.id)
             }
             
             if showMessage {
@@ -50,11 +72,12 @@ struct AddVehicleView: View {
             }
             
             if vm.isLoading {
-                Color.white
                 ProgressView()
             }
             
-        }.onChange(of: vm.message) { _, _ in
+        }
+        .ignoresSafeArea(edges: [.top, .bottom])
+        .onChange(of: vm.message) { _, _ in
             presentMessage()
         }
     }
@@ -131,6 +154,7 @@ struct AddVehicleView: View {
 
 
 #Preview {
-    AddVehicleView(user: .mock)
-        .environment(AppCoordinator(appState: AppState()))
+    let appState = AppState()
+    AddVehicleView(appState: appState, mode: .addNew)
+        .environment(AppCoordinator(appState: appState))
 }

@@ -17,11 +17,10 @@ protocol TaskRepositoryProtocol {
 
 struct TaskRepository:  TaskRepositoryProtocol {
     // MARK: Dependencies:
-    let client: SupabaseClient = SupabaseManagerSingleton.shared.client
     let vehicleId: UUID
     let postRequest: SupabaseINSERTRequestProtocol = INSERTRequest(
         client: SupabaseManagerSingleton.shared.client,
-        table: "V_Tasks"
+        table: "v_tasks"
     )
     let deleteRequest: SupabaseDELETERequestProtocol = DELETErequest(
         table: "",
@@ -30,7 +29,7 @@ struct TaskRepository:  TaskRepositoryProtocol {
     )
     let getRequest: SupabaseGETRequestProtocol = GETRequest(
         client: SupabaseManagerSingleton.shared.client,
-        table: "V_Tasks"
+        table: "v_tasks"
     )
         
     
@@ -40,15 +39,15 @@ struct TaskRepository:  TaskRepositoryProtocol {
     }
     
     func save(task: VTask) async throws -> Result<Bool, Error> {
-        try await postRequest.customRequest(model: task)
+         await postRequest.customRequest(model: task)
     }
     
     func delete(task: VTask) async throws -> Result<Bool, Error> {
-        try await deleteRequest.customRequest(model: task, itemId: task.id)
+        try await deleteRequest.customRequest(itemId: task.id)
     }
     
     func fetchAll() async throws ->  Result<[VTask], Error> {
-        try await getRequest.customRequest(model: VTask.self, vehicleId: vehicleId)
+         await getRequest.customRequest(model: VTask.self, vehicleId: vehicleId)
     }
 }
 

@@ -9,6 +9,7 @@ import Foundation
 
 @Observable
 final class FleetViewModel {
+    private var repository: VehicleSupaRepository
     private var appState: AppState
     var vehicles: [Vehicle] { appState.user.vehicles }
     var hasVehicles: Bool { !vehicles.isEmpty }
@@ -47,7 +48,23 @@ final class FleetViewModel {
         ExpensesCalculator(entries: totalExpenses).calculateTotalBalance().formatted(.number.grouping(.automatic)).description
     }
     
+    func fetchVehicles() async {
+       let result = try? await repository.fetchVehicles()
+        switch result {
+        case .success(let success):
+            for vehicle in success {
+                appState.user.vehicles.append(TransportationVehicle(vehicleInformation: vehicle))
+            }
+        case .failure(let failure):
+            print(failure)
+        case .none:
+            print("daw")
+
+        }
+    }
+    
     init(appState: AppState) {
         self.appState = appState
+        self.repository = VehicleSupaRepository(appState: appState)
     }
 }

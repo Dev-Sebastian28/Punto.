@@ -10,7 +10,7 @@ import Supabase
 protocol SupabaseGETRequestProtocol {
     var client: SupabaseClient { get }
     var table: String { get }
-    func customRequest<T: Decodable>(model: T.Type, vehicleId: UUID) async throws -> Result<[T], Error>
+    func customRequest<T: Decodable>(model: T.Type, vehicleId: UUID) async  -> Result<[T], Error>
 }
 
 struct GETRequest: SupabaseGETRequestProtocol {
@@ -18,12 +18,12 @@ struct GETRequest: SupabaseGETRequestProtocol {
     let table: String
     
     @MainActor
-    func customRequest<T: Decodable>(model: T.Type, vehicleId: UUID) async throws -> Result<[T], Error> {
+    func customRequest<T: Decodable>(model: T.Type, vehicleId: UUID) async  -> Result<[T], Error> {
         do {
             let response = try await client
                 .from(table)
                 .select()
-                .eq("vehicle_id", value: vehicleId)
+                .eq("user_id", value: vehicleId)
                 .execute()
             
             guard (200...299).contains(response.status) else {

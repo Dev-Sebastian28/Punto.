@@ -44,7 +44,7 @@ final class OnboardingCoordinator {
             SecondFormView()
                 .navigationBarBackButtonHidden()
         case .addVehicle:
-            AddVehicleView(user: appState.user)
+            AddVehicleView(appState: appState, mode: .firstTime)
                 .navigationBarBackButtonHidden()
         case .addDriver:
             AddDriverView(user: appState.user)

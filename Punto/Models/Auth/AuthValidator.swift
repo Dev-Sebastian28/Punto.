@@ -12,7 +12,6 @@ enum ValidatorError: Error {
     case invalidEmail
     case passwordTooShort
     case passwordMissingNumber
-    case passwordMissingSymbol
     case passwordMissingLowercase
     case passwordMissingUppercase
 
@@ -22,7 +21,6 @@ enum ValidatorError: Error {
         case .invalidEmail: return "Please enter a valid email"
         case .passwordTooShort: return "Password must be at least 8 characters long"
         case .passwordMissingNumber: return "Password must contain a number"
-        case .passwordMissingSymbol: return "Password must contain a symbol"
         case .passwordMissingLowercase: return "Password must contain a lowercase letter"
         case .passwordMissingUppercase: return "Password must contain an uppercase letter"
         }
@@ -49,7 +47,6 @@ struct AuthValidator {
 
         if password.count < 8 { throw ValidatorError.passwordTooShort }
         if !password.contains(where: { $0.isNumber }) { throw ValidatorError.passwordMissingNumber }
-        if !password.contains(where: { $0.isSymbol }) { throw ValidatorError.passwordMissingSymbol }
         if !password.contains(where: { $0.isLowercase }) { throw ValidatorError.passwordMissingLowercase }
         if !password.contains(where: { $0.isUppercase }) { throw ValidatorError.passwordMissingUppercase }
         

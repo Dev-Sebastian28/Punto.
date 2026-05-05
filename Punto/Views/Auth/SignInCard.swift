@@ -64,10 +64,8 @@ struct SignInCard: View {
                 isEnabled: canSubmit && !vm.operationState.isLoading
             ) {
                 Task { await vm.login(email: email, password: password) }
-            }
-            .overlay(loadingOverlay)
-        }
-        .genericRoundedBackground(color: .white)
+            }.overlay(loadingOverlay)
+        }.genericRoundedBackground(color: .white)
     }
 
     @ViewBuilder

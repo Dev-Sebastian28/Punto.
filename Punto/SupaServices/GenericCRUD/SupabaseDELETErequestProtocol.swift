@@ -11,7 +11,7 @@ import Supabase
 protocol SupabaseDELETERequestProtocol {
     var table: String { get set }
     var client: SupabaseClient { get }
-    func customRequest<T: Codable>(model: T, itemId: UUID) async throws -> Result<Bool, Error>
+    func customRequest(itemId: UUID) async throws -> Result<Bool, Error>
 }
 
 struct DELETErequest: SupabaseDELETERequestProtocol {
@@ -19,7 +19,7 @@ struct DELETErequest: SupabaseDELETERequestProtocol {
     var client: SupabaseClient
     var filter: String
     
-    func customRequest<T>(model: T, itemId: UUID) async throws -> Result<Bool, Error> {
+    func customRequest(itemId: UUID) async throws -> Result<Bool, Error> {
         do {
             let response = try await client.from(table).delete().eq("id", value: itemId.uuidString).execute()
 

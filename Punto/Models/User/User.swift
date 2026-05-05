@@ -37,6 +37,7 @@ struct User {
              vehicles: [
                 TransportationVehicle(
                     vehicleInformation: .init(
+                        userId: UUID(),
                         imageUrl: nil,
                         plate: "DMW-2342",
                         brand: "Volvo",
@@ -50,6 +51,7 @@ struct User {
                 ),
                 PrivateVehicle(
                     vehicleInformation: .init(
+                        userId: UUID(),
                         imageUrl: nil,
                         plate: "AFV-2342",
                         brand: "Ford",
@@ -63,6 +65,7 @@ struct User {
                 ),
                 TransportationVehicle(
                     vehicleInformation: .init(
+                        userId: UUID(),
                         imageUrl: nil,
                         plate: "TGB-2342",
                         brand: "Kenworth",

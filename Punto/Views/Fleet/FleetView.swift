@@ -11,8 +11,7 @@ struct FleetView: View {
     @State private var searchText: String = ""
     @State private var hideHeader: Bool = false
     @State private var vm: FleetViewModel
-    
-    @Environment(AppCoordinator.self) var coordinator
+        @Environment(AppCoordinator.self) var coordinator
     
     init(appState: AppState) {
         self.vm = FleetViewModel(appState: appState)

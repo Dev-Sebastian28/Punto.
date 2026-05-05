@@ -10,38 +10,47 @@ import Supabase
 import SwiftUI
 
 class VehicleSupaRepository {
-    let client = SupabaseManagerSingleton.shared.client
-    let userId: UUID
+    // MARK: Dependencies:
+    let postRequest: SupabaseINSERTRequestProtocol = INSERTRequest(
+        client: SupabaseManagerSingleton.shared.client,
+        table: "vehicles"
+    )
+    let deleteRequest: SupabaseDELETERequestProtocol = DELETErequest(
+        table: "",
+        client: SupabaseManagerSingleton.shared.client,
+        filter: "user_id"
+    )
+    let getRequest: SupabaseGETRequestProtocol = GETRequest(
+        client: SupabaseManagerSingleton.shared.client,
+        table: "vehicles"
+    )
     
-    init(userId: UUID) {
-        self.userId = userId
+    // MARK: init:
+    init(appState: AppState) {
+        self.userId = appState.user.id
     }
     
-    func saveVehicle(_ vehicle: VehicleInformation) async throws {
-            do {
-                
-                // 1. Assign the current user ID and set it to the vehicle just created
-                var vehicleToSave = vehicle
-                vehicleToSave.userId = userId
-                
-                // 2. Insert to the table with the new userId
-                try await client
-                    .from("vehicles")
-                    .insert(vehicleToSave)
-                    .execute()
-                
-                print("✅ Successful saved vehicle ")
-                
-            } catch {
-                print("❌ Save vehicle error: \(error.localizedDescription)")
-                throw error 
-            }
-        }
+    var userId: UUID
     
+    
+    func saveVehicle(_ vehicle: VehicleInformation) async throws -> Result<Bool, Error> {
+         await postRequest.customRequest(model: vehicle)
+    }
+    
+    func fetchVehicles() async throws -> Result<[VehicleInformation], Error>  {
+        print("statr fetching")
+        return await getRequest.customRequest(model: VehicleInformation.self, vehicleId: userId)
+    }
+    
+    func deleteVehicle(for vehicle: VehicleInformation) async throws -> Result<Bool, Error> {
+        try await deleteRequest.customRequest(itemId: vehicle.id)
+    }
+    
+    // MARK: Todo
     func uploadVehicleImage(data: Data, fileName: String) async -> String? {
         do {
             // reference to the supabase bucket called "vehicle_images"
-            let storage = client.storage.from("vehicle_images")
+            let storage = SupabaseManagerSingleton.shared.client.storage.from("vehicle_images")
             
             // 1. upload the file to supa Bucket
             try await storage.upload(
@@ -60,22 +69,5 @@ class VehicleSupaRepository {
         }
     }
     
-    func fetchVehicles() async throws -> [VehicleInformation] {
-        do {
-            guard let currentUser = try? await client.auth.session.user else {
-                print("❌ No session found (login or register required) ")
-                return []
-            }
-
-            try await client
-                .from("vehicles")
-                .select()
-                .eq("user_id", value: "\(currentUser.id)")
-                .execute()
-                .value
-        } catch {
-            print("error: \(error)")
-        }
-        return []
-    }
+    
 }
