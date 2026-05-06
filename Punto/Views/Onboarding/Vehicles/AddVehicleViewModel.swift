@@ -58,16 +58,13 @@ final class AddVehicleViewModel {
             isLoading = false
         }
         
-        
-        
-        let result = try? await vehicleRepository.saveVehicle(vehicle.vehicleInformation)
-        print(user.id)
-        print("🔑 user id: \(try? await SupabaseManagerSingleton.shared.client.auth.user().id, default: "ERror")")
-        print("🔑 vehicle user_id: \(vehicle.vehicleInformation.userId)")
+        do {
+            print("DEBUGG: AddVehicleViewModel" + user.id.uuidString)
+            print("DEBUGG: AddVehicleViewModel 🔑 user id: \(try? await SupabaseManagerSingleton.shared.client.auth.user().id, default: "ERror")")
+            print("DEBUGG: AddVehicleViewModel 🔑 vehicle user_id: \(vehicle.vehicleInformation.userId)")
 
-        switch result {
-        case .success(_):
-            
+
+            try await vehicleRepository.saveVehicle(vehicle.vehicleInformation)
             var finalImageUrl: String? = nil
             
             // Store Vehicle Image in Supabase Buckets
@@ -85,33 +82,25 @@ final class AddVehicleViewModel {
             if let index = user.vehicles.firstIndex(where: { $0.vehicleInformation.id == vehicle.vehicleInformation.id }) {
                 user.vehicles[index].vehicleInformation.imageUrl = finalImageUrl
             }
-            break
-        case .failure(let error):
-            print("❌ saveVehicle failure: \(error)")
-            message = Message.error.message
-            
-        case .none:
 
+        } catch {
             message = Message.error.message
+
         }
     }
     
     func fetchVehicles() async {
-        let result = try? await vehicleRepository.fetchVehicles()
         
-        switch result {
-        case .success(let success):
-            for vehicle in success {
+        do {
+            let vehcilesFetch = try await vehicleRepository.fetchVehicles()
+            for vehicle in vehcilesFetch {
                 user.vehicles.append(TransportationVehicle(vehicleInformation: vehicle))
             }
-            print(success)
-        case .failure(let error):
-            print("❌ fetchVehicles failure: \(error)")
+            
+        } catch {
+            print("DEBUGG: AddVehicleViewModel ❌ fetchVehicles failure: \(error)")
             message = Message.error.message
-        case .none:
-            message = Message.error.message
+
         }
     }
-    
-    
 }

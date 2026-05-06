@@ -161,7 +161,7 @@ struct AuthUserTransformer {
         
         if let supaEmail = supaUser.email, let supaPhone = supaUser.phone {
             userModel.email = supaEmail
-            userModel.phone = supaPhone
+            userModel.phone = Int(supaPhone)
         }
         return userModel
     }

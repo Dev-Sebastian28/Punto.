@@ -17,7 +17,7 @@ enum AvailableCountries: String, Codable {
 struct User {
     var id: UUID
     var email: String?
-    var phone: String?
+    var phone: Int?
     var userInformation: UserInformation
     var vehicles: [Vehicle]
     var drivers: [User]
@@ -79,6 +79,10 @@ struct User {
                 )
             ],
              drivers: [])
+    }
+    static var empty: User {
+      User(id: UUID(), userInformation: UserInformation(name: "", country: .argentina), vehicles: [], drivers: [])
+
     }
 }
 

@@ -8,16 +8,19 @@ import Foundation
 
 @Observable
 final class AppState {
-    var user: User = empty {
+    var user: User = .empty {
         willSet {
-            print("""
-changed from \(user) ----------------------------------------------------------------------------------------------------------------------------------------------------to \(newValue)
-""")
+            print("DEBUG AppState: " + "User Change from: \(user)")
+            print("------------------------------------------------------------------------------------------------")
+            print("DEBUG AppState: " + "User Change to: \(newValue)")
+            
+            
         }
     }
-    
+        
+    // MARK: - Init and Deinit:
     init() {
-        print(" 👋 init: AppState")
+        print("👋 init: AppState")
         print(user.id)
     }
     
@@ -26,4 +29,3 @@ changed from \(user) -----------------------------------------------------------
     }
 }
 
-var empty = User(id: UUID(), userInformation: UserInformation(name: "", country: .argentina), vehicles: [], drivers: [])

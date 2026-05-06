@@ -11,10 +11,11 @@ import Auth
 
 struct ExpensesRepository {
     let client = SupabaseManagerSingleton.shared.client
-    let userId: UUID
+    var userId: UUID
     
-    init(userId: UUID) {
-        self.userId = userId
+    // MARK: - init
+    init(appState: AppState) {
+        self.userId = appState.user.id
     }
     
     func saveExpense(expense: Expense) async throws {
@@ -32,7 +33,6 @@ struct ExpensesRepository {
             print("✅ Successful saved expense")
         }
     }
-    
     func fetchExpenses() async throws -> [Expense] {
        try await client
           .from("instruments")

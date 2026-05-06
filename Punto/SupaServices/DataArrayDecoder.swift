@@ -7,9 +7,17 @@
 import Foundation
 
 struct DataArrayDecoder {
-    static func map<Typee: Decodable>(_ type: Typee.Type, from responseData: Data) throws -> [Typee] {
+    static func map<Model: Decodable>(_ type: Model.Type, from responseData: Data) throws -> [Model] {
         let decoder = JSONDecoder()
        decoder.dateDecodingStrategy = .iso8601
-        return try decoder.decode([Typee].self, from: responseData)
+        return try decoder.decode([Model].self, from: responseData)
+    }
+}
+
+struct SingleDataDecoder {
+    static func map<Model: Decodable>(_ type: Model.Type, from responseData: Data) throws -> Model {
+        let decoder = JSONDecoder()
+       decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode(Model.self, from: responseData)
     }
 }

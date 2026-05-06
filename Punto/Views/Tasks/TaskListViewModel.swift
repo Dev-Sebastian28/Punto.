@@ -47,21 +47,16 @@ final class TaskListViewModel {
     // MARK: - Respository Accions:
     func updateTasks() async {
         isLoading  = true
-        let result = try? await repository.fetchAll()
-        switch result {
-        case .success(let success):
-            self.Tasks = success
+        
+        do {
+            try await repository.save(task: .init(id: UUID(), title: "", deadLine: Date(), importance: .high, status: .done))
+            self.message = "Error updating tasks"
 
-        case .failure(let failure):
-            self.message = failure.localizedDescription
-        case .none:
-            self.message = "unknown error"
-
+        } catch {
+            self.message = "Error updating tasks"
         }
         isLoading = false
     }
-    
-    
 }
 
 @Observable
@@ -92,15 +87,15 @@ final class TaskViewModel {
 
     func addTask(_ task: VTask) async {
         isLoading  = true
-        let result = try? await repository.save(task: task)
-        switch result {
-        case .success( _):
+        
+        
+        do {
+            try await repository.save(task: task)
             appState.user.vehicles[selectedVehicle].tasks.append(task)
 
-        case .failure(let failure):
-            self.message = failure.localizedDescription
-        case .none:
-            self.message = "unknown error"
+            
+        } catch  {
+            self.message = "Error adding tasks"
 
         }
         isLoading = false
@@ -108,14 +103,12 @@ final class TaskViewModel {
     
     func deleteTask(task: VTask) async {
         isLoading  = true
-        let result = try? await repository.delete(task: task)
-        switch result {
-        case .success(_):
+        
+        do {
+            try await repository.delete(task: task)
             appState.user.vehicles[selectedVehicle].tasks.removeAll(where: { $0.id == task.id })
 
-        case .failure(let failure):
-            self.message = failure.localizedDescription
-        case .none:
+        } catch {
             self.message = "unknown error"
 
         }

@@ -10,14 +10,14 @@ import Auth
 import Supabase
 
 protocol TaskRepositoryProtocol {
-    func save(task: VTask) async throws -> Result<Bool, Error>
-    func delete(task: VTask) async throws -> Result<Bool, Error>
-    func fetchAll() async throws ->  Result<[VTask], Error>
+    func save(task: VTask) async throws
+    func delete(task: VTask) async throws
+    func fetchAll() async throws -> [VTask]
 }
 
 struct TaskRepository:  TaskRepositoryProtocol {
     // MARK: Dependencies:
-    let vehicleId: UUID
+    var vehicleId: UUID
     let postRequest: SupabaseINSERTRequestProtocol = INSERTRequest(
         client: SupabaseManagerSingleton.shared.client,
         table: "v_tasks"
@@ -33,36 +33,34 @@ struct TaskRepository:  TaskRepositoryProtocol {
     )
         
     
-    // MARK: init
-    init(userId: UUID) {
-        self.vehicleId = userId
+    // MARK: - init
+    init(appState: AppState) {
+        self.vehicleId = appState.user.id
     }
     
-    func save(task: VTask) async throws -> Result<Bool, Error> {
-         await postRequest.customRequest(model: task)
+    func save(task: VTask) async throws  {
+        try await postRequest.insertItem(model: task)
     }
     
-    func delete(task: VTask) async throws -> Result<Bool, Error> {
-        try await deleteRequest.customRequest(itemId: task.id)
+    func delete(task: VTask) async throws  {
+        try await deleteRequest.delateItem(itemId: task.id)
     }
     
-    func fetchAll() async throws ->  Result<[VTask], Error> {
-         await getRequest.customRequest(model: VTask.self, vehicleId: vehicleId)
+    func fetchAll() async throws -> [VTask] {
+        try await getRequest.fetchItems(model: VTask.self, itemId: vehicleId)
     }
 }
 
 struct MockTaskRepository: TaskRepositoryProtocol {
-    func delete(task: VTask) async throws -> Result<Bool, any Error> {
-        return .success(true)
+    func delete(task: VTask) async throws {
     }
     
-    func fetchAll() async throws -> Result<[VTask], any Error> {
-        return .success([VTask].dummyData())
+    func fetchAll() async throws -> [VTask] {
+        [VTask].dummyData()
 
     }
     
-    func save(task: VTask) async throws -> Result<Bool, Error> {
-        return .success(true)
+    func save(task: VTask) async throws {
     }
 }
 

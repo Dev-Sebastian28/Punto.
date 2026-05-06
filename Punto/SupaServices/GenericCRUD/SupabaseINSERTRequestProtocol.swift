@@ -10,14 +10,13 @@ import Supabase
 protocol SupabaseINSERTRequestProtocol {
     var table: String { get set }
     var client: SupabaseClient { get }
-    func customRequest<T: Encodable>(model: T) async  -> Result<Bool, Error>
+    func insertItem<T: Encodable>(model: T) async throws
 }
 
 struct INSERTRequest: SupabaseINSERTRequestProtocol {
     var client: Supabase.SupabaseClient
     var table: String
-    func customRequest<T: Encodable>(model: T) async  -> Result<Bool, Error> {
-        do {
+    func insertItem<T: Encodable>(model: T) async throws  {
             
             let response = try await client
                 .from(table)
@@ -25,12 +24,8 @@ struct INSERTRequest: SupabaseINSERTRequestProtocol {
                 .execute()
             
             guard (200...299).contains(response.status) else {
-                return .failure(HttpClientError.invalidStatusCode(response.status, nil))
+                print("Debbug: INSERTRequest" + "Server error: \(response.status)")
+                throw (HttpClientError.invalidStatusCode(response.status, nil))
             }
-            
-            return .success(true)
-        } catch {
-            return .failure(error)
-        }
     }
 }

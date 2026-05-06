@@ -10,34 +10,50 @@ import Supabase
 protocol SupabaseGETRequestProtocol {
     var client: SupabaseClient { get }
     var table: String { get }
-    func customRequest<T: Decodable>(model: T.Type, vehicleId: UUID) async  -> Result<[T], Error>
+    func fetchItems<T: Decodable>(model: T.Type, itemId: UUID) async throws -> [T]
+    func fetchItem<T: Decodable>(model: T.Type, itemId: UUID) async throws -> T
+
 }
 
 struct GETRequest: SupabaseGETRequestProtocol {
+    
+    
     let client: SupabaseClient
     let table: String
     
     @MainActor
-    func customRequest<T: Decodable>(model: T.Type, vehicleId: UUID) async  -> Result<[T], Error> {
-        do {
+    func fetchItems<T: Decodable>(model: T.Type, itemId: UUID) async throws -> [T] {
             let response = try await client
                 .from(table)
                 .select()
-                .eq("user_id", value: vehicleId)
+                .eq("user_id", value: itemId)
                 .execute()
             
             guard (200...299).contains(response.status) else {
                 let bodyString = String(data: response.data, encoding: .utf8)
                 print(bodyString ?? "")
-                return .failure(HttpClientError.invalidStatusCode(response.status, nil))
+                throw (HttpClientError.invalidStatusCode(response.status, nil))
             }
             
             let decodedItems = try DataArrayDecoder.map(T.self, from: response.data)
-            return .success(decodedItems)
-        } catch {
-            return .failure(error)
+            return decodedItems
+    }
+    
+    func fetchItem<T: Decodable>(model: T.Type, itemId: UUID) async throws -> T {
+        let response = try await client
+            .from(table)
+            .select()
+            .eq("user_id", value: itemId)
+            .execute()
+        
+        guard (200...299).contains(response.status) else {
+            let bodyString = String(data: response.data, encoding: .utf8)
+            print(bodyString ?? "")
+            throw (HttpClientError.invalidStatusCode(response.status, nil))
         }
+        
+        let decodedItem = try SingleDataDecoder.map(T.self, from: response.data)
+        return decodedItem
     }
 }
-
 

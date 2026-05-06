@@ -25,7 +25,7 @@ class VehicleSupaRepository {
         table: "vehicles"
     )
     
-    // MARK: init:
+    // MARK: - init
     init(appState: AppState) {
         self.userId = appState.user.id
     }
@@ -33,17 +33,16 @@ class VehicleSupaRepository {
     var userId: UUID
     
     
-    func saveVehicle(_ vehicle: VehicleInformation) async throws -> Result<Bool, Error> {
-         await postRequest.customRequest(model: vehicle)
+    func saveVehicle(_ vehicle: VehicleInformation) async throws  {
+         try await postRequest.insertItem(model: vehicle)
     }
     
-    func fetchVehicles() async throws -> Result<[VehicleInformation], Error>  {
-        print("statr fetching")
-        return await getRequest.customRequest(model: VehicleInformation.self, vehicleId: userId)
+    func fetchVehicles() async throws -> [VehicleInformation] {
+        return try await getRequest.fetchItems(model: VehicleInformation.self, itemId: userId)
     }
     
-    func deleteVehicle(for vehicle: VehicleInformation) async throws -> Result<Bool, Error> {
-        try await deleteRequest.customRequest(itemId: vehicle.id)
+    func deleteVehicle(for vehicle: VehicleInformation) async throws  {
+        try await deleteRequest.delateItem(itemId: vehicle.id)
     }
     
     // MARK: Todo
@@ -68,6 +67,4 @@ class VehicleSupaRepository {
             return nil
         }
     }
-    
-    
 }

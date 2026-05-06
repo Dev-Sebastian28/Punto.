@@ -7,8 +7,18 @@
 import SwiftUI
 
 struct AppCoordinatorEntryView: View {
-    var coordinator: AppCoordinator
-    var appState: AppState
+    @State private var appState: AppState
+    @State private var carouselVM: CarouselViewModel
+    @State private var coordinator: AppCoordinator
+
+    
+    init() {
+        let appState = AppState()
+        _appState = State(initialValue: appState)
+        _coordinator = State(initialValue: AppCoordinator(appState: appState))
+        _carouselVM = State(initialValue: CarouselViewModel(user: appState.user))
+    }
+
     
     var body: some View {
         Group {
@@ -23,6 +33,8 @@ struct AppCoordinatorEntryView: View {
                 
             case .mainTabs:
                 MainTabsView(user: appState.user)
+                    .environment(carouselVM)
+
 
             case .auth:
                 NavigationStack(path: Bindable(coordinator.authCoordinator).path) {
@@ -32,6 +44,6 @@ struct AppCoordinatorEntryView: View {
                         }
                 }
             }
-        }
+        }.environment(coordinator)
     }
 }
