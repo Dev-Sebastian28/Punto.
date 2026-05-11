@@ -38,7 +38,7 @@ class VehicleSupaRepository {
     }
     
     func fetchVehicles() async throws -> [VehicleInformation] {
-        return try await getRequest.fetchItems(model: VehicleInformation.self, itemId: userId)
+        return try await getRequest.fetchItems(model: VehicleInformation.self, itemId: userId, columnName: "user_id")
     }
     
     func deleteVehicle(for vehicle: VehicleInformation) async throws  {

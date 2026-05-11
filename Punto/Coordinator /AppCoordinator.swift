@@ -18,7 +18,7 @@ enum AppRoot {
 final class AppCoordinator {
     var currentRoot: AppRoot = .auth  {
         willSet {
-            print("curent root changed from \(currentRoot) to \(newValue)")
+            print("Debug: AppCoordinator - curent root changed from \(currentRoot) to \(newValue)")
         }
     }
     
@@ -27,7 +27,7 @@ final class AppCoordinator {
         self.authCoordinator = AuthCoordinator(appState: appState)
         self.onBoardingCoordinator = OnboardingCoordinator(appState: appState)
         self.fleetCoordinator = FleetCoordinator(appState: appState)
-        self.cargoCoordinator = CargoCoordinator()
+        self.cargoCoordinator = CargoCoordinator(userId: appState.user.id)
         setupAuthBindings()
         setupOnboardingBindings()
     }

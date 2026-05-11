@@ -8,43 +8,31 @@
 import SwiftUI
 
 struct CargoCardView: View {
-    var cargo: Cargo
+    let cargoInfo: Cargo
+    @Environment(AppCoordinator.self) var coordinator
+
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 10) {
 
             // MARK: - Header
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Carga disponible")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
-                        .textCase(.uppercase)
-                        .tracking(0.5)
-
-                    Text(cargo.cargoType)
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.primary)
-                }
-
-                Spacer()
-
-                Label("\(cargo.distanceToCargo) km", systemImage: "location.fill")
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Available Cargo of:")
                     .font(.caption)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(Capsule().fill(.blue))
+                    .foregroundStyle(.secondary)
+                    .textCase(.uppercase)
+                    .tracking(0.5)
+
+                Text(cargoInfo.cargoType)
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.primary)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
-            .padding(.bottom, 14)
+            
 
             // MARK: - Route
-            HStack(alignment: .top, spacing: 12) {
+            HStack(alignment: .center, spacing: 12) {
 
                 // Timeline indicators
                 VStack(spacing: 0) {
@@ -69,7 +57,7 @@ struct CargoCardView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     RouteStopView(
                         label: "Origen",
-                        address: cargo.origin,
+                        address: cargoInfo.origin,
                         color: .green
                     )
 
@@ -77,52 +65,74 @@ struct CargoCardView: View {
 
                     RouteStopView(
                         label: "Destino",
-                        address: cargo.destination,
+                        address: cargoInfo.destination,
                         color: .red
                     )
                 }
+                
+                Spacer()
+                
+                VStack {
+                    Label("T. Distance: " + "\(cargoInfo.destination) km", systemImage: "location.fill")
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(Capsule().fill(.blue))
+
+                    
+                    Label("Able to carry", systemImage: "checkmark")
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(Capsule().fill(.green))
+                }
+                .font(.caption).bold()
+                .foregroundStyle(.white)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(RoundedRectangle(cornerRadius: 10).fill(.blue.opacity(0.3)))
+
+
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 14)
 
-            // MARK: - Divider
+            // MARK: - Footer Divider
             Divider()
                 .padding(.horizontal, 16)
+            footer
 
-            // MARK: - Footer
-            HStack(spacing: 16) {
-                Label("\(cargo.weight) ton", systemImage: "scalemass.fill")
+
+        }.genericRoundedBackgroundShadow(color: .gray)
+    }
+    
+    private var footer: some View {
+        // MARK: - Footer
+        HStack(spacing: 16) {
+            Label("\(cargoInfo.weightKg) ton", systemImage: "scalemass.fill")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+
+            Divider()
+                .frame(height: 16)
+
+            Label(cargoInfo.cargoType, systemImage: "shippingbox.fill")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+
+            Spacer()
+
+            Button {
+                coordinator.cargoCoordinator.navigate(to: .details(cargo: cargoInfo))
+            } label: {
+                Text("Ver")
                     .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
-
-                Divider()
-                    .frame(height: 16)
-
-                Label(cargo.cargoType, systemImage: "shippingbox.fill")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.secondary)
-
-                Spacer()
-
-                Button {
-                    // action
-                } label: {
-                    Text("Ver")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.blue)
-                }
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.blue)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.white)
-                .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 4)
-        )
+        .padding(.horizontal)
+        .padding(.vertical, 12)
     }
 }
 
@@ -153,5 +163,6 @@ struct RouteStopView: View {
 
 
 #Preview {
-    CargoCardView(cargo: Cargo(origin: "Boston", destination: "Texas", weight: 120, cargoType: "Furniture", distanceToCargo: 250, distanceToDestination: 230, dueDate: .distantFuture, price: 2000))
+    CargoCardView(cargoInfo: .mockPending)
+        .environment(AppCoordinator(appState: AppState()))
 }

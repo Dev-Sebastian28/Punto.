@@ -27,9 +27,13 @@ enum CargoFilter: String, CaseIterable {
 struct CargoView: View {
     @State private var selectedFilter: CargoFilter = .all
     @State private var searchText: String = ""
+    @State private var cargoListVM: CargoListViewModel
+    @Environment(AppCoordinator.self) var coordinator
     
-    private let cargos: [Cargo] = []
-    
+    init(userId: UUID) {
+        self.cargoListVM = CargoListViewModel(userId: userId)
+    }
+        
     var body: some View {
         ZStack(alignment: .top) {
             Color(.systemGroupedBackground)
@@ -45,17 +49,18 @@ struct CargoView: View {
                         filterSection
                         cargoList
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal)
                     .padding(.bottom, 32)
                 }
             }
         }
     }
+    
     private var header: some View {
     ZStack(alignment: .topLeading) {
         // Background
         LinearGradient(
-            colors: [.myBlue, .blue, .blue, .white],
+            colors: [.myBlue, .blue, .blue],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         ).ignoresSafeArea(edges: .top)
@@ -72,7 +77,7 @@ struct CargoView: View {
             }
             
             VStack(alignment: .leading, spacing: 2) {
-                Text("Cargas disponibles")
+                Text("Available cargos")
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                 
@@ -87,12 +92,11 @@ struct CargoView: View {
                 }
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom, 16)
+        .padding(.horizontal)
     }
-    .frame(maxWidth: .infinity)
     .frame(height: 60)
 }
+    
     private var searchBar: some View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
@@ -111,6 +115,7 @@ struct CargoView: View {
                 .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 2)
         )
     }
+    
     private var filterSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
@@ -127,14 +132,16 @@ struct CargoView: View {
             }
         }
     }
+    
     private var cargoList: some View {
         LazyVStack(spacing: 12) {
-            ForEach(cargos) { cargo in
-                CargoCardView(cargo: cargo)
+            ForEach(cargoListVM.cargos) { cargo in
+                CargoCardView(cargoInfo: cargo)
             }
         }
     }
 }
+
 
 private struct FilterChip: View {
     let filter: CargoFilter
@@ -164,6 +171,8 @@ private struct FilterChip: View {
     }
 }
 
+
 #Preview {
-    CargoView()
+    CargoView(userId: UUID())
+        .environment(AppCoordinator(appState: AppState()))
 }

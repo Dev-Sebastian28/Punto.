@@ -41,9 +41,28 @@ struct SharedRectangleBackground: ViewModifier {
     }
 }
 
+struct SharedRectangleBackgroundShadow: ViewModifier {
+    let color: Color
+    func body(content: Content) -> some View {
+        content
+            .padding(16)
+            .background(Color(.systemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .shadow(color: color.opacity(0.06), radius: 6, x: 0, y: 2)
+
+    }
+}
+
+
+
 
 // MARK: - View Extension
 extension View {
+    
+    func genericRoundedBackgroundShadow (color: Color) -> some View {
+        modifier(SharedRectangleBackgroundShadow(color: color))
+    }
+    
     func genericRoundedBackground (color: Color) -> some View {
         modifier(SharedRoundedBackground(color: color))
     }

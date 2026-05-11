@@ -34,7 +34,7 @@ struct infoAccountRepository {
     }
     
     
-    func save(_ userInfo: UserInformation) async throws  {
+    func save(_ userInfo: UserProfile) async throws  {
         try await postRequest.insertItem(model: userInfo)
     }
     
@@ -42,7 +42,7 @@ struct infoAccountRepository {
         try await deleteRequest.delateItem(itemId: userId)
     }
     
-    func fetchAll(id userId: UUID) async throws -> UserInformation {
-        try await getRequest.fetchItem(model: UserInformation.self, itemId: userId)
+    func fetchAll(id userId: UUID) async throws -> UserProfile {
+        try await getRequest.fetchItem(model: UserProfile.self, itemId: userId, columnName: "user_id")
     }
 }

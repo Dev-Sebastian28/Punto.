@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct PuntoApp: App {    
+struct PuntoApp: App {
     var body: some Scene {
         WindowGroup {
             AppCoordinatorEntryView()

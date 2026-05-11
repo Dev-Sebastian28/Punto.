@@ -7,22 +7,13 @@
 
 import Foundation
 
-
-
-enum AvailableCountries: String, Codable {
-    case colombia
-    case argentina
-}
-
 struct User {
     var id: UUID
-    var email: String?
-    var phone: Int?
-    var userInformation: UserInformation
+    var userInformation: UserProfile
     var vehicles: [Vehicle]
     var drivers: [User]
 
-    init(id: UUID, userInformation: UserInformation, vehicles: [Vehicle], drivers: [User]) {
+    init(id: UUID, userInformation: UserProfile, vehicles: [Vehicle], drivers: [User]) {
         self.id = id
         self.userInformation = userInformation
         self.vehicles = vehicles
@@ -31,8 +22,8 @@ struct User {
     
     static var mock: User {
         User(id: UUID(),
-             userInformation: UserInformation(
-                name: "sebastian", country: .colombia
+             userInformation: UserProfile(
+                name: "sebastian"
              ),
              vehicles: [
                 TransportationVehicle(
@@ -81,15 +72,15 @@ struct User {
              drivers: [])
     }
     static var empty: User {
-      User(id: UUID(), userInformation: UserInformation(name: "", country: .argentina), vehicles: [], drivers: [])
+      User(id: UUID(), userInformation: UserProfile(name: ""), vehicles: [], drivers: [])
 
     }
 }
 
-struct UserInformation: Codable {
+struct UserProfile: Codable {
     var name: String
-    var country: AvailableCountries
+    var phone: Int?
+    var email: String?
+    var avatar: String?
 }
-
-
 

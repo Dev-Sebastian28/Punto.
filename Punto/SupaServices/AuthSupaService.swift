@@ -11,9 +11,7 @@ import Auth
 
 protocol AuthServiceProtocol {
     func login(email: String, password: String) async throws -> AuthStatus
-    func signup(email: String, password: String) async throws -> AuthStatus
-    func getUser() async throws  -> Auth.User?
-    
+    func signup(email: String, password: String) async throws -> AuthStatus    
 }
 
 // MARK: - Auth Status
@@ -46,3 +44,4 @@ struct AuthSupaService: AuthServiceProtocol {
         return user
     }
 }
+

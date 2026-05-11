@@ -47,7 +47,7 @@ struct TaskRepository:  TaskRepositoryProtocol {
     }
     
     func fetchAll() async throws -> [VTask] {
-        try await getRequest.fetchItems(model: VTask.self, itemId: vehicleId)
+        try await getRequest.fetchItems(model: VTask.self, itemId: vehicleId, columnName: "user_id")
     }
 }
 

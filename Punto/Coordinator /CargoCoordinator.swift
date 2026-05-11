@@ -7,15 +7,21 @@
 import Foundation
 import SwiftUI
 
-enum CargoRoute {
+enum CargoRoute: Hashable {
     case main
-    case details
+    case details(cargo: Cargo)
     case accept
 }
 
 
 @Observable
 final class CargoCoordinator {
+    
+    init(userId: UUID) {
+        self.userId = userId
+    }
+    
+    var userId: UUID
     var path: [CargoRoute] = []
     
     var onAccept: (() -> Void)?
@@ -24,12 +30,12 @@ final class CargoCoordinator {
     @ViewBuilder
     func build(path: CargoRoute) -> some View {
         switch path {
-        case .details:
-            CargoDetailView()
+        case .details(let cargo):
+            CargoDetailView(cargo: cargo)
         case .accept:
             EmptyView()
         case .main:
-            CargoView()
+            CargoView(userId: userId)
         }
     }
     

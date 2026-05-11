@@ -83,16 +83,11 @@ final class AuthViewModel {
     func login(email: String, password: String) async {
         guard localValidate(email: email, password: password) else { return }
         await perform { try await self.service.login(email: email, password: password) }
-        guard let supaUser = try? await service.getUser() else { return }
-        self.appState.user = AuthUserTransformer().transform(supaUser: supaUser)
     }
 
     func signUp(email: String, password: String) async {
         guard localValidate(email: email, password: password) else { return }
         await perform { try await self.service.signup(email: email, password: password) }
-        guard let supaUser = try? await service.getUser() else { return }
-        self.appState.user = AuthUserTransformer().transform(supaUser: supaUser)
-
     }
 
   
@@ -152,17 +147,3 @@ final class AuthViewModel {
     }
 }
 
-struct AuthUserTransformer {
-    func transform(supaUser: Auth.User) -> User {
-        var userModel = User(id: UUID(), userInformation: UserInformation(name: "", country: .argentina), vehicles: [], drivers: [])
-        
-        let supaId = supaUser.id
-        userModel.id = supaId
-        
-        if let supaEmail = supaUser.email, let supaPhone = supaUser.phone {
-            userModel.email = supaEmail
-            userModel.phone = Int(supaPhone)
-        }
-        return userModel
-    }
-}
