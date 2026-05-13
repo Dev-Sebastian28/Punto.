@@ -37,7 +37,7 @@ struct AppCoordinatorEntryView: View {
 
 
             case .auth:
-                NavigationStack(path: Bindable(coordinator.authCoordinator).path) {
+                NavigationStack(path: Bindable( coordinator.authCoordinator).path) {
                     coordinator.authCoordinator.build(.auth)
                         .navigationDestination(for: AutAuthFlow.self) { screen in
                             coordinator.authCoordinator.build(screen)

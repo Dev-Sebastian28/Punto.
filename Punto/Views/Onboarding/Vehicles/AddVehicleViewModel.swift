@@ -29,7 +29,7 @@ final class AddVehicleViewModel {
     // MARK: - init
     init(appState: AppState) {
         self.user = appState.user
-        self.vehicleRepository = VehicleSupaRepository(appState: appState)
+        self.vehicleRepository = VehicleSupaRepository(userId: appState.user.id)
     }
     
     // MARK: - Dependency

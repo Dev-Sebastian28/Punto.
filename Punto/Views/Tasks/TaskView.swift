@@ -23,7 +23,7 @@ struct TaskView: View {
 
     init(appState: AppState) {
         let state = TaskState()
-        let repository = TaskRepository(appState: appState)
+        let repository = TaskRepository(vehicleId: appState.user.id)
         self.indexState = state
         self.tasksListVM = TaskListViewModel(appState: appState, state: state, service: repository)
         self.taskVM = TaskViewModel(appState: appState, state: state, service: repository)

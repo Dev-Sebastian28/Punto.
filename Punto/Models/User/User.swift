@@ -8,22 +8,23 @@
 import Foundation
 
 struct User {
+    // Id Used in database
     var id: UUID
     var userInformation: UserProfile
     var vehicles: [Vehicle]
-    var drivers: [User]
 
-    init(id: UUID, userInformation: UserProfile, vehicles: [Vehicle], drivers: [User]) {
+    init(id: UUID, userInformation: UserProfile, vehicles: [Vehicle]) {
         self.id = id
         self.userInformation = userInformation
         self.vehicles = vehicles
-        self.drivers = drivers
     }
     
     static var mock: User {
         User(id: UUID(),
              userInformation: UserProfile(
-                name: "sebastian"
+                id: UUID(),
+                fullName: "sebastian",
+                email: "sebas@gmail.com"
              ),
              vehicles: [
                 TransportationVehicle(
@@ -68,19 +69,30 @@ struct User {
                         fuel: .gasoline
                     )
                 )
-            ],
-             drivers: [])
+            ])
     }
     static var empty: User {
-      User(id: UUID(), userInformation: UserProfile(name: ""), vehicles: [], drivers: [])
+        User(id: UUID(), userInformation: UserProfile(id: UUID(), fullName: "", email: ""), vehicles: [])
 
     }
 }
 
+// MARK: User editable information:
+// I would like to implemet User real id and user driver license
+
 struct UserProfile: Codable {
-    var name: String
-    var phone: Int?
-    var email: String?
-    var avatar: String?
+    var id: UUID                        // referencia a auth.users
+    var fullName: String                // User Full Name
+    var phone: String?                  // User optional phone (recommended)
+    var email: String                   // User optional email (recommended)
+    var avatar: String?                 // User Profile Picture (recommended)
+     
+    enum CodingKeys: String, CodingKey {
+        case id
+        case fullName = "full_name"
+        case phone
+        case email
+        case avatar
+    }
 }
 

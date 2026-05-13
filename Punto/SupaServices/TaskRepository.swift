@@ -20,7 +20,7 @@ struct TaskRepository:  TaskRepositoryProtocol {
     var vehicleId: UUID
     let postRequest: SupabaseINSERTRequestProtocol = INSERTRequest(
         client: SupabaseManagerSingleton.shared.client,
-        table: "v_tasks"
+        table: "tasks"
     )
     let deleteRequest: SupabaseDELETERequestProtocol = DELETErequest(
         table: "",
@@ -29,13 +29,13 @@ struct TaskRepository:  TaskRepositoryProtocol {
     )
     let getRequest: SupabaseGETRequestProtocol = GETRequest(
         client: SupabaseManagerSingleton.shared.client,
-        table: "v_tasks"
+        table: "tasks"
     )
         
     
     // MARK: - init
-    init(appState: AppState) {
-        self.vehicleId = appState.user.id
+    init(vehicleId: UUID) {
+        self.vehicleId = vehicleId
     }
     
     func save(task: VTask) async throws  {
@@ -63,6 +63,7 @@ struct MockTaskRepository: TaskRepositoryProtocol {
     func save(task: VTask) async throws {
     }
 }
+
 
 
 

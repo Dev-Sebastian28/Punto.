@@ -7,6 +7,7 @@
 
 import Foundation
 import Auth
+import Supabase
 
 
 enum AuthMode {
@@ -83,11 +84,15 @@ final class AuthViewModel {
     func login(email: String, password: String) async {
         guard localValidate(email: email, password: password) else { return }
         await perform { try await self.service.login(email: email, password: password) }
+        appState.user.id = SupabaseManagerSingleton.shared.client.auth.currentUser?.id ?? .init()
+       // await appState.fetchData()
+
     }
 
     func signUp(email: String, password: String) async {
         guard localValidate(email: email, password: password) else { return }
         await perform { try await self.service.signup(email: email, password: password) }
+        appState.user.id = SupabaseManagerSingleton.shared.client.auth.currentUser?.id ?? .init()
     }
 
   

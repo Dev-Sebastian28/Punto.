@@ -21,6 +21,7 @@ enum CargoStatus: String, Codable, CaseIterable {
 
 /// Status of the driver's application to a cargo contract.
 enum CargoRequestStatus: String, Codable, CaseIterable {
+    case undetermined
     case pending        // Awaiting owner's response
     case accepted       // Owner accepted the driver
     case declined       // Owner declined the driver
@@ -42,7 +43,7 @@ struct CargoRestrictedInfo: Codable, Hashable {
 struct Cargo: Identifiable, Codable, Hashable {
 
     // MARK: Identity
-    let id: UUID
+    var id: UUID
     let ownerID: UUID           // References auth.users on Supabase
     var cargoName: String
     var cargoType: String       // Free text from backend
@@ -61,9 +62,7 @@ struct Cargo: Identifiable, Codable, Hashable {
     // MARK: Distances (computed by backend, immutable on client)
     let distanceToCargoKm: Double
     let distanceToDestinationKm: Double
-    var totalRouteDistanceKm: Double {
-        distanceToCargoKm + distanceToDestinationKm
-    }
+
 
     // MARK: Pricing & Dates
     var price: Double
@@ -72,6 +71,7 @@ struct Cargo: Identifiable, Codable, Hashable {
 
     // MARK: Restricted (nil until owner accepts)
     var restrictedInfo: CargoRestrictedInfo?
+
 }
 
 // MARK: - Mocks
@@ -117,3 +117,4 @@ struct CargoRequest: Identifiable, Codable {
     var status: CargoRequestStatus   // pending, accepted, declined
     let createdAt: Date
 }
+

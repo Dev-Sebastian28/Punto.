@@ -26,8 +26,8 @@ class VehicleSupaRepository {
     )
     
     // MARK: - init
-    init(appState: AppState) {
-        self.userId = appState.user.id
+    init(userId: UUID) {
+        self.userId = userId
     }
     
     var userId: UUID

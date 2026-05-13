@@ -142,7 +142,6 @@ struct CargoView: View {
     }
 }
 
-
 private struct FilterChip: View {
     let filter: CargoFilter
     let isSelected: Bool

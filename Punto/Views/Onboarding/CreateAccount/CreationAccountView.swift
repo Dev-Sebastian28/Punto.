@@ -6,80 +6,141 @@
 //
 
 import SwiftUI
-
-import SwiftUI
+import PhotosUI
 
 struct CreationAccountView: View {
-    @State private var name: String = ""
-    @State private var phoneNumber: Int = 0
+    
+    // MARK: Avatar (Profile Picture)
+    @State private var pickerItem: PhotosPickerItem?
+    @State private var uiImage: UIImage?
+    @State private var selectedImageData: Data?
+    
+    // MARK: User information
+    @State private var fullName: String = ""
+    @State private var phone: Int = 0
     @State private var vehiclesNumber: Int = 1
+    
+    // MARK: - View Model
     @State private var vm: CreationAccountViewModel
     
     @Environment(AppCoordinator.self) var coordinator
     
     private var isValid: Bool {
-        !name.isEmpty && phoneNumber != 0
+        !fullName.isEmpty && phone > 0
     }
     
+    // MARK: - Init
     init(appState: AppState) {
-        _vm = State(initialValue: CreationAccountViewModel(user: appState.user))
+        _vm = State(initialValue: CreationAccountViewModel(appState: appState))
     }
     
     var body: some View {
-        VStack {
-            ScrollView {
-                VStack(spacing: 24) {
-                    header
-                    userInfo
-                    vehiclesPicker
-                    
-                }.padding(.horizontal)
-            }
-            
-            
-            DButtonComp(
-                text: "Create Account",
-                color: .green,
-                image: "checkmark",
-            ) {
-                guard isValid else  {
-                    return coordinator.onBoardingCoordinator.uniqueNavigation(to: .form1)
+        ZStack {
+            Color(.systemGroupedBackground).ignoresSafeArea()
+            VStack {
+                ScrollView {
+                    VStack(spacing: 24) {
+                        header
+                        imagePicker
+                        userInfo
+                        vehiclesPicker
+                        
+                    }.padding(.horizontal)
                 }
                 
-                vm.createAccount(
-                    name: name,
-                    phone: phoneNumber,
-                    vehicles: vehiclesNumber
-                )
-                coordinator.onBoardingCoordinator.uniqueNavigation(to: .form1)
+                
+                DButtonComp(
+                    text: "Create Account",
+                    color: .green,
+                    image: "checkmark",
+                    isEnabled: isValid
+                ) {
+                    Task {
+                        await vm.createAccount(
+                            fullName: fullName,
+                            phone: String(phone),
+                            avatarData: selectedImageData
+                        )
+                        
+                        coordinator.onBoardingCoordinator.uniqueNavigation(to: .form1)
+                    }
+                }.padding()
             }
-            .padding()
-        }.background(Color(.systemGroupedBackground))
+        }.onChange(of: pickerItem) { _, newItem in
+            Task {
+                if let data = try? await newItem?.loadTransferable(type: Data.self),
+                   let image = UIImage(data: data),
+                   let compressedData = image.jpegData(compressionQuality: 0.5) {
+                    selectedImageData = compressedData
+                    uiImage = image
+                }
+            }
+        }
     }
     
     private var header: some View {
         VStack(alignment: .center, spacing: 8) {
+            HStack {
+                Text("Create Account")
+                    .font(.title.bold())
                 
-                VStack(alignment: .center) {
-                    Text("Create Account")
-                        .font(.title.bold())
-                    HStack {
-                        Text("Enter your personal info")
-                        Text("optional (Recommended)")
-                    }
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                Spacer()
+                
+                Button {
+                    coordinator.onBoardingCoordinator.uniqueNavigation(to: .form1)
+                } label: {
+                    Text("Later")
+                        .genericCapsuleBackground(color: .blue.opacity(0.3))
                 }
-            
-            VStack(spacing: 0) {
-                Image(systemName: "person.crop.circle.fill")
-                    .font(.system(size: 100))
-                    .foregroundStyle(.blue)
-                Text("Select a profile picture")
             }
-            
-        }.frame(maxWidth: .infinity)
+        }
     }
+    
+    private var imagePicker: some View {
+        PhotosPicker(selection: $pickerItem, matching: .images) {
+            if let uiImage = uiImage {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: 200)
+                    .clipShape(.circle)
+            } else {
+                VStack(spacing: 0) {
+                    Image(systemName: "person.crop.circle.fill")
+                        .font(.system(size: 100))
+                        .foregroundStyle(.blue)
+                    Text("Select a profile picture")
+                }
+            }
+        }
+    }
+    
+    private var userInfo: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("Enter your personal info")
+                Text("optional (Recommended)")
+            }
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            
+            VStack(spacing: 16) {
+                
+                TextFieldComp(
+                    text: $fullName,
+                    prompt: "Full name",
+                    leadingIcon: "person"
+                )
+                
+                TextFieldComp(
+                    intValue: $phone,
+                    prompt: "Phone number ",
+                    leadingIcon: "phone"
+                )
+            }.genericRoundedBackground(color: .platformSystemBackground)
+        }
+    }
+    
     private var vehiclesPicker: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Vehicles")
@@ -98,35 +159,9 @@ struct CreationAccountView: View {
                     }
                 }.pickerStyle(.menu)
             }
-        }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.05), radius: 10)
-        )
+        }.genericRoundedBackground(color: .platformSystemBackground)
     }
-    private var userInfo: some View {
-        VStack(spacing: 16) {
-            TextFieldComp(
-                text: $name,
-                prompt: "Full name",
-                leadingIcon: "person"
-            )
-            
-            TextFieldComp(
-                intValue: $phoneNumber,
-                prompt: "Phone number ",
-                leadingIcon: "phone"
-            )
-        }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.05), radius: 10)
-        )
-    }
+    
 }
 
 

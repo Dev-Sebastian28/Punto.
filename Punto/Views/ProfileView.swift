@@ -115,22 +115,54 @@ struct ProfileView: View {
         }
     }
     
+    @ViewBuilder
+    private var imageContent: some View {
+        if let urlString = user.userInformation.avatar, let url = URL(string: urlString) {
+            AsyncImage(url: url) { phase in
+                switch phase {
+                case .empty:
+                    placeholder
+                        .overlay(ProgressView())
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                case .failure:
+                    placeholder
+                        .overlay {
+                            Image(systemName: "photo.slash")
+                                .foregroundStyle(.secondary)
+                        }
+                @unknown default:
+                    Image(systemName: "person.crop.circle")
+                }
+            }
+        } else {
+            placeholder
+                .overlay {
+                    Image(systemName: "person.crop.circle")
+                        .font(.largeTitle)
+                }
+        }
+    }
+ 
+    private var placeholder: some View {
+        Circle()
+            .foregroundStyle(.white)
+            .frame(width: 100, height: 100)
+    }
+    
     // MARK: - HEADER
     var header: some View {
-        VStack(spacing: 5) {
-            Circle()
-                .stroke(Color.blue.opacity(0.5), lineWidth: 2)
-                .frame(width: 80, height: 80)
-                .overlay(
-                    Image(systemName: "person")
-                )
-            
-            Text(user.userInformation.name)
-                .font(.title2)
-                .fontWeight(.semibold)
-            Text(user.userInformation.email ?? "")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+        VStack {
+            imageContent
+                
+                Text(user.userInformation.fullName)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                Text(user.userInformation.email)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
         }
     }
     
