@@ -26,14 +26,19 @@ struct MainTabsView: View {
                         coordinator.fleetCoordinator.build(route: .fleet)
                             .navigationDestination(for: FleetRoute.self) { scren in
                                 coordinator.fleetCoordinator.build(route: scren)
-                                    .toolbar(.hidden, for: .tabBar) // <-- Esta es la clave
+                                    .toolbar(.hidden, for: .tabBar)
 
                             }
                     }
                 }
                 
                 Tab("Account", systemImage: "person.crop.circle.fill") {
-                    ProfileView(user: user)
+                    NavigationStack(path: Bindable(coordinator.profileCoordinator).path) {
+                        ProfileView(user: .empty)
+                            .navigationDestination(for: ProfileRoute.self) { screen in
+                                coordinator.profileCoordinator.build(screen)
+                            }
+                    }
                 }
             }
         }

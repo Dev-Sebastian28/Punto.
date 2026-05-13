@@ -28,17 +28,19 @@ final class AppCoordinator {
         self.onBoardingCoordinator = OnboardingCoordinator(appState: appState)
         self.fleetCoordinator = FleetCoordinator(appState: appState)
         self.cargoCoordinator = CargoCoordinator(userId: appState.user.id)
+        self.profileCoordinator = ProfileCoordinator(appState: appState)
         setupAuthBindings()
         setupOnboardingBindings()
     }
     
     // MARK: - Test Init
-    init(authCoordinator: AuthCoordinator, onboardingCoordinator: OnboardingCoordinator, fleetCoordinator: FleetCoordinator, cargoCoordinator: CargoCoordinator) {
+    init(authCoordinator: AuthCoordinator, onboardingCoordinator: OnboardingCoordinator, fleetCoordinator: FleetCoordinator, cargoCoordinator: CargoCoordinator, profileCoordinator: ProfileCoordinator) {
         
         self.authCoordinator = authCoordinator
         self.onBoardingCoordinator = onboardingCoordinator
         self.fleetCoordinator = fleetCoordinator
         self.cargoCoordinator = cargoCoordinator
+        self.profileCoordinator = profileCoordinator
         setupAuthBindings()
         setupOnboardingBindings()
     }
@@ -49,7 +51,8 @@ final class AppCoordinator {
     let onBoardingCoordinator: OnboardingCoordinator
     let fleetCoordinator: FleetCoordinator
     let cargoCoordinator: CargoCoordinator
-     
+    let profileCoordinator: ProfileCoordinator
+    
     
     
     private func setupAuthBindings() {
@@ -69,6 +72,7 @@ final class AppCoordinator {
     }
     
 }
+
 
 
 
