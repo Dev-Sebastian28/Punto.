@@ -10,25 +10,25 @@ import PhotosUI
 import UIKit
 
 struct AddVehicleForm: View {
-    @State private var isPrivateSelected = false
-    @State private var isTransportSelected = true
-    @State private var vehicleInf: VehicleInformation = .sample
+    @State private var vehicleInf: VehicleInformation = .empty
     
+    // MARK: Vehicle Picture Properties
     @State private var pickerItem: PhotosPickerItem?
     @State private var uiImage: UIImage?
     @State private var selectedImageData: Data?
     
+    @Environment(AppCoordinator.self) var coordinator
+    
     let vm: AddVehicleViewModel
     let userId: UUID
-    
-    @Environment(\.dismiss) private var dimiss
+    let mode: VehicleType
     
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
             ScrollView {
                 imagePicker
-                vehicleTypeSelector
+                    .padding(.bottom)
                 formFields
                 actionButtons
             }
@@ -62,26 +62,6 @@ struct AddVehicleForm: View {
                 }
             }
         }.clipShape(RoundedRectangle(cornerRadius: 10))
-    }
-    
-    private var vehicleTypeSelector: some View {
-        HStack(spacing: 12) {
-            VehicleCategoryButton(
-                title: "Transport",
-                systemImage: "box.truck.fill",
-                tint: .orange,
-                isSelected: isTransportSelected,
-                action: { isTransportSelected = true; isPrivateSelected = false}
-            )
-            
-            VehicleCategoryButton(
-                title: "Private",
-                systemImage: "car.fill",
-                tint: .blue,
-                isSelected: isPrivateSelected,
-                action: { isTransportSelected = false; isPrivateSelected = true}
-            )
-        }
     }
     
     private var formFields: some View {
@@ -169,7 +149,8 @@ struct AddVehicleForm: View {
                 style: .neutral,
                 maxWidth: 100
             ) {
-                dimiss()
+                coordinator.onBoardingCoordinator.addVehicleCoordinator.didCancel()
+
             }
             
             DButtonComp(
@@ -177,68 +158,35 @@ struct AddVehicleForm: View {
                 color: .blue,
                 image: "car.fill",
                 maxWidth: 150) {
-                    
                     vehicleInf.userId = userId
-                    print(vehicleInf)
-                    
+                    print("Debug: AddVehicleForm: vehicleInf:" + "\(vehicleInf)")
                     Task {
-                        if isTransportSelected {
+                        switch mode {
+                            
+                        case .transportVehicle:
                             await vm.addVehicle(
                                 TransportationVehicle(
                                     vehicleInformation: vehicleInf
                                 ),
                                 imageData: selectedImageData
                             )
-                            
-                        } else {
+                        case .privateVehicle:
                             await vm.addVehicle(
-                                TransportationVehicle(
+                                PrivateVehicle(
                                     vehicleInformation: vehicleInf
                                 ),
                                 imageData: selectedImageData
                             )
                         }
                     }
-                    
-                    dimiss()
+                    coordinator.onBoardingCoordinator.addVehicleCoordinator.didCancel()
                 }
-        }
-        .padding(.top)
-    }
-}
-
-private struct VehicleCategoryButton: View {
-    let title: String
-    let systemImage: String
-    let tint: Color
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 10) {
-                Image(systemName: systemImage)
-                    .font(.title3)
-                    .foregroundStyle(tint)
-                    .frame(width: 40, height: 40)
-                    .background(tint.opacity(0.1))
-                    .clipShape(Circle())
-                
-                Text(title)
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.primary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(isSelected ? tint.opacity(0.2) : Color.platformSecondaryBackground)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-        }
+        }.padding(.top)
     }
 }
 
 #Preview {
     AddVehicleForm(
-        vm: AddVehicleViewModel(appState: AppState()), userId: UUID()
-    )
+        vm: AddVehicleViewModel(appState: AppState()), userId: UUID(), mode: .privateVehicle
+    ).environment(AppCoordinator(appState: AppState()))
 }

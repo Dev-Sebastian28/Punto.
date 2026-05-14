@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct MessageToast: View {
+    @Binding var isPresented: Bool
     let message: String
+    
     var body: some View {
         HStack(spacing: 10) {
             Text(message)
@@ -18,5 +20,16 @@ struct MessageToast: View {
         )
         .padding(.horizontal, 16)
         .padding(.top, 8)
+        .onAppear {
+            isPresented = true
+            Task {
+                try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
+                isPresented = false
+            }
+        }
     }
+}
+
+#Preview {
+    MessageToast(isPresented: .constant(true), message: "Message to show here ...")
 }

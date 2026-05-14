@@ -14,9 +14,11 @@ enum AddVehicleViewMode {
 
 struct AddVehicleView: View {
     let mode: AddVehicleViewMode
+    
     @State private var isAddVehiclePresented = false
-    @State private var vm: AddVehicleViewModel
     @State private var showMessage: Bool = false
+    
+    @State private var vm: AddVehicleViewModel
     @Environment(AppCoordinator.self) var coordinator
     
     
@@ -27,68 +29,78 @@ struct AddVehicleView: View {
     
     var body: some View {
         ZStack(alignment: .center) {
-            Color.platformGroupedBackground
-            VStack(alignment: .center, spacing: 24) {
+            Color.platformGroupedBackground.ignoresSafeArea(edges: [.top, .bottom])
+
+            VStack(alignment: .center) {
+                if mode == .firstTime {
+                    header
+                } else {
+                    Spacer()
+                }
                 
-                switch mode {
-                case .firstTime:
-                    
-                    VStack {
-                        header
-                        if vm.hasVehicle {
-                            ScrollView(.vertical, showsIndicators: false) {
-                                vehicleInfoSection
-                                DButtonComp(
-                                    text: "Add New Vehicle",
-                                    color: .blue,
-                                    image: "plus") {
-                                        isAddVehiclePresented.toggle()
-                                    }
+                if vm.hasVehicle {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        vehicleInfoSection
+                        DButtonComp(
+                            text: "Add New Vehicle",
+                            color: .blue,
+                            image: "plus") {
+                                coordinator.onBoardingCoordinator.addVehicleCoordinator.didSelectCreate()
                             }
-                            
-                        } else {
-                            EmptyStateVehicleCard(isFormPresented: $isAddVehiclePresented)
-                        }
                     }
                     
-                case .addNew:
-                  
-                    VStack {
-                        EmptyStateVehicleCard(isFormPresented: $isAddVehiclePresented)
-
+                } else {
+                    EmptyStateVehicleCard()
+                }
+                Spacer()
+            }.padding(.horizontal)
+            
+            if vm.isLoading {
+                ZStack {
+                    Color.platformGroupedBackground.ignoresSafeArea()
+                    
+                    VStack(spacing: 24) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.blue.opacity(0.1))
+                                .frame(width: 80, height: 80)
+                            
+                            Image(systemName: "car.fill")
+                                .font(.system(size: 32))
+                                .foregroundStyle(.blue)
+                        }
+                        
+                        VStack(spacing: 6) {
+                            Text("Creating vehicle")
+                                .font(.title3.weight(.semibold))
+                            Text("This will only take a moment")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        
+                        ProgressView()
+                            .tint(.blue)
                     }
                 }
-            }
-            
-            .padding(.horizontal)
-            .sheet(isPresented: $isAddVehiclePresented) {
-                AddVehicleForm(vm: self.vm, userId: vm.user.id)
             }
             
             if showMessage {
                 if let message = vm.message {
-                    MessageToast(message: message)
+                    Color.platformGroupedBackground.ignoresSafeArea()
+                    MessageToast(isPresented: $showMessage, message: message)
                 }
             }
             
-            if vm.isLoading {
-                ProgressView()
+        }
+        .onChange(of: vm.message) { _, newMessage in
+            guard newMessage != nil else { return }
+            showMessage = true
+            Task {
+                try? await Task.sleep(nanoseconds: 2_000_000_000)
+                showMessage = false
+                vm.message = nil
             }
-            
         }
-        .ignoresSafeArea(edges: [.top, .bottom])
-        .onChange(of: vm.message) { _, _ in
-            presentMessage()
-        }
-    }
-    private func presentMessage() {
-        showMessage = true
-        Task {
-            try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
-            showMessage = false
-            
-        }
-        
     }
     
     private var header: some View {

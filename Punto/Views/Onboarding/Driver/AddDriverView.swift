@@ -52,7 +52,7 @@ struct AddDriverView: View {
             .padding(.horizontal)
 
             if showMessage {
-                MessageToast(message: vm.message)
+                MessageToast(isPresented: .constant(true), message: vm.message)
             }
         }
         // Watch the message from VM and trigger animation

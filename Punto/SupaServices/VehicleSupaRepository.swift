@@ -67,4 +67,12 @@ class VehicleSupaRepository {
             return nil
         }
     }
+    
+    func updateVehicleImageUrl(vehicleId: UUID, imageUrl: String) async throws {
+        try await SupabaseManagerSingleton.shared.client
+            .from("vehicles")
+            .update(["image_url": imageUrl])
+            .eq("id", value: vehicleId)
+            .execute()
+    }
 }

@@ -13,8 +13,7 @@ struct  EmptyStateVehicleCard: View {
         ("steeringwheel", .brandGreen),
         ("wrench.and.screwdriver.fill", .orange)
     ]
-    @Binding var isFormPresented: Bool
-    
+    @Environment(AppCoordinator.self) var coordinator
     var body: some View {
         
         VStack(alignment: .center, spacing: 22) {
@@ -41,7 +40,7 @@ struct  EmptyStateVehicleCard: View {
             
             VStack(spacing: 12) {
                 emptyStateInfo(
-                    title: "Manual setup ",
+                    title: "Manual setup",
                     description: "Register the core vehicle information in a few steps."
                 )
                 
@@ -58,8 +57,7 @@ struct  EmptyStateVehicleCard: View {
                     image: "camera.fill",
                     maxWidth: .infinity
                 ) {
-                    isFormPresented = true
-                    
+                    coordinator.onBoardingCoordinator.addVehicleCoordinator.didSelectPhoto()
                 }
                 
                 DButtonComp(
@@ -69,11 +67,10 @@ struct  EmptyStateVehicleCard: View {
                     style: .neutral,
                     maxWidth: .infinity
                 ) {
-                    isFormPresented = true
+                    coordinator.onBoardingCoordinator.addVehicleCoordinator.didSelectManual()
                 }
             }
         }.genericRoundedBackground(color: .white)
-
         .overlay {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(Color.cardStroke, lineWidth: 1)
@@ -101,5 +98,6 @@ private func emptyStateInfo(title: String, description: String) -> some View {
 }
 
 #Preview {
-    EmptyStateVehicleCard(isFormPresented: .constant(true))
+    EmptyStateVehicleCard()
+        .environment(AppCoordinator(appState: AppState()))
 }

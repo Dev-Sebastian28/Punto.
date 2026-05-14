@@ -66,6 +66,7 @@ final class AppCoordinator {
     }
     
     private func setupOnboardingBindings() {
+        
         onBoardingCoordinator.finishOnBoarding = { [weak self] in
             self?.currentRoot = .mainTabs
         }
